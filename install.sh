@@ -77,8 +77,10 @@ GitDownload()
 GitUpload()
 {
   git status
-  git add install.sh
-  git commit
+  #git add install.sh
+  git add -u
+  git commit -m "just commit"
+  git push -u origin master
 }
 
 
