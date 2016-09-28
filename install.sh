@@ -37,6 +37,7 @@ ServiceRun()
 
   cd web
   python Main.py
+  #nohup python Main.py &
 
   #listen on http://0.0.0.0:5000
 }
@@ -58,26 +59,42 @@ Clean()
   find . -name '*.json' | xargs wc
 }
 
-GitInit()
+GitCreate()
 {
-  echo "# appman" > README.md
   git init
   git config --global user.email "vladvons@gmail.com"
-
-  #git add README.md
-  git add -u
   git add -A
-
   git commit -m "first commit"
   git remote add origin https://github.com/VladVons/appman.git
   git push -u origin master
 }
 
+GitDownload()
+{
+  git clone https://github.com/VladVons/appman.git
+}
+
+
+GitUpload()
+{
+  git status
+
+  #git add install.sh
+  #git rm TestClient.py
+  #git mv README.md README
+  #git log
+
+  git add -u -v
+  git commit -m "just commit"
+  git push -u origin master
+}
+
+
 
 clear
 #
 Clean
-GitInit
+#GitCreate
 
 #Install
 #ServiceRun
