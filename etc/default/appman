@@ -1,0 +1,6 @@
+# defaults for /etc/init.d/appman
+
+ENABLED=1
+OPTIONS=""
+SCRYPT="RunServer.py"
+WORKDIR="/admin/project/appman/src"

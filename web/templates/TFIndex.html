@@ -1,0 +1,8 @@
+Version: {{ Form.Version }}<br>
+
+{% if Form.UserOK %}
+<a href='/conf_list'>conf_list</a><br>
+<a href='/logout'>logout</a><br>
+{% else %}
+<a href='/login'>Login</a><br>
+{% endif %}

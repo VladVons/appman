@@ -1,0 +1,43 @@
+{
+  "Variable":{
+    "Path_Initd":{"Value":"/etc/init.d"},
+    "Path_Log":{"Value":"/var/log"},
+    "Path_Run":{"Value":"/var/run"},
+
+    "File_Passwd":{"Value":"/etc/passwd"},
+    "File_Services":{"Value":"/etc/services"},
+    "File_SysLog":{"Value":"/var/log/syslog"},
+
+    "Util_OS":{"Value":"lsb_release -a && uname -r"},
+    "Util_MemTotal":{"Value":"grep -i 'MemTotal' /proc/meminfo | awk '{ print $2}'"},
+    "Util_IsRoot":{"Value":"whoami | grep root"},
+    "Util_Reboot":{"Value":"reboot"},
+    "Util_Top":{"Value":"top -b -n 1 | head -n 25"},
+    "Util_Process":{"Value":"pgrep -a"},
+    "Util_Service":{"Value":"ps aux | grep -v grep | awk '{ print $1, $2, $11}' | grep"},
+    "Util_ShowFile":{"Value":"cat"},
+    "Util_Manual":{"Value":"man"},
+
+    "Util_PkgInfo":   {"Value":"dpkg -s"},
+    "Util_PkgInstall":{"Value":"apt-get install --yes"},
+    "Util_PkgRemove": {"Value":"apt-get remove --yes"},
+    "Util_PkgAddPpa": {"Value":"add-apt-repository --yes"},
+
+    "Cmd_ServiceStart": {"Value":"service $<Arg1> start"},
+    "Cmd_ServiceStop":  {"Value":"service $<Arg1> stop"},
+    "Cmd_ServiceStatus":{"Value":"service $<Arg1> status"},
+
+    "Cmd_PkgVersion":{"Value":"$<Util_PkgInfo> $<Arg1> | grep -i version:"},
+    "Cmd_PkgInstall":{"Value":"$<Util_PkgInstall> $<Arg1>"},
+    "Cmd_PkgRemove": {"Value":"$<Util_PkgRemove> $<Arg1>"},
+    "Cmd_PkgAddPpa": {"Value":"$<Util_PkgAddPpa> $<Arg1>"},
+
+    "Cmd_ShowService":{"Value":"$<Util_Service> $<Arg1>"},
+    "Cmd_ShowProcess":{"Value":"$<Util_Process> $<Arg1>"},
+    "Cmd_ShowPort":   {"Value":"lsof -i :$<Arg1> | grep -v 'COMMAND' | awk '{ print $1, $5, $8, $9 }'"},
+    "Cmd_ShowFile":   {"Value":"$<Util_ShowFile> $<Arg1>"},
+    "Cmd_ShowLog":    {"Value":"$<Util_ShowFile> $<Arg1> | tail -25"},
+    "Cmd_ShowLogGrep":{"Value":"$<Util_ShowFile> $<Arg1> | grep $<Arg2> | tail -25"},
+    "Cmd_ShowMan":    {"Value":"$<Util_Manual> $<Arg1>"}
+  }
+}

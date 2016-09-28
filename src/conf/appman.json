@@ -1,0 +1,46 @@
+{
+    "Variable":{
+        "Sys_OS":{"Value":"linux"}
+    },
+    "Option":{
+        "Policy":{
+            "Group":{
+                "GAdmin":{"Value":"VladVons,Admin","Descr":"administartors"},
+                "GUser":{"Value":"User1","Descr":"simle users"}
+            },
+            "User":{
+                "VladVons":{"Value":"Allow","Password":"1234","Mail":"vladvons@gmail.com"}
+            },
+            "Api":{
+                "Allow":{
+                    "GAdmin":{"Value":"TAppMan.*"},
+                    "GUser":{"Value":"TAppMan.Check.*"}
+                },
+                "Deny":{
+                    "GUser":{"Value":"TAppMan.Util.*|TAppMan.User.Add"},
+                    "GAdmin":{"Value":"TAppMan.GetVersion"}
+                }
+            },
+            "Conf":{
+                "Allow":{
+                    "GAdmin":{"Value":""}
+                },
+                "Deny":{
+                    "GAdmin":{"Value":""}
+                }
+            }
+        },
+        "Server":{
+            "Port":{"Value":51017},
+            "Host":{"Value":"127.0.0.1"},
+            "AuthUser":{"Value":true, "Descr":"require user login"},
+            "AuthApi":{"Value":false, "Descr":"reqire api_allow / api_deny"},
+            "MaxConn":{"Value":2},
+            "LogFile":{"Value":"/var/log/appman.log"},
+            "BufSize":{"Value":4096},
+            "IpAllow":{"Value":".*"},
+            "DebugLevel":{"Value":0},
+            "DebugConsole":{"Value":true}
+        }
+    }
+}

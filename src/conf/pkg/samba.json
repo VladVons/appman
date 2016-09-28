@@ -1,0 +1,56 @@
+{
+    "Include":{
+        "File":[
+            {"Value":"$<Sys_OS>.json", "Descr":"Common constants"}
+        ]
+    },
+    "Variable":{
+        "App":{"Value":"samba"},
+        "Descr":{"Value":"$<App> is a SMB/CIFS networking protocol"},
+        "Install":{"Value":"$<App>;winbind"},
+        "Remove":{"Value":"samba-common;smbclient;libsmbclient"},
+        "Service":{"Value":"smbd"},
+        "Process":{"Value":"smb;nmb;winbind"},
+        "Script":{"Value":"$<Path_Initd>/$<Service>"},
+        "Log":{"Value":"$<Path_Log>/$<App>/$<Service>.log"},
+        "Port":{"Value":"139;445"},
+        "Pid":{"Value":"$<Path_Run>/$<App>/$<Service>.pid"},
+        "Man":{"Value":"$<App>;smb.conf;limits.conf"},
+        "HomePage":{"Value":"https://www.samba.org"},
+        "Tag":{"Value":"service;file sharing;smb"}
+    },
+    "Cmd":{
+        "ServiceStart":{"Value":"$<Service>"},
+        "ServiceStop":{"Value":"$<Service>"},
+        "ServiceReload":{"Value":"smbcontrol all reload-config"},
+        "PkgInstall":{"Value":"$<Install>"},
+        "PkgRemove":{"Value":"$<Remove>"},
+        "ShowService":{"Value":"$<Service>"},
+        "ShowProcess":{"Value":"$<Process>"},
+        "ShowPort":{"Value":"$<Port>"},
+        "ShowLog":{"Value":"$<Log>"},
+        "ShowMan":{"Value":"$<Man>"}
+    },
+    "User":{
+        "Add":{"Cmd":"useradd -M $<Arg1>;smbpasswd -s -a -n $<Arg1>"},
+        "Del":{"Cmd":"deluser $<Arg1>;smbpasswd -s -x $<Arg1>"},
+        "Enable":{"Cmd":"smbpasswd -s -e $<Arg1>"},
+        "Disable":{"Cmd":"smbpasswd -s -d $<Arg1>"},
+        "Password":{"Cmd":"(echo $<Arg2>; echo $<Arg2>) | smbpasswd -s -a $<Arg1>"},
+        "List":{"Cmd":"pdbedit -L | awk -F: '{print $1}'"}
+    },
+    "Config":{
+        "Main":{
+            "Type":"Ini",
+            "Path":"/etc/$<App>/smb.conf",
+            "Validate":true,
+            "Comment":"#",
+            "Check":"testparm",
+            "Descr":"main config file",
+            "Field":{
+                "workgroup":{"Value":"", "Type":"String", "Descr":"mydescr"},
+                "usershare allow guests":{"Value":"yes", "Type":"YN", "Descr":"mydescr"}
+            }
+        }
+    }
+}

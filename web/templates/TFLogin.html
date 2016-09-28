@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="/static/style.css" type="text/css">
+
+{% block body %}
+
+{% if session['logged_in'] %}
+    <p>You're logged in already!</p>
+{% else %}
+    <form action="/login" method="POST">
+        <div class="login">
+            <div class="login-screen">
+                <div class="app-title">
+                    <h1>{{ Form.Title }}</h1>
+                </div>
+                <div class="login-form">
+                    <div class="control-group">
+                    {{ Form.UserName(class='login-field', placeholder='user') }}
+                    </div>
+                    <div class="control-group">
+                    {{ Form.Password(class='login-field', placeholder='password') }}
+                    </div>
+                    {{ Form.Submit(class="btn btn-primary btn-large btn-block") }}
+                    <br>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endif %}
+
+{% endblock %}

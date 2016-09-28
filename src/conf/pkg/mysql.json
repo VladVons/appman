@@ -1,0 +1,60 @@
+{
+    "Include":{
+        "File":[
+            {"Value":"$<Sys_OS>.json", "Descr":"Common constants"}
+        ]
+    },
+    "Variable":{
+        "App":{"Value":"mysql-server"},
+        "Descr":{"Value":"$<App> is a database server"},
+        "Install":{"Value":"$<App>"},
+        "Service":{"Value":"mysql"},
+        "Process":{"Value":"mysqld"},
+        "User":{"Value":"mysql"},
+        "Script":{"Value":"$<Path_Initd>/$<Service>"},
+        "Log":{"Value":"$<File_SysLog>"},
+        "Port":{"Value":"3306"},
+        "Pid":{"Value":"$<Path_Run>/$<Process>/$<Process>.pid"},
+        "Man":{"Value":"$<App>"},
+        "HomePage":{"Value":"https://www.pureftpd.org"},
+        "Tag":{"Value":"service;database"},
+        "_DbAdmin":{"Value":"root"},
+        "_DbPassw":{"Value":"19710819"},
+        "_Sql":{"Value":"mysql --user=$<_DbAdmin> --password=$<_DbPassw> --host=localhost --disable-column-names --batch --execute=\"$<Macro1>\""}
+     },
+     "Cmd":{
+        "ServiceStart":{"Value":"$<Service>"},
+        "ServiceStop":{"Value":"$<Service>"},
+        "PkgInstall":{"Value":"$<Install>"},
+        "ShowService":{"Value":"$<Process>"},
+        "ShowProcess":{"Value":"$<Process>"},
+        "ShowPort":{"Value":"$<Port>"},
+        "ShowLog":{"Value":"$<Log>|$<Service>", "Cmd":"$<Cmd_ShowLogGrep>"},
+        "ShowMan":{"Value":"$<Man>"}
+    },
+    "User":{
+        "Add": {"Cmd":"$<_Sql>", "Macro1":"GRANT ALL PRIVILEGES ON $<Arg3>.* TO '$<Arg1>'@'localhost' IDENTIFIED BY '$<Arg2>'"},
+        "Del": {"Cmd":"$<_Sql>", "Macro1":"REVOKE ALL PRIVILEGES ON $<Arg2>.* FROM '$<Arg1>'@'localhost'"},
+        "List":{"Cmd":"mysql.sh UserList"}
+    },
+    "Config":{
+        "Main":{
+            "Type":"Ini",
+            "Path":"/etc/mysql/my.cnf",
+            "Validate":true,
+            "Comment":"#",
+            "Descr":"Main config file",
+            "Field":{
+                "datadir":{"Value":"/var/lib/mysql", "Type":"Path"},
+                "bind-address":{"Value":"127.0.0.1", "Type":"IP"},
+                "user":{"Value":"$<User>", "Type":"User"},
+                "port":{"Value":"$<Port>", "Type":"Port"},
+                "max_allowed_packet":{"Value":"16M", "Type":"DigitM"},
+                "log_error":{"Value":"/var/log/mysql/error.log", "Type":"File"}
+            },
+            "Section":{
+                "mysqld":{"Value":"datadir;bind-address;log_error;user;port;max_allowed_packet"}
+            }
+        }
+    }
+}
