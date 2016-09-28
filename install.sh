@@ -78,6 +78,7 @@ GitUpload()
 {
   git status
   git add install.sh
+  git commit
 }
 
 
