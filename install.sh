@@ -95,13 +95,22 @@ GitUpload()
   git push -u origin master
 }
 
+GitUpdate()
+{
+  Clean
+  git add -u -A
+  GitUpload
+}
 
+
+#GitUpdate
 
 clear
-#
-#Install
-#ServiceRun
+case $1 in
+    Clean)          "$1"        "$2" "$3" ;;
+    GitCreate)      "$1"        "$2" "$3" ;;
+    GitUpdate|u)    GitUpdate   "$2" "$3" ;;
+    Install)        "$1"        "$2" "$3" ;;
+    ServiceRun)     "$1"        "$2" "$3" ;;
+esac
 
-Clean
-#GitCreate
-GitUpload
