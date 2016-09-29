@@ -98,7 +98,7 @@ GitUpload()
 GitUpdate()
 {
   Clean
-  git add -u -A
+  git add -A -v
   GitUpload
 }
 
