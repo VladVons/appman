@@ -146,7 +146,8 @@ def TestSerial(aJson):
 
     print("Serial.CallFunc:TAppMan.LoadFile",           Serial.CallFunc("TAppMan.LoadFile", [aJson]))
     print("Serial.CallFunc:TAppMan.Variable.GetValue",  Serial.CallFunc("TAppMan.Variable.GetValue", ["Descr"]))
-    print("Serial.CallFunc:TAppMan.Editor.GetPath",     Serial.CallFunc("TAppMan.Editor.GetPath"))
+    #print("Serial.CallFunc:TAppMan.Editor.GetPath",     Serial.CallFunc("TAppMan.Editor.GetPath"))
+    print("Serial.CallFunc:TAppMan.Util.FileRead",      Serial.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
     #print("Serial.GetProp:TAppMan.Editor.PathName",     Serial.GetProp("TAppMan.Editor.PathName"))
     #print("Type", type(Serial.CasheObj))
 
@@ -188,14 +189,14 @@ def TestSocketCycle(aJson):
 #TShell.ExecM("clear")
 
 #FileName = "samba.json"
-FileName = "pure-ftpd.json"
+#FileName = "pure-ftpd.json"
 #FileName = "sysuser.json"
-#FileName = "mysql.json"
+FileName = "mysql.json"
 
 #TestSocketCycle(FileName)
 #TestSocket(FileName)
 #TestAppMan(FileName)
-#TestSerial(FileName)
+TestSerial(FileName)
 
 
 #TestDir()

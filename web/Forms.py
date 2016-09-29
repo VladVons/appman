@@ -96,8 +96,11 @@ class TFPkgInfo(Form):
                 if (Item in Xlat):
                     CmdRes = User.Call(Xlat[Item])
                 elif (Item in ["Pid", "Script", "Log"]):
-                    Data = User.Call("TAppMan.Util.FileRead", PairsVar.get(Item))
-                    CmdRes = HTML.a("more...", href="/file_show?name=" + PairsVar.get(Item))
+                    IsFile = User.Call("TAppMan.Util.FileExist", PairsVar.get(Item))
+                    if (IsFile):
+                        CmdRes = HTML.a("more...", href="/file_show?name=" + PairsVar.get(Item) + "&type=" + Item)
+                    else:
+                        CmdRes = "Not found"
                 else:
                     CmdRes = ""
                 Result.append( {"Field": Item, "Value": PairsVar.get(Item),  "Info": CmdRes} )
@@ -134,8 +137,12 @@ class TFFileShow(Form):
             return redirect("/login")
         else:
             if (request.method == "GET"):
-                FileName = request.args.get("name")
-                Data = User.Call("TAppMan.Util.FileRead", FileName)
-                self.FileData = Data.replace("\n", "<br>")
+                if (request.args.get("type") == "Log"):
+                    Data = User.Call("TAppMan.Cmd.ShowLog")
+                else:
+                    FileName = request.args.get("name")
+                    Data = User.Call("TAppMan.Util.FileRead", FileName)
+                    #self.FileData = Data.replace("\n", "<br>")
+                self.FileData = Data
 
             return render_template(self.Template, Form = self)

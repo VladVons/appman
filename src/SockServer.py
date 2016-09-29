@@ -120,7 +120,7 @@ class TSockSession():
                 else:
                     break
         except Exception as E:
-            DataOut = "Error:" + E.message + ", Data:" + DataIn
+            DataOut = "TSockSession->Run Error:" + E.message + ", Data:" + DataIn
             self.Log(DataOut)
             self.Send(DataOut)
 
@@ -160,7 +160,7 @@ class TSockServer():
                             filemode='a')
             Result = True
         except IOError as (errno, strerror):
-            print ("Error: {0}: {1}".format(strerror, aFile))
+            print ("TSockServer->SetLoger Error: {0}: {1}".format(strerror, aFile))
         return Result
 
     def __Stop(self):

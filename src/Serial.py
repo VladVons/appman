@@ -73,7 +73,7 @@ class TSerial():
                             self.Data[Path] = Result
                 except Exception as E:
                     Result = None
-                    self.LastError = "GetObj Error: " + E.message + " in " + Path
+                    self.LastError = "TSerial->GetObj Error: " + E.message + " in " + Path
                     print(self.LastError)
 
         return Result
@@ -95,7 +95,7 @@ class TSerial():
             else:
                 Result = aObj()
         except Exception as E:
-            self.LastError = "CallObj Error: " + E.message
+            self.LastError = "TSerial->CallObj Error: " + E.message
             #Result = None
             Result = self.LastError
             print(self.LastError)
@@ -111,7 +111,7 @@ class TSerial():
           if (ObjType in ["instancemethod", "function"]):
               return self.CallObj(Obj, aArgs)
           else:
-              return "Error: Object is not callable: " + aFuncName + " " + ObjType
+              return "TSerial->CallFunc Error: Object is not callable: " + aFuncName + " " + ObjType
         else:
           return self.LastError
 
@@ -148,7 +148,7 @@ class TSerial():
                 Node = json.loads(aData)
             except Exception as E:
                 Node   = None
-                Result = "Error: " + E
+                Result = "TSerial->Decode Error: " + E
 
             if (Node):
                 Type = Node.get("Type")
@@ -161,7 +161,7 @@ class TSerial():
                 elif (Type == "Prop"):
                     Result = self.GetObj(Name)
                 else:
-                    Result = "Error: Unknown type " + Type
+                    Result = "TSerial->Decode Error: Unknown type: " + Type
 
         return Result
 
