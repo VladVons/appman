@@ -102,6 +102,6 @@ clear
 #Install
 #ServiceRun
 
-#Clean
+Clean
 #GitCreate
 GitUpload
