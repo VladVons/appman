@@ -1,4 +1,7 @@
 #!/bin/bash
+# Created: 28.09.2016
+# Vladimir Vons, VladVons@gmail.com
+
 
 Install()
 {
