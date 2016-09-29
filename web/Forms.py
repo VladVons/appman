@@ -72,12 +72,12 @@ class TFPkgInfo(Form):
     Template = "TFPkgInfo.html"
 
     def CustomSort(self, aItem1, aItem2):
-        print("---1", aItem1, aItem2)
         Idx1 = TList.Find(self.SortOrd, aItem1["Field"])
         Idx2 = TList.Find(self.SortOrd, aItem2["Field"])
-        if (Idx1 != -1) and (Idx2 != -1):
+        if ((Idx1 != -1) and (Idx2 != -1)):
             return Idx1 - Idx2
-        return 0
+        else:
+            return 0
 
     def GetList(self, aFile):
         Result = []
