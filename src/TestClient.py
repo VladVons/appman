@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # Created: 21.08.2016
-# Vladimir Vons, VladVons@gmail.com
+# Vladimir Vons, VladVons@gmail.com, OK
 
 
 import re
