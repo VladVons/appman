@@ -63,6 +63,11 @@ GitCreate()
 {
   git init
   git config --global user.email "vladvons@gmail.com"
+
+  # no password 
+  git config --global credential.helper 'cache --timeout=36000'
+  #git config --global credential.helper wincred
+
   git add -A
   git commit -m "first commit"
   git remote add origin https://github.com/VladVons/appman.git
