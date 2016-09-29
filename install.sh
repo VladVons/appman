@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 Install()
 {
   Installed=$(pip list | grep Flask)
@@ -101,8 +99,9 @@ GitUpload()
 
 clear
 #
-Clean
-#GitCreate
-
-Install
+#Install
 #ServiceRun
+
+#Clean
+#GitCreate
+GitUpload
