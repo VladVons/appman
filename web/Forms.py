@@ -90,8 +90,9 @@ class TFPkgInfo(Form):
 
         User.Call("TAppMan.LoadFile", aFile)
         PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
+        HideVar  = User.Call("TAppMan.Variable.GetFieldList", "App_HideVar/Value")
         for Item in PairsVar:
-            if (not Item.startswith(("_", "Cmd_", "Util_", "File_", "Path_", "Sys_", "Misc_"))):
+            if (not Item.startswith(tuple(HideVar))):
                 if (Item in Xlat):
                     CmdRes = User.Call(Xlat[Item])
                 elif (Item in ["Pid", "Script", "Log"]):
@@ -105,7 +106,7 @@ class TFPkgInfo(Form):
         if (Prop):
             Result.append( {"Field": "Config", "Value": Prop, "Info": ""} )
 
-        self.SortOrd = User.Call("TAppMan.Variable.GetFieldList", "Misc_SortVar/Value")
+        self.SortOrd = User.Call("TAppMan.Variable.GetFieldList", "App_SortVar/Value")
         if (len(self.SortOrd) > 0):
             Result.sort(self.CustomSort)
         else:

@@ -1,7 +1,8 @@
 {
     "Variable":{
         "Sys_OS":{"Value":"linux"},
-        "Misc_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;Log;Pid;Port;Script;Service;Process"}
+        "App_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;Log;Pid;Port;Script;Service;Process"},
+        "App_HideVar":{"Value":"_;Cmd_;Util_;File_;Path_;Sys_;App_"}
     },
     "Option":{
         "Policy":{

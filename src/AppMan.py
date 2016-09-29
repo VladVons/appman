@@ -19,7 +19,7 @@ from Editor import *
 
 sys.path.insert(0, './conf/pkg')
 
-__version__ = {"Version": "1.03", "EMail": "VladVons@gmail.com"}
+__version__ = {"Version": "1.031", "EMail": "VladVons@gmail.com"}
 cPathConf   = "conf/pkg"
 
 #---
