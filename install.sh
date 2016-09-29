@@ -67,6 +67,9 @@ GitCreate()
   git commit -m "first commit"
   git remote add origin https://github.com/VladVons/appman.git
   git push -u origin master
+
+  #web admin
+  #https://github.com/VladVons/appman
 }
 
 GitDownload()
