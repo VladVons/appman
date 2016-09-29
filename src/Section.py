@@ -66,8 +66,16 @@ class TSectionVar(TSection):
         Value = self.GetItem(aName, aDef)
         return self.Parent.Variable.Parse(Value)
 
+    def GetFieldList(self, aName):
+        Str = self.GetField(aName)
+        if (Str):
+            return Str.split(cObjDelim)
+        else:
+            return []
+
     def GetValue(self, aName, aDef = ""):
         return self.GetField(aName + "/" + cFieldValue, aDef)
+
 
     def GetCmd(self, aName, aDef = ""):
         return self.GetField(aName + "/" + cFieldCmd, aDef)

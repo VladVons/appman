@@ -82,8 +82,6 @@ class TFPkgInfo(Form):
     def GetList(self, aFile):
         Result = []
 
-        self.SortOrd = ["App", "Descr", "Tag", "HomePage", "Man", "Install", "Config", "User", "Log", "Pid", "Port", "Script", "Process", "Service" ]
-
         Xlat = {}
         Xlat["Install"] = "TAppMan.Cmd.PkgVersion"
         Xlat["Service"] = "TAppMan.Cmd.ShowService"
@@ -93,7 +91,7 @@ class TFPkgInfo(Form):
         User.Call("TAppMan.LoadFile", aFile)
         PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
         for Item in PairsVar:
-            if (not Item.startswith(("_", "Cmd_", "Util_", "File_", "Path_", "Sys_", "Sort_"))):
+            if (not Item.startswith(("_", "Cmd_", "Util_", "File_", "Path_", "Sys_", "Misc_"))):
                 if (Item in Xlat):
                     CmdRes = User.Call(Xlat[Item])
                 elif (Item in ["Pid", "Script", "Log"]):
@@ -107,8 +105,11 @@ class TFPkgInfo(Form):
         if (Prop):
             Result.append( {"Field": "Config", "Value": Prop, "Info": ""} )
 
-        Result.sort(self.CustomSort)
-        #Result.sort()
+        self.SortOrd = User.Call("TAppMan.Variable.GetFieldList", "Misc_SortVar/Value")
+        if (len(self.SortOrd) > 0):
+            Result.sort(self.CustomSort)
+        else:
+            Result.sort()
         return Result
 
     def Render(self):

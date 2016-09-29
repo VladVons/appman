@@ -1,7 +1,7 @@
 {
     "Variable":{
         "Sys_OS":{"Value":"linux"},
-        "Sort_Var":{"Value":"App;Descr;Tag;HomePage;Man;User;Install;Log;Pid;Port;Script;Process;Service"}
+        "Misc_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;Log;Pid;Port;Script;Service;Process"}
     },
     "Option":{
         "Policy":{
