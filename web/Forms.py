@@ -9,6 +9,10 @@ from webhelpers.html import HTML
 
 from Session import User, TUser
 
+import sys
+sys.path.insert(0, '../src/inc')
+from Common import *
+
 
 class TFIndex(Form):
     Title    = "Main"
@@ -67,8 +71,18 @@ class TFPkgInfo(Form):
     Title    = "Package information"
     Template = "TFPkgInfo.html"
 
+    def CustomSort(self, aItem1, aItem2):
+        print("---1", aItem1, aItem2)
+        Idx1 = TList.Find(self.SortOrd, aItem1["Field"])
+        Idx2 = TList.Find(self.SortOrd, aItem2["Field"])
+        if (Idx1 != -1) and (Idx2 != -1):
+            return Idx1 - Idx2
+        return 0
+
     def GetList(self, aFile):
         Result = []
+
+        self.SortOrd = ["App", "Descr", "Tag", "HomePage", "Man", "Install", "Config", "User", "Log", "Pid", "Port", "Script", "Process", "Service" ]
 
         Xlat = {}
         Xlat["Install"] = "TAppMan.Cmd.PkgVersion"
@@ -79,7 +93,7 @@ class TFPkgInfo(Form):
         User.Call("TAppMan.LoadFile", aFile)
         PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
         for Item in PairsVar:
-            if (not Item.startswith(("_", "Cmd_", "Util_", "File_", "Path_", "Sys_"))):
+            if (not Item.startswith(("_", "Cmd_", "Util_", "File_", "Path_", "Sys_", "Sort_"))):
                 if (Item in Xlat):
                     CmdRes = User.Call(Xlat[Item])
                 elif (Item in ["Pid", "Script", "Log"]):
@@ -93,7 +107,8 @@ class TFPkgInfo(Form):
         if (Prop):
             Result.append( {"Field": "Config", "Value": Prop, "Info": ""} )
 
-        Result.sort()
+        Result.sort(self.CustomSort)
+        #Result.sort()
         return Result
 
     def Render(self):

@@ -185,7 +185,7 @@ def TestSocketCycle(aJson):
 
 
 #---
-TShell.ExecM("clear")
+#TShell.ExecM("clear")
 
 #FileName = "samba.json"
 FileName = "pure-ftpd.json"
@@ -201,4 +201,7 @@ FileName = "pure-ftpd.json"
 #TestDir()
 #TestRegEx()
 
+#Find = "Man"
+#SortOrd = ["App", "Descr", "Tag", "HomePage", "Man", "User"]
+#print(TList.Find(SortOrd, Find))
 

@@ -163,6 +163,15 @@ class TArray():
 
         return Result
 
+class TList():
+
+    @staticmethod
+    def Find(aList, aData):
+        if (aData in aList):
+            return aList.index(aData)
+        return -1
+
+
 
 #---
 class TSocket():
