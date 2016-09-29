@@ -84,9 +84,7 @@ GitUpload()
   #git mv README.md README
   #git log
 
-  #git add -u -v
-  #git add install.sh
-  #git add -u
+  git add -u -v
   git commit -m "just commit"
   git push -u origin master
 }
