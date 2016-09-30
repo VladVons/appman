@@ -116,7 +116,7 @@ class TSectionVarExec(TSectionVar):
         Items   = aStr.split(cObjDelim)
         if (Items):
             for Item in Items:
-                Parsed  = TString.MultiRepl(Item, aFindRepl)
+                Parsed  = TStr.MultiRepl(Item, aFindRepl)
                 Result += TShell.ExecM(Parsed) + "\n"
         return Result
 

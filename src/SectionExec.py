@@ -64,7 +64,7 @@ class TSCmd(TSectionVarExec):
         return Result
 
     def PkgVersion(self):
-        PkgName = TString.GetPart(self.GetValue("PkgInstall"), 0, cObjDelim)
+        PkgName = TStr.GetPart(self.GetValue("PkgInstall"), 0, cObjDelim)
         return self.ExecValue("PkgVersion", PkgName)
 
 

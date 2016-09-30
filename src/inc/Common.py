@@ -43,7 +43,7 @@ class TDicReplace:
 
 
 #---
-class TString():
+class TStr():
 
     @staticmethod
     def MultiRepl(aStr, aFindRepl):
