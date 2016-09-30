@@ -93,10 +93,10 @@ class TAppMan():
             with open(aFileName) as File:
                 root = json.load(File)
 
-            Items = TArray.FindNode(root, "Include/File")
-            if (Items):
-                for Item in Items:
-                    Value = self.Variable.Parse(Item[cFieldValue])
+            IncludeFile = TArray.FindNode(root, "Include/File/" + cFieldValue)
+            if (IncludeFile):
+                for Item in IncludeFile.split(cObjDelim):
+                    Value = self.Variable.Parse(Item)
                     self.__LoadFileSearch(Value)
 
             self.Option._Load(root)

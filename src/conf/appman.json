@@ -1,11 +1,8 @@
 {
    "Include":{
-        "File":[
-            {"Value":"linux.json", "Descr":"OS constants"}
-        ]
+        "File":{"Value":"linux.json"}
     },
     "Variable":{
-        "Sys_Include":{"Value":"linux.json"},
         "App_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;Log;Pid;Port;Script;Service;Process"},
         "App_HideVar":{"Value":"_;Cmd_;Util_;File_;Path_;Sys_;App_"},
         "App_Util":{"Value":"OS;MemTotal;DiskFree;IsRoot;_Top_;_PkgList_;_Reboot_"}
