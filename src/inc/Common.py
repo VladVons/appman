@@ -132,7 +132,7 @@ class TFile():
 
 
 
-class TArray():
+class TDict():
 
     @staticmethod
     def FindNode(aNode, aPath):
@@ -147,7 +147,7 @@ class TArray():
 
     @staticmethod
     def FindNodeDef(aNode, aPath, aDef):
-        Node = TArray.FindNode(aNode, aPath)
+        Node = TDict.FindNode(aNode, aPath)
         if (Node == None):
             return aDef
         else:

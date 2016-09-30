@@ -46,11 +46,11 @@ class TSection():
                         print("xxx", Method, Obj)
                         del(Obj)
 
-        self._AddItems(TArray.FindNode(aNode, self.Name))
+        self._AddItems(TDict.FindNode(aNode, self.Name))
         #RemoveEmptyMethods()
 
     def GetItem(self, aName, aDef = ""):
-        return TArray.FindNodeDef(self.Data, aName, aDef)
+        return TDict.FindNodeDef(self.Data, aName, aDef)
 
     def SetItem(self, aName, aValue):
         self.Data[aName] = aValue

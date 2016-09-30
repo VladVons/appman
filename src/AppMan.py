@@ -75,7 +75,7 @@ class TAppMan():
               TCl = getattr(Lib, Item.name)
               Cl  = TCl(self, Item.name)
               setattr(self, Item.name, Cl)
-              Cl._AddItems(TArray.FindNode(aNode, Item.name))
+              Cl._AddItems(TDict.FindNode(aNode, Item.name))
 
     def __LoadFileSearch(self, aFileName):
         Result = False
@@ -93,7 +93,7 @@ class TAppMan():
             with open(aFileName) as File:
                 root = json.load(File)
 
-            IncludeFile = TArray.FindNode(root, "Include/File/" + cFieldValue)
+            IncludeFile = TDict.FindNode(root, "Include/File/" + cFieldValue)
             if (IncludeFile):
                 for Item in IncludeFile.split(cObjDelim):
                     Value = self.Variable.Parse(Item)
