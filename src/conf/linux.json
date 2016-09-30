@@ -10,6 +10,7 @@
 
     "Util_OS":{"Value":"lsb_release -a && uname -r"},
     "Util_MemTotal":{"Value":"grep -i 'MemTotal' /proc/meminfo | awk '{ print $2}'"},
+    "Util_DiskFree":{"Value":"df -h"},
     "Util_IsRoot":{"Value":"whoami | grep root"},
     "Util_Reboot":{"Value":"reboot"},
     "Util_Top":{"Value":"top -b -n 1 | head -n 25"},
@@ -18,10 +19,14 @@
     "Util_ShowFile":{"Value":"cat"},
     "Util_Manual":{"Value":"man"},
 
-    "Util_PkgInfo":   {"Value":"dpkg -s"},
-    "Util_PkgInstall":{"Value":"apt-get install --yes"},
-    "Util_PkgRemove": {"Value":"apt-get remove --yes"},
-    "Util_PkgAddPpa": {"Value":"add-apt-repository --yes"},
+    "Util_PkgList":     {"Value":"dpkg -l"},
+    "Util_PkgInfo":     {"Value":"dpkg -s"},
+    "Util_PkgInstall":  {"Value":"apt-get install --yes"},
+    "Util_PkgRemove":   {"Value":"apt-get remove --yes"},
+    "Util_PkgDepends":  {"Value":"apt-cache depends"},
+    "Util_PkgRDepends": {"Value":"apt-cache rdepends"},
+    "Util_PkgAddPpa":   {"Value":"add-apt-repository --yes"},
+    "Util_PkgToFix":    {"Value":"dpkg -l | tail -n +6 | awk '{print $1,$2}' | grep -v 'ii' | awk '{print $2}'"},
 
     "Cmd_ServiceStart": {"Value":"service $<Arg1> start"},
     "Cmd_ServiceStop":  {"Value":"service $<Arg1> stop"},

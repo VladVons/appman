@@ -1,9 +1,4 @@
 {
-    "Include":{
-        "File":[
-            {"Value":"$<Sys_OS>.json", "Descr":"Common constants"}
-        ]
-    },
     "Variable":{
         "Descr":{"Value":"system users handling"},
         "Man":{"Value":"adduser;useradd"},

@@ -46,6 +46,11 @@ def R_conf_list():
     form = TFConfList(request.form)
     return form.Render()
 
+@app.route("/util", methods=["POST", "GET"])
+def R_util():
+    form = TFUtil(request.form)
+    return form.Render()
+
 @app.route("/login", methods=["POST", "GET"])
 def R_login():
     form = TFLogin(request.form)

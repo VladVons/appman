@@ -34,7 +34,7 @@ class TFLogin(Form):
     def Render(self):
         self.Error = ""
         if (User.OK()):
-            return redirect("/conf_list")
+            return redirect("/")
         else:
             if (request.method == "POST"):
                 if (self.validate()):
@@ -54,8 +54,8 @@ class TFConfList(Form):
         if (not User.OK()):
             return redirect("/login")
         else:
-            Columns = ["_numbered", "File", "Version", "Run", "Tag", "Descr"]
-            Items   = []
+            GridColumns = ["_numbered", "File", "Version", "Run", "Tag", "Descr"]
+            GridItems   = []
             Files   = User.Call("TAppMan.GetListConf")
             for File in Files:
                 User.Call("TAppMan.LoadFile", File)
@@ -63,8 +63,8 @@ class TFConfList(Form):
                 Pairs = User.Call("TAppMan.Variable.GetPairs", "Value")
                 Run   = User.Call("TAppMan.Cmd.ShowService").strip() != ""
                 Ver   = User.Call("TAppMan.Cmd.PkgVersion")
-                Items.append( {"File": Conf, "Tag": Pairs.get("Tag"), "Version": Ver, "Descr": Pairs.get("Descr"), "Run": Run } )
-            self.Grid = Grid(Items, Columns)
+                GridItems.append( {"File": Conf, "Tag": Pairs.get("Tag"), "Version": Ver, "Descr": Pairs.get("Descr"), "Run": Run } )
+            self.Grid = Grid(GridItems, GridColumns)
             return render_template(self.Teplate, Form = self)
 
 class TFPkgInfo(Form):
@@ -95,7 +95,7 @@ class TFPkgInfo(Form):
             if (not Item.startswith(tuple(HideVar))):
                 if (Item in Xlat):
                     CmdRes = User.Call(Xlat[Item])
-                elif (Item in ["Pid", "Script", "Log"]):
+                elif (Item in ["Pid", "Script", "Config", "Log"]):
                     IsFile = User.Call("TAppMan.Util.FileExist", PairsVar.get(Item))
                     if (IsFile):
                         CmdRes = HTML.a("more...", href="/file_show?name=" + PairsVar.get(Item) + "&type=" + Item)
@@ -121,12 +121,11 @@ class TFPkgInfo(Form):
             return redirect("/login")
         else:
             if (request.method == "GET"):
-                Columns   = ["_numbered", "Field", "Value", "Info"]
-                Items     = self.GetList(request.args.get("name"))
-                self.Grid = Grid(Items, Columns)
+                GridColumns   = ["_numbered", "Field", "Value", "Info"]
+                GridItems     = self.GetList(request.args.get("name"))
+                self.Grid = Grid(GridItems, GridColumns)
 
             return render_template(self.Template, Form = self)
-
 
 class TFFileShow(Form):
     Title    = "Show file"
@@ -146,3 +145,26 @@ class TFFileShow(Form):
                 self.FileData = Data
 
             return render_template(self.Template, Form = self)
+
+class TFUtil(Form):
+    Title   = "Utils"
+    Teplate = "TFUtil.html"
+
+    def Render(self):
+        if (not User.OK()):
+            return redirect("/login")
+        else:
+            GridColumns = ["_numbered", "Name", "Command", "Result"]
+            GridItems   = []
+
+            PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
+            Utils    = User.Call("TAppMan.Variable.GetFieldList", "App_Util/Value")
+            for Util in Utils:
+                #Var      = HTML.a(Util, href="util1?name=" + Util)
+                Var      = Util
+                ExecVar  = "Util_" + Util
+                ExecStr  = PairsVar.get(ExecVar)
+                ExecRes  = User.Call("TAppMan.Util.ExecVar", ExecVar)
+                GridItems.append( {"Name": Var, "Command": ExecStr, "Result" : ExecRes} )
+            self.Grid = Grid(GridItems, GridColumns)
+            return render_template(self.Teplate, Form = self)

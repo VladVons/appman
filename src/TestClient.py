@@ -148,6 +148,7 @@ def TestSerial(aJson):
     print("Serial.CallFunc:TAppMan.Variable.GetValue",  Serial.CallFunc("TAppMan.Variable.GetValue", ["Descr"]))
     #print("Serial.CallFunc:TAppMan.Editor.GetPath",     Serial.CallFunc("TAppMan.Editor.GetPath"))
     print("Serial.CallFunc:TAppMan.Util.FileRead",      Serial.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
+    print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_OS"]))
     #print("Serial.GetProp:TAppMan.Editor.PathName",     Serial.GetProp("TAppMan.Editor.PathName"))
     #print("Type", type(Serial.CasheObj))
 

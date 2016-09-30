@@ -1,9 +1,4 @@
 {
-    "Include":{
-        "File":[
-            {"Value":"$<Sys_OS>.json", "Descr":"Common constants"}
-        ]
-    },
     "Variable":{
         "App":{"Value":"mysql-server"},
         "Descr":{"Value":"$<App> is a database server"},

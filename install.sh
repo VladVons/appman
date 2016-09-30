@@ -50,8 +50,8 @@ ServiceRun()
 Clean()
 {
   echo "delete objects"
-  find . -name '*.pyc' -exec rm -v -R {} \;
-  find . -name '*.log' -exec rm -v -R {} \;
+  find . -name '*.pyc' -exec rm -v -f -R {} \;
+  find . -name '*.log' -exec rm -v -f -R {} \;
 
   echo
   echo "Statistics *.py"

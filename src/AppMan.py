@@ -86,6 +86,8 @@ class TAppMan():
         return Result
 
     def __LoadFile(self, aFileName):
+        #print("LoadFile", aFileName)
+
         Result = os.path.isfile(aFileName)
         if (Result):
             with open(aFileName) as File:
