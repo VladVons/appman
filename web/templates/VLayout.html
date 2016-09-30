@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/grid.css" type="text/css">
+    <title>{{ Form.Title }}</title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    <div id="footer" class="app-footer">
+        <a href="https://github.com/VladVons/appman">appman 2016</a>
+    </div>
+  </body>
+</html>

@@ -40,6 +40,9 @@ ServiceRun()
   python Main.py
   #nohup python Main.py &
 
+  #kill python process 
+  #pkill -f Main.py
+
   #listen on http://0.0.0.0:5000
 }
 

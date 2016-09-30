@@ -1,6 +1,11 @@
-<link rel="stylesheet" href="/static/grid.css" type="text/css">
+{% extends "VLayout.html" %}
 
+{% block content %}
+<!--TFPkgInfo.html begin-->
 <table class="stylized">
-<caption>{{ Form.Title }}</caption>
-{{ Form.Grid }}
+    <caption>{{ Form.Title }}</caption>
+    {{ Form.Grid }}
 </table>
+<!--TFPkgInfo.html end-->
+{% endblock %}
+
