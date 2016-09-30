@@ -19,8 +19,8 @@ class TFIndex(Form):
     Teplate  = "TFIndex.html"
 
     def Render(self):
-        self.UserOK  = User.OK()
-        self.Version = User.Call("TAppMan.GetVersion")["Version"]
+        self.UserOK = User.OK()
+        self.Info   = User.Call("TAppMan.GetInfo")
         return render_template(self.Teplate, Form = self)
 
 

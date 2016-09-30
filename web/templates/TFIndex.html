@@ -2,7 +2,13 @@
 
 {% block content %}
 <!--TFIndex.html begin-->
-Version: {{ Form.Version }}<br>
+App ver:  {{ Form.Info['Sys_AppVer'] }}<br>
+Started:  {{ Form.Info['Sys_TimeStart'] }}<br>
+<br>
+OS  ver:  {{ Form.Info['Sys_Platform'] }}<br>
+OS  Rel:  {{ Form.Info['Sys_Release'] }}<br>
+OS  User: {{ Form.Info['Sys_User'] }}<br>
+<br>
 {% if Form.UserOK %}
     <a href='/conf_list'>conf_list</a><br>
     <a href='/util'>util</a><br>

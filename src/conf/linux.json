@@ -15,10 +15,12 @@
     "Util_Reboot":{"Value":"reboot"},
     "Util_Top":{"Value":"top -b -n 1 | head -n 25"},
     "Util_Process":{"Value":"pgrep -a"},
+    "Util_NetDev":{"Value":"ifconfig | cut -c 1-8 | sort | uniq -u"},
     "Util_Service":{"Value":"ps aux | grep -v grep | awk '{ print $1, $2, $11}' | grep"},
     "Util_ShowFile":{"Value":"cat"},
     "Util_Manual":{"Value":"man"},
 
+    "Util_PkgUpdate":   {"Value":"linux.sh PkgUpdate"},
     "Util_PkgList":     {"Value":"dpkg -l"},
     "Util_PkgInfo":     {"Value":"dpkg -s"},
     "Util_PkgInstall":  {"Value":"apt-get install --yes"},

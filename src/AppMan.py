@@ -11,6 +11,7 @@ import importlib
 import inspect
 import ast
 import re
+import datetime
 
 from inc.Common import *
 from SectionExec import *
@@ -19,7 +20,7 @@ from Editor import *
 
 sys.path.insert(0, './conf/pkg')
 
-__version__ = {"Version": "1.031", "EMail": "VladVons@gmail.com"}
+__version__ = {"Sys_AppVer": "1.031", "Sys_Mail": "VladVons@gmail.com"}
 cPathConf   = "conf/pkg"
 
 #---
@@ -28,6 +29,7 @@ class TAppMan():
     def __init__(self):
         self.Path = ["/etc/appman", "conf", cPathConf]
         os.environ["PATH"] += os.pathsep + os.pathsep.join(self.Path)
+        self.TimeStart = datetime.datetime.now()
 
         self.Clear()
 
@@ -40,6 +42,10 @@ class TAppMan():
         self.Config   = TSConfig(self, "Config")
         self.Cmd      = TSCmd(self, "Cmd")
         self.User     = TSUser(self, "User")
+
+        Items = self.GetInfo()
+        for Item in Items:
+            self.Variable.SetItem(Item, {"Value":Items[Item]})
 
         self.__LoadFileSearch("appman.json")
 
@@ -118,8 +124,16 @@ class TAppMan():
         self.LoadEditor("Main")
         return Result
 
-    def GetVersion(self):
-        return __version__
+    def GetInfo(self):
+        import platform, getpass
+
+        Result = __version__
+        Result["Sys_Platform"]  = platform.system().lower()
+        Result["Sys_Release"]   = platform.release()
+        Result["Sys_User"]      = getpass.getuser()
+        Result["Sys_TimeStart"] = str(self.TimeStart)
+        Result["Sys_TimeNow"]   = str(datetime.datetime.now())
+        return Result
 
     def __GetApi(self, aClass, aPath):
         Result = []

@@ -144,12 +144,14 @@ def TestSerial(aJson):
     #print isinstance(Serial.CallFunc, instancemethod)
     #return
 
+    print("Serial.CallFunc:TAppMan.GetInfo",            Serial.CallFunc("TAppMan.GetInfo"))
     print("Serial.CallFunc:TAppMan.LoadFile",           Serial.CallFunc("TAppMan.LoadFile", [aJson]))
     print("Serial.CallFunc:TAppMan.Variable.GetValue",  Serial.CallFunc("TAppMan.Variable.GetValue", ["Descr"]))
     #print("Serial.CallFunc:TAppMan.Editor.GetPath",     Serial.CallFunc("TAppMan.Editor.GetPath"))
-    print("Serial.CallFunc:TAppMan.Util.FileRead",      Serial.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
+    #print("Serial.CallFunc:TAppMan.Util.FileRead",      Serial.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
     print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_OS"]))
-    #print("Serial.GetProp:TAppMan.Editor.PathName",     Serial.GetProp("TAppMan.Editor.PathName"))
+    #print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_PkgUpdate"]))
+    #print("Serial.CallFunc:TAppMan.GetInfo",             Serial.CallFunc("TAppMan.GetInfo"))
     #print("Type", type(Serial.CasheObj))
 
 def TestDir():
@@ -205,5 +207,6 @@ TestSerial(FileName)
 
 #Find = "Man"
 #SortOrd = ["App", "Descr", "Tag", "HomePage", "Man", "User"]
-#print(TList.Find(SortOrd, Find))
+print(os.getlogin())
+
 
