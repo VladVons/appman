@@ -1,15 +1,15 @@
 #!/bin/sh
 
 ## BEGIN INIT INFO
-# Provides:          appman
+# Provides:          appman_web
 # Required-Start:    $network $syslog
 # Required-Stop:     $network $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # X-Interactive:     true
 # Author:            VladVons@gmail.com
-# Short-Description: appman
-# Description:       appman daemon
+# Short-Description: appman_web
+# Description:       appman_web daemon
 ### END INIT INFO
 
 NAME="appman_web"
@@ -33,7 +33,7 @@ case "$1" in
   start)
     if [ $ENABLED = 1 ]; then
       log_daemon_msg "Starting $NAME "
-      start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --user $USER  --chdir $WORKDIR --exec $DAEMON $ARGS
+      start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --chuid $USER  --chdir $WORKDIR --exec $DAEMON $ARGS
       log_end_msg $?
     else
       log_daemon_msg "Disabled by $DEFAULT"

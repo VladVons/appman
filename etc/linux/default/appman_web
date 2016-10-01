@@ -1,6 +1,7 @@
-# defaults for /etc/init.d/appman
+# defaults for /etc/init.d/appman_web
 
 ENABLED=1
 OPTIONS=""
 SCRYPT="AppMan_Web.py"
 WORKDIR="/admin/project/appman/web"
+USER="www-data"

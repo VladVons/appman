@@ -6,11 +6,15 @@
     <caption>{{ Form.GridVarTitle }}</caption>
     {{ Form.GridVar }}
 </table>
+
+{% if Form.GridUser %}
 <br>
 <table class="stylized">
     <caption>{{ Form.GridUserTitle }}</caption>
     {{ Form.GridUser }}
 </table>
+{% endif %}
+
 <!--TFPkgInfo.html end-->
 {% endblock %}
 

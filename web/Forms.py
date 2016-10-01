@@ -69,7 +69,7 @@ class TFConfList(Form):
                 Run   = User.Call("TAppMan.Cmd.ShowService").strip() != ""
                 Ver   = User.Call("TAppMan.Cmd.PkgVersion")
                 GridItems.append( {"File": Conf, "Tag": Pairs.get("Tag"), "Version": Ver, "Descr": Pairs.get("Descr"), "Run": Run } )
-            self.Grid = Grid(GridItems, GridColumns)
+            self.Grid = Grid(GridItems, GridColumns, order_direction = "dsc")
             return render_template(self.Teplate, Form = self)
 
 class TFPkgInfo(Form):
@@ -143,15 +143,16 @@ class TFPkgInfo(Form):
                 aFile = request.args.get("name")
                 User.Call("TAppMan.LoadFile", aFile)
 
-                GridVarColumns   = ["_numbered", "Field", "Value", "Info"]
-                GridVarItems     = self.GetVarList()
-                self.GridVar     = Grid(GridVarItems, GridVarColumns)
+                GridVarItems      = self.GetVarList()
+                GridVarColumns    = ["_numbered", "Field", "Value", "Info"]
+                self.GridVar      = Grid(GridVarItems, GridVarColumns)
                 self.GridVarTitle = "Variables"
 
-                GridUserColumns   = ["_numbered", "Field", "Value", "Info"]
-                GridUserItems     = self.GetUserList()
-                self.GridUser     = Grid(GridUserItems, GridUserColumns)
-                self.GridUserTitle = "Users"
+                GridUserItems = self.GetUserList()
+                if (len(GridUserItems) > 0):
+                    GridUserColumns    = ["_numbered", "Field", "Value", "Info"]
+                    self.GridUser      = Grid(GridUserItems, GridUserColumns)
+                    self.GridUserTitle = "Users"
 
             return render_template(self.Template, Form = self)
 
