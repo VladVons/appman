@@ -23,8 +23,8 @@ ServiceRun()
   #ln -s $(pwd)/etc/init.d/appman  /etc/init.d/appman
   #ln -s $(pwd)/etc/default/appman /etc/default/appman
 
-  cp etc/init.d/appman  /etc/init.d/appman
-  cp etc/default/appman /etc/default/appman
+  cp etc/linux/init.d/appman  /etc/init.d/appman
+  cp etc/linux/default/appman /etc/default/appman
   echo WORKDIR="$(pwd)/src" >> /etc/default/appman
 
   #update-rc.d appman defaults

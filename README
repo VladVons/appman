@@ -1,0 +1,11 @@
+appman allows execute root commands via socket
+1) run ./src/RunServer.py on remote host
+    For autoboot service use scripts in ./etc directory
+2) run ./web/Main.py on web host
+
+see TestClient.py for examples
+
+
+VladVons@gmail.com
+Vladimir Vons
+Ukraine
