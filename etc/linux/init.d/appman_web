@@ -12,14 +12,14 @@
 # Description:       appman daemon
 ### END INIT INFO
 
-NAME="appman"
+NAME="appman_web"
 DESCR="Some description $NAME"
 PIDFILE="/var/run/$NAME.pid"
-USER="root"
+USER="www-data"
 
 # Read default configuration variable
 ENABLED=1
-SCRYPT="AppMan_Server.py"
+SCRYPT="AppMan_Web.py"
 WORKDIR="/usr/share/$NAME"
 DEFAULT="/etc/default/$NAME"
 if [ -r $DEFAULT ] ; then

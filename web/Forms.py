@@ -6,7 +6,8 @@ from wtforms import Form, StringField, PasswordField, SubmitField, validators
 from wtforms.validators import Required, Length
 from webhelpers.html.grid import Grid
 from webhelpers.html import HTML
-
+#
+from Const import *
 from Session import User, TUser
 
 import sys
@@ -15,12 +16,16 @@ from Common import *
 
 
 class TFIndex(Form):
+
     Title    = "Main"
     Teplate  = "TFIndex.html"
 
     def Render(self):
-        self.UserOK = User.OK()
-        self.Info   = User.Call("TAppMan.GetInfo")
+        import getpass
+
+        self.UserOK  = User.OK()
+        self.Info    = User.Call("TAppMan.GetInfo")
+        self.UserWeb = getpass.getuser()
         return render_template(self.Teplate, Form = self)
 
 
@@ -38,7 +43,7 @@ class TFLogin(Form):
         else:
             if (request.method == "POST"):
                 if (self.validate()):
-                    if (User.Connect(User.Host, User.Port, self.UserName.data, self.Password.data)):
+                    if (User.Connect(cAppHost, cAppPort, self.UserName.data, self.Password.data)):
                         return redirect("/conf_list")
                     else:
                         self.Error = "Username or password incorrect"

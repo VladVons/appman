@@ -1,13 +1,7 @@
-#!/usr/bin/python
-
 # Created: 22.09.2016
 # Vladimir Vons, VladVons@gmail.com
 #
 # Application manager
-
-# sudo pip install Flask
-# sudo pip install Flask-WTF
-# sudo pip install webhelpers
 
 #https://sarahleejane.github.io/learning/python/2015/08/09/simple-tables-in-webapps-using-flask-and-pandas-with-python.html
 #https://wtforms.readthedocs.io/en/latest/
@@ -62,7 +56,7 @@ def R_logout():
     return R_index()
 
 #---
-if (__name__ == "__main__"):
+def Run():
     print("Start main")
     app.secret_key = "Vlad_" + str(os.urandom(12))
     app.run(host = '0.0.0.0', port = 5000, debug = True)

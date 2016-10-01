@@ -1,0 +1,6 @@
+# defaults for /etc/init.d/appman
+
+ENABLED=1
+OPTIONS=""
+SCRYPT="AppMan_Web.py"
+WORKDIR="/admin/project/appman/web"

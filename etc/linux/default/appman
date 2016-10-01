@@ -2,5 +2,5 @@
 
 ENABLED=1
 OPTIONS=""
-SCRYPT="RunServer.py"
+SCRYPT="AppMan_Server.py"
 WORKDIR="/admin/project/appman/src"

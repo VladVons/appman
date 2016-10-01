@@ -2,6 +2,7 @@
 # Vladimir Vons, VladVons@gmail.com
 
 from flask import session
+from Const import *
 #
 import sys
 sys.path.insert(0, '../src')
@@ -12,9 +13,6 @@ from SockClient import *
 # map session variable on dictionaru TUser.Obj with a key = session["User"] + "_" + Var
 class TUser():
     Cnt   = 0
-    Debug = False
-    Host  = "localhost"
-    Port  = 51017
 
     def __init__(self):
         TUser.Cnt += 1
@@ -28,8 +26,8 @@ class TUser():
 
     def OK(self):
         Result = (self.GetName() != "")
-        if (not Result and self.Debug):
-            self.Connect(self.Host, self.Port, "VladVons", "1234")
+        if (not Result and cAppAuth == False):
+            self.Connect(cAppHost, cAppPort, "VladVons", "1234")
         return Result
 
     def GetName(self):
@@ -67,4 +65,3 @@ class TUser():
         session["User"] = ""
 
 User = TUser()
-User.Debug = True

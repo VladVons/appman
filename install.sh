@@ -23,22 +23,27 @@ ServiceRun()
   #ln -s $(pwd)/etc/init.d/appman  /etc/init.d/appman
   #ln -s $(pwd)/etc/default/appman /etc/default/appman
 
-  cp etc/linux/init.d/appman  /etc/init.d/appman
-  cp etc/linux/default/appman /etc/default/appman
+  cp etc/linux/init.d/appman  /etc/init.d/
+  cp etc/linux/default/appman /etc/default/
   echo WORKDIR="$(pwd)/src" >> /etc/default/appman
+
+  cp etc/linux/init.d/appman_web  /etc/init.d/appman
+  cp etc/linux/default/appman /etc/default/appman
+  echo WORKDIR="$(pwd)/web" >> /etc/default/appman_web
 
   #update-rc.d appman defaults
   #systemctl daemon-reload
   service appman start
+  service appman_web start
 
   echo
   echo "Check appman server running"
   service appman status
-  ps aux | grep -iv "grep" | grep -i "RunServer.py"
+  ps aux | grep -iv "grep" | egrep -i "AppMan_Server|AppMan_Web"
 
-  cd web
-  python Main.py
-  #nohup python Main.py &
+  #cd web
+  #python AppMan_Web.py
+  #nohup python AppMan_Web.py &
 
   #kill python process 
   #pkill -f Main.py
