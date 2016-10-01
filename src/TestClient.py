@@ -197,9 +197,9 @@ def TestSocketCycle(aJson):
 FileName = "mysql.json"
 
 #TestSocketCycle(FileName)
-#TestSocket(FileName)
+TestSocket(FileName)
 #TestAppMan(FileName)
-TestSerial(FileName)
+#TestSerial(FileName)
 
 
 #TestDir()

@@ -71,7 +71,7 @@ class TFPkgInfo(Form):
     Title    = "Package information"
     Template = "TFPkgInfo.html"
 
-    def CustomSort(self, aItem1, aItem2):
+    def CustomSort_GridVar(self, aItem1, aItem2):
         Idx1 = TList.Find(self.SortOrd, aItem1["Field"])
         Idx2 = TList.Find(self.SortOrd, aItem2["Field"])
         if ((Idx1 != -1) and (Idx2 != -1)):
@@ -79,7 +79,22 @@ class TFPkgInfo(Form):
         else:
             return 0
 
-    def GetList(self, aFile):
+
+    def GetUserList(self):
+        Result = []
+
+        PairsVar = User.Call("TAppMan.User.GetPairs", "Cmd")
+        for Item in PairsVar:
+            if ("List" in Item):
+                CmdRes = User.Call("TAppMan.User.List")
+            else:
+                CmdRes = ""
+
+            Result.append( {"Field": Item, "Value": PairsVar.get(Item),  "Info": CmdRes} )
+
+        return Result
+
+    def GetVarList(self):
         Result = []
 
         Xlat = {}
@@ -88,7 +103,6 @@ class TFPkgInfo(Form):
         Xlat["Process"] = "TAppMan.Cmd.ShowProcess"
         Xlat["Port"]    = "TAppMan.Cmd.ShowPort"
 
-        User.Call("TAppMan.LoadFile", aFile)
         PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
         HideVar  = User.Call("TAppMan.Variable.GetFieldList", "App_HideVar/Value")
         for Item in PairsVar:
@@ -111,7 +125,7 @@ class TFPkgInfo(Form):
 
         self.SortOrd = User.Call("TAppMan.Variable.GetFieldList", "App_SortVar/Value")
         if (len(self.SortOrd) > 0):
-            Result.sort(self.CustomSort)
+            Result.sort(self.CustomSort_GridVar)
         else:
             Result.sort()
         return Result
@@ -121,9 +135,18 @@ class TFPkgInfo(Form):
             return redirect("/login")
         else:
             if (request.method == "GET"):
-                GridColumns   = ["_numbered", "Field", "Value", "Info"]
-                GridItems     = self.GetList(request.args.get("name"))
-                self.Grid = Grid(GridItems, GridColumns)
+                aFile = request.args.get("name")
+                User.Call("TAppMan.LoadFile", aFile)
+
+                GridVarColumns   = ["_numbered", "Field", "Value", "Info"]
+                GridVarItems     = self.GetVarList()
+                self.GridVar     = Grid(GridVarItems, GridVarColumns)
+                self.GridVarTitle = "Variables"
+
+                GridUserColumns   = ["_numbered", "Field", "Value", "Info"]
+                GridUserItems     = self.GetUserList()
+                self.GridUser     = Grid(GridUserItems, GridUserColumns)
+                self.GridUserTitle = "Users"
 
             return render_template(self.Template, Form = self)
 

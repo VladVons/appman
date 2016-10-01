@@ -102,14 +102,14 @@ class TSockSession():
             while True:
                 #time.sleep(0.1)
                 DataIn = self.Receive()
-                if (DataIn != ""):
+                if (DataIn == ""):
+                    break
+                else:
                     if (DataIn == "Stop"):
-                        self.Send("Stop command")
-                        #self.Parent.FlagRun.value = False
-                        #sys.exit(1)
+                        self.Parent.FlagRun.value = False
+                        self.Send(DataOut)
                         break
-
-                    if (not self.AuthApi(DataIn)):
+                    elif (not self.AuthApi(DataIn)):
                         DataOut = "Option->Policy->Api permission failed"
                     elif (not self.AuthConf(DataIn)):
                         DataOut = "Option->Policy->Conf permission failed"
@@ -117,8 +117,6 @@ class TSockSession():
                         DataOut = self.Serial.Decode(DataIn)
 
                     self.Send(DataOut)
-                else:
-                    break
         except Exception as E:
             DataOut = "TSockSession->Run Error:" + E.message + ", Data:" + DataIn
             self.Log(DataOut)
@@ -174,7 +172,10 @@ class TSockServer():
         if (OptAuthUser and SockSession.Login() != True):
             return
 
+        self.Count.value += 1
         SockSession.Run()
+        self.Count.value -= 1
+
         self.logger.info("Session ending")
 
     def Connect(self):
@@ -189,16 +190,23 @@ class TSockServer():
         self.Sock.listen(OptMaxConn)
 
         # RW shared thread variable
+        self.Count   = multiprocessing.Value('i', 0)
         self.FlagRun = multiprocessing.Value('i')
         self.FlagRun.value = True
         while (self.FlagRun.value):
             Conn, Address = self.Sock.accept()
-            if (not re.match(OptIpAllow, Address[0], flags=0)):
-                self.logger.info("Address deny %s", Address)
-                Conn.close()
-                break
 
-            process = multiprocessing.Process(target=self.__ConnThread, args=(Conn, Address))
-            process.daemon = True
-            process.start()
-            time.sleep(0.1)
+            Error = ""
+            if (not re.match(OptIpAllow, Address[0], flags=0)):
+                Error = "Address deny {}".format(Address)
+            elif (self.Count.value > OptMaxConn):
+                Error = "Maximum connection reached"
+
+            if (Error == ""):
+                process = multiprocessing.Process(target = self.__ConnThread, args = (Conn, Address))
+                process.daemon = True
+                process.start()
+                time.sleep(0.1)
+            else:
+                self.logger.info(Error)
+                Conn.close()
