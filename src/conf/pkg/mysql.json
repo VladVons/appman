@@ -5,6 +5,7 @@
         "Install":{"Value":"$<App>"},
         "Service":{"Value":"mysql"},
         "Process":{"Value":"mysqld"},
+        "MonitProcess":{"Value":false},
         "User":{"Value":"mysql"},
         "Script":{"Value":"$<Path_Initd>/$<Service>"},
         "Log":{"Value":"$<File_SysLog>"},

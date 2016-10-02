@@ -40,10 +40,11 @@
             "Host":{"Value":"127.0.0.1"},
             "AuthUser":{"Value":true, "Descr":"require user login"},
             "AuthApi":{"Value":false, "Descr":"reqire api_allow / api_deny"},
-            "MaxConn":{"Value":2},
+            "MaxConn":{"Value":5},
             "LogFile":{"Value":"/var/log/appman.log"},
             "BufSize":{"Value":4096},
             "IpAllow":{"Value":".*"},
+            "MonitTime":{"Value":0, "Descr":"Check if services are running every xxx seconds. 0 - disable"},
             "DebugLevel":{"Value":0},
             "DebugConsole":{"Value":true}
         }

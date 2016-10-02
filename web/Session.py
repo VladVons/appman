@@ -58,6 +58,7 @@ class TUser():
                 if (Result):
                     session["User"] = aUser
                     self.SetObj("SockClient", SockClient)
+            self.LastError = SockClient.LastError
         return Result
 
     def Close(self):

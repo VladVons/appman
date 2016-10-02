@@ -22,13 +22,16 @@ def SockConnect():
         else:
             print("Login Err")
             sys.exit(1)
+    else:
+        print("Err:", SockClient.LastError)
+        sys.exit(1)
     return SockClient
 
 
 def TestSocket(aJson):
     SockClient = SockConnect()
 
-    print("SockClient.CallFunc:TAppMan.GetVersion",          SockClient.CallFunc("TAppMan.GetVersion"))
+    print("SockClient.CallFunc:TAppMan.GetInfo",             SockClient.CallFunc("TAppMan.GetInfo"))
     print("SockClient.CallFunc:TAppMan.LoadFile",            SockClient.CallFunc("TAppMan.LoadFile", aJson))
     print("SockClient.CallFunc:TAppMan.Variable.GetValue",   SockClient.CallFunc("TAppMan.Variable.GetValue", "Descr"))
 
@@ -43,12 +46,12 @@ def TestSocket(aJson):
     #print("SockClient.CallFunc:TAppMan.Editor.KeySet",       SockClient.CallFunc("TAppMan.Editor.Section.KeySet", "socket1", "MySocket-MySection"))
     #print("SockClient.CallFunc:TAppMan.Editor.SaveToFile",   SockClient.CallFunc("TAppMan.Editor.SaveToFile", "my.cnf"))
 
-    print("SockClient.CallFunc:TAppMan.User.List",           SockClient.CallFunc("TAppMan.User.List"))
+    #print("SockClient.CallFunc:TAppMan.User.List",           SockClient.CallFunc("TAppMan.User.List"))
     #print("SockClient.CallFunc:TAppMan.User.Add",            SockClient.CallFunc("TAppMan.User.Add", "test2"))
     #print("SockClient.CallFunc:TAppMan.User.Del",            SockClient.CallFunc("TAppMan.User.Del", "test1"))
     #print("SockClient.CallFunc:TAppMan.User.List",           SockClient.CallFunc("TAppMan.User.List"))
 
-    print("SockClient.CallFunc:TAppMan.Cmd.PkgVersion",      SockClient.CallFunc("TAppMan.Cmd.PkgVersion"))
+    #print("SockClient.CallFunc:TAppMan.Cmd.PkgVersion",      SockClient.CallFunc("TAppMan.Cmd.PkgVersion"))
     #print("SockClient.CallFunc:TAppMan.Cmd.PkgInstall",      SockClient.CallFunc("TAppMan.Cmd.PkgInstall"))
     #print("SockClient.CallFunc:TAppMan.Cmd.PkgRemove",       SockClient.CallFunc("TAppMan.Cmd.PkgRemove"))
 

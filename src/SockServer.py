@@ -13,17 +13,18 @@ import re
 
 
 from Serial import *
+from AppMan import *
 
 
 class TSockSession():
     def __init__(self, aParent, aConn, aAddress):
-        self.Parent    = aParent
-        self.Conn      = aConn
-        self.Address   = aAddress
+        self.Parent     = aParent
+        self.Conn       = aConn
+        self.Address    = aAddress
 
-        self.UserName  = ""
-        self.UserGroup = ""
-        self.OptBufSize   = self.Parent.Option.GetValue("Server/BufSize", 4096)
+        self.UserName   = ""
+        self.UserGroup  = ""
+        self.OptBufSize = self.Parent.Option.GetValue("Server/BufSize", 4096)
 
         self.Serial  = TSerial()
         # export functions
@@ -123,6 +124,31 @@ class TSockSession():
             self.Send(DataOut)
 
 
+class TMonit():
+
+    def __init__(self, aParent):
+        self.Parent  = aParent
+        self.OptMonitTime = self.Parent.Option.GetValue("Server/MonitTime", 60)
+        self.AppMan  = TAppMan()
+
+    def Log(self, aMsg):
+        self.Parent.logger.info("Monit: %s", aMsg)
+
+    def CheckFiles(self):
+        for File in self.AppMan.GetListConf():
+            self.AppMan.LoadFile(File)
+            if (self.AppMan.Variable.GetValue("MonitProcess", False)):
+                Process = self.AppMan.Cmd.ShowProcess().strip()
+                if (Process == ""):
+                    self.AppMan.Cmd.ServiceStart()
+                    self.Log("Starting service in " + File)
+
+    def Run(self):
+        while (True):
+            time.sleep(self.OptMonitTime)
+            self.CheckFiles()
+
+
 # https://gist.github.com/micktwomey/606178#file-server-py-L26
 class TSockServer():
 
@@ -165,7 +191,7 @@ class TSockServer():
         self.logger.info("Stop server")
         self.Sock.close()
 
-    def __ConnThread(self, aConn, aAddress):
+    def __RunThreadConn(self, aConn, aAddress):
         SockSession = TSockSession(self, aConn, aAddress)
 
         OptAuthUser = self.Option.GetValue("Server/AuthUser", True)
@@ -178,11 +204,25 @@ class TSockServer():
 
         self.logger.info("Session ending")
 
+    def __RunThreadMonit(self):
+        Monit = TMonit(self)
+        Monit.Run()
+
+    def __CreateThread(self, aTarget, aArgs):
+        process = multiprocessing.Process(target = aTarget, args = aArgs)
+        process.daemon = True
+        process.start()
+        time.sleep(0.3)
+
     def Connect(self):
         OptHost    = self.Option.GetValue("Server/Host", "")
         OptPort    = self.Option.GetValue("Server/Port", 50019)
         OptMaxConn = self.Option.GetValue("Server/MaxConn", 5)
         OptIpAllow = self.Option.GetValue("Server/IpAllow", "127.0.0.1")
+
+        OptMonitTime = self.Option.GetValue("Server/MonitTime", 60)
+        if (OptMonitTime > 0):
+            self.__CreateThread(self.__RunThreadMonit, ())
 
         self.logger.info("Listening host '%s' on port '%s'", OptHost, OptPort)
         self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -197,16 +237,16 @@ class TSockServer():
             Conn, Address = self.Sock.accept()
 
             Error = ""
-            if (not re.match(OptIpAllow, Address[0], flags=0)):
-                Error = "Address deny {}".format(Address)
-            elif (self.Count.value > OptMaxConn):
-                Error = "Maximum connection reached"
+            if (not re.match(OptIpAllow, Address[0])):
+                Error = "Error: Address deny {}".format(Address)
+            elif (self.Count.value >= OptMaxConn):
+                Error = "Error: Maximum connections reached"
 
             if (Error == ""):
-                process = multiprocessing.Process(target = self.__ConnThread, args = (Conn, Address))
-                process.daemon = True
-                process.start()
-                time.sleep(0.1)
+                self.logger.info("Start thread")
+                Conn.sendall(TSerial.CEncodeData("OK"))
+                self.__CreateThread( self.__RunThreadConn, (Conn, Address))
             else:
                 self.logger.info(Error)
+                Conn.sendall(TSerial.CEncodeData(Error))
                 Conn.close()

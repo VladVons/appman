@@ -4,6 +4,7 @@
         "Descr":{"Value":"$<App> is a simple File Transfer Protocol server"},
         "Install":{"Value":"$<App>"},
         "Service":{"Value":"$<App>"},
+        "MonitProcess":{"Value":false},
         "Script":{"Value":"$<Path_Initd>/$<Service>"},
         "Log":{"Value":"$<File_SysLog>"},
         "Port":{"Value":"20;21"},

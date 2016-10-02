@@ -11,10 +11,11 @@ from Serial import *
 class TSockClient():
 
     def __init__(self, aHost, aPort):
-        self.BufSize  = 4096
-        self.UserName = ""
-        self.Sock     = None
-        self.Serial   = TSerial()
+        self.BufSize   = 4096
+        self.UserName  = ""
+        self.Sock      = None
+        self.Serial    = TSerial()
+        self.LastError = ""
         self.Connect(aHost, aPort)
 
     def __del__(self):
@@ -27,27 +28,36 @@ class TSockClient():
             print("TSockClient.Close")
 
     def Connect(self, aHost, aPort):
+        self.LastError = ""
+
         if (not self.Connected()):
             self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.Sock.connect((aHost, aPort))
-                print("Connected")
+                Data = self.ReceiveData()
+                if (Data != "OK"):
+                    self.LastError = Data
+                    self.Close()
             except Exception as E:
-                self.Sock = None
-                print(E)
+                self.LastError = E.message
+                print(self.LastError)
+                self.Close()
                 raise
-        return self.Connected()
+        return (self.LastError == "")
 
     def Connected(self):
         return (self.Sock != None)
 
     def Send(self, aData):
         self.Sock.sendall(aData)
-        Data = self.Receive()
-        return json.loads(Data)["Data"]
+        return self.ReceiveData()
 
     def Receive(self):
         return TSocket.Receive(self.Sock, self.BufSize)
+
+    def ReceiveData(self):
+        Data = self.Receive()
+        return json.loads(Data)["Data"]
 
     def CallFunc(self, aFunc, *aArgs):
         Data = self.Serial.EncodeFunc(aFunc, *aArgs)

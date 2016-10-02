@@ -122,8 +122,12 @@ class TSerial():
         else:
           return self.LastError
 
-    def EncodeData(self, aData):
+    @staticmethod
+    def CEncodeData(aData):
         return json.dumps( {"Data": aData} )
+
+    def EncodeData(self, aData):
+        return TSerial.CEncodeData(aData)
 
     def EncodeFuncAuth(self, aUser, aPassw):
         return self.EncodeFunc("AuthUser", aUser, aPassw)

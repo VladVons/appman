@@ -9,6 +9,7 @@
 #http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms
 #https://media.readthed ocs.org/pdf/webhelpers/latest/webhelpers.pdf
 #http://metanit.com/web/angular/1.1.php
+#https://github.com/Severenit/loftblog_angular_phonecat_app
 
 
 import os

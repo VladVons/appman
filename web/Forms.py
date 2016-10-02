@@ -46,7 +46,7 @@ class TFLogin(Form):
                     if (User.Connect(cAppHost, cAppPort, self.UserName.data, self.Password.data)):
                         return redirect("/conf_list")
                     else:
-                        self.Error = "Username or password incorrect"
+                        self.Error = "Username or password incorrect " + User.LastError
                         flash(self.Error)
             return render_template(self.Teplate, Form = self)
 
@@ -114,10 +114,14 @@ class TFPkgInfo(Form):
             if (not Item.startswith(tuple(HideVar))):
                 if (Item in Xlat):
                     CmdRes = User.Call(Xlat[Item])
-                elif (Item in ["Pid", "Script", "Config", "Log"]):
-                    IsFile = User.Call("TAppMan.Util.FileExist", PairsVar.get(Item))
+                elif (Item in ["Script", "Config", "Log", "Pid"]):
+                    File = PairsVar.get(Item)
+                    IsFile = User.Call("TAppMan.Util.FileExist", File)
                     if (IsFile):
-                        CmdRes = HTML.a("more...", href="/file_show?name=" + PairsVar.get(Item) + "&type=" + Item)
+                        if (Item == "Pid"):
+                            CmdRes = User.Call("TAppMan.Util.FileRead", File)
+                        else:
+                            CmdRes = HTML.a("more...", href="/file_show?name=" + File + "&type=" + Item)
                     else:
                         CmdRes = "Not found"
                 else:

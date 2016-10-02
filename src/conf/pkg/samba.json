@@ -5,6 +5,7 @@
         "Install":{"Value":"$<App>;winbind"},
         "Remove":{"Value":"samba-common;smbclient;libsmbclient"},
         "Service":{"Value":"smbd"},
+        "MonitProcess":{"Value":false},
         "Process":{"Value":"smb;nmb;winbind"},
         "Script":{"Value":"$<Path_Initd>/$<Service>"},
         "Log":{"Value":"$<Path_Log>/$<App>/$<Service>.log"},
