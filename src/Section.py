@@ -6,16 +6,17 @@ import time
 from inc.Common import *
 
 
-cFieldValue = "Value"
-cFieldCmd   = "Cmd"
-cFieldDescr = "Descr"
-cObjDelim   = ";"
-cVarPrefix  = "$<"
-cVarSufix   = ">"
-cVarArg     = "Arg"
+cFieldValue   = "Value"
+cFieldCmd     = "Cmd"
+cFieldCmdExec = "CmdExec"
+cFieldDescr   = "Descr"
+cObjDelim     = ";"
+cVarPrefix    = "$<"
+cVarSufix     = ">"
+cVarArg       = "Arg"
 
 
-#__all__ = ["TSUtil", "TSOption", "TSVariable", "TSService", "TSCheck", "TSUser", "TSAbout", "TSInstall", "TSUninstall"]
+#__all__ = ["TSUtil", "TSOption", "TSVar", "TSService", "TSCheck", "TSUser", "TSAbout", "TSInstall", "TSUninstall"]
 
 class TSection():
 
@@ -28,11 +29,17 @@ class TSection():
         self.Data = {}
 
 
-    def _AddItems(self, aItems, aAddComma=True):
+    def _AddItems(self, aItems, aAddComma = False):
         if (aItems):
             for Item in aItems:
-                if (aAddComma and (Item in self.Data)):
-                    self.Data[Item][cFieldValue] += cObjDelim + aItems[Item][cFieldValue]
+
+                if (Item in self.Data):
+                    for Key in aItems[Item].keys():
+                        Data = self.Data[Item].get(Key, "")
+                        if (aAddComma and Data):
+                            self.Data[Item][Key] = Data + cObjDelim + aItems[Item][Key]
+                        else:
+                            self.Data[Item][Key] = aItems[Item][Key]
                 else:
                     self.Data[Item] = aItems[Item]
 
@@ -64,7 +71,7 @@ class TSectionVar(TSection):
 
     def GetField(self, aName, aDef = ""):
         Value = self.GetItem(aName, aDef)
-        return self.Parent.Variable.Parse(Value)
+        return self.Parent.Var.Parse(Value)
 
     def GetFieldList(self, aName):
         Str = self.GetField(aName)
@@ -76,18 +83,14 @@ class TSectionVar(TSection):
     def GetValue(self, aName, aDef = ""):
         return self.GetField(aName + "/" + cFieldValue, aDef)
 
-
     def GetCmd(self, aName, aDef = ""):
         return self.GetField(aName + "/" + cFieldCmd, aDef)
 
-    def GetDescr(self, aName, aDef = ""):
-        return self.GetField(aName + "/" + cFieldDescr, aDef)
-
     def GetVar(self, aName, aDef = ""):
-        return self.Parent.Variable.GetValue(aName, aDef)
+        return self.Parent.Var.GetValue(aName, aDef)
 
     def SetVar(self, aName, aValue):
-        self.Parent.Variable.Data[aName] = aValue
+        self.Parent.Var.Data[aName] = aValue
 
     def GetPairs(self, aName):
         Result = {}
@@ -100,15 +103,11 @@ class TSectionVarExec(TSectionVar):
     def __init__(self, aParent, aName ):
         TSectionVar.__init__(self, aParent, aName)
 
-        self.__DicReplace = TDicReplace(cVarPrefix, cVarSufix)
-        self.__DicReplace.CallBack = self.__Replace
-
-    def _DelMethods(self):
-        for Item in self.Methods:
-            print("-----123", Item)
+        self.__DictReplace = TDictReplace(cVarPrefix, cVarSufix)
+        self.__DictReplace.CallBack = self.__Replace
 
     def __Replace(self, aName):
-        Path = self.__DicReplace.CurField + "/" + aName
+        Path = self.__DictReplace.CurField + "/" + aName
         return self.GetField(Path)
 
     def ExecStr(self, aStr, aFindRepl = {}):
@@ -120,37 +119,33 @@ class TSectionVarExec(TSectionVar):
                 Result += TShell.ExecM(Parsed) + "\n"
         return Result
 
-    def ExecCmdDic(self, aName, aFindRepl = {}):
-        self.__DicReplace.CurField = aName
-        CmdOrig = self.GetCmd(aName, self.GetVar(cFieldCmd + "_" + aName))
-        Cmd     = self.__DicReplace.Parse(CmdOrig)
+    def ExecFieldDict(self, aName, aField, aFindRepl = {}):
+        self.__DictReplace.CurField = aName
+        CmdOrig = self.GetField(aName + "/" + aField)
+        Cmd     = self.__DictReplace.Parse(CmdOrig)
         return self.ExecStr(Cmd, aFindRepl)
 
-    def ExecCmd(self, aName, aArg = []):
+    def ExecFieldList(self, aName, aField, aArg = []):
         FindRepl = {}
         for Idx in range(0, len(aArg)):
             Key = cVarPrefix + cVarArg + str(Idx + 1) + cVarSufix
             FindRepl[Key] = aArg[Idx]
-        return self.ExecCmdDic(aName, FindRepl)
+        return self.ExecFieldDict(aName, FindRepl)
 
-    def ExecValue(self, aName, aValue = ""):
-        Result  = ""
+    def ExecValue(self, aName, aField = cFieldCmdExec):
+        Result = ""
 
-        if (aValue == ""):
-            Items = self.GetValue(aName).split(cObjDelim)
-        else:
-            Items = aValue.split(cObjDelim)
-
-        if (Items):
-            for Item in Items:
-                if (Item):
-                    Idx = 0
-                    FindRepl = {}
-                    for Arg in Item.split("|"):
-                        Idx += 1
-                        Key = cVarPrefix + cVarArg + str(Idx) + cVarSufix
-                        FindRepl[Key] = Arg
-                    Result += self.ExecCmdDic(aName, FindRepl)
+        Value = self.GetVar(self.GetValue(aName), self.GetVar(aName)).strip()
+        print("----1", aName, aField, Value)
+        if (Value):
+            for Item in Value.split(cObjDelim):
+                Idx = 0
+                FindRepl = {}
+                for Arg in Item.split("|"):
+                    Idx += 1
+                    Key = cVarPrefix + cVarArg + str(Idx) + cVarSufix
+                    FindRepl[Key] = Arg
+                Result += self.ExecFieldDict(aName, aField, FindRepl)
         return Result
 
     def ExecVar(self, aName, aArg = ""):
@@ -160,20 +155,19 @@ class TSectionVarExec(TSectionVar):
         else:
             return ""
 
-
 #---
-class TSVariable(TSectionVar):
+class TSVar(TSectionVar):
     def __init__(self, aParent, aName):
         TSectionVar.__init__(self, aParent, aName)
 
-        self.__DicReplace = TDicReplace(cVarPrefix, cVarSufix)
-        self.__DicReplace.CallBack = self.__Replace
+        self.__DictReplace = TDictReplace(cVarPrefix, cVarSufix)
+        self.__DictReplace.CallBack = self.__Replace
 
     def __Replace(self, aName):
         return self.GetValue(aName)
 
     def Parse(self, aStr):
-        return self.__DicReplace.Parse(aStr)
+        return self.__DictReplace.Parse(aStr)
 
     def GetValue(self, aName, aDef = ""):
         Value = self.GetItem(aName + "/" + cFieldValue, aDef)

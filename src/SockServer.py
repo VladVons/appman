@@ -137,7 +137,7 @@ class TMonit():
     def CheckFiles(self):
         for File in self.AppMan.GetListConf():
             self.AppMan.LoadFile(File)
-            if (self.AppMan.Variable.GetValue("MonitProcess", False)):
+            if (self.AppMan.Var.GetValue("MonitProcess", False)):
                 Process = self.AppMan.Cmd.ShowProcess().strip()
                 if (Process == ""):
                     self.AppMan.Cmd.ServiceStart()

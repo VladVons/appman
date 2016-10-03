@@ -6,22 +6,30 @@
 
 import re
 from AppMan import *
+from Serial import *
 
 
 def TestAppMan(aJson):
+    def Test1():
+        for Item in AppMan.Cmd.GetKeys():
+            #print("--1", Item)
+            Field = AppMan.Cmd.GetField(Item)
+            #print("--2", Field)
+            CmdInfo = Field.get("CmdInfo")
+            if (CmdInfo):
+                print(Item, Field)
+            #    print(AppMan.Var.Parse(CmdInfo), AppMan.Var.GetValue(Item))
 
     AppMan = TAppMan()
-    #for Item in AppMan.GetApi():
-        #print(Item)
-
     #print("AppMan.GetVersion",          AppMan.GetVersion())
     #print("AppMan.GetListConf",         AppMan.GetListConf())
     print("AppMan.LoadFile",            AppMan.LoadFile(aJson))
-    print("AppMan.Variable.GetValue",   AppMan.Variable.GetValue("Descr"))
-    #print("AppMan.Variable.GetPairs",   AppMan.Variable.GetPairs("Value"))
+    #print("AppMan.Var.GetValue",      AppMan.Var.GetValue("Descr"))
+    #print("AppMan.Var.GetField",      AppMan.Var.GetField("App"))
+    #print("AppMan.Cmd.ExecValue",       AppMan.Cmd.ExecValue("LogFile", "CmdExec"))
+    #print("AppMan.Var.GetPairs",      AppMan.Var.GetPairs("Value"))
     #print("AppMan.Editor.PathName",     AppMan.Editor.PathName)
     #print("AppMan.Editor.GetPath",      AppMan.Editor.GetPath())
-
 
     #print("AppMan.Editor.KeyGet",       AppMan.Editor.Section.KeyGet("FSCharset"))
     #print("AppMan.Editor.KeyList",       AppMan.Editor.Section.KeyList())
@@ -42,6 +50,11 @@ def TestAppMan(aJson):
     #print("AppMan.User.List",           AppMan.User.List())
     #print("AppMan.User.Del",            AppMan.User.Del("test1", "myDB"))
     #print("AppMan.User.List",           AppMan.User.List())
+
+
+    print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgVersion"))
+    print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("Port"))
+   #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgInstall"))
 
     #print("AppMan.Cmd.PkgVersion",      AppMan.Cmd.PkgVersion())
     #print("AppMan.Cmd.PkgInstall",      AppMan.Cmd.PkgInstall())
@@ -76,12 +89,13 @@ def TestSerial(aJson):
     #print isinstance(Serial.CallFunc, instancemethod)
     #return
 
-    print("Serial.CallFunc:TAppMan.GetInfo",            Serial.CallFunc("TAppMan.GetInfo"))
+    #print("Serial.CallFunc:TAppMan.GetInfo",            Serial.CallFunc("TAppMan.GetInfo"))
     print("Serial.CallFunc:TAppMan.LoadFile",           Serial.CallFunc("TAppMan.LoadFile", [aJson]))
-    print("Serial.CallFunc:TAppMan.Variable.GetValue",  Serial.CallFunc("TAppMan.Variable.GetValue", ["Descr"]))
+    print("Serial.CallFunc:TAppMan.Var.GetValue",       Serial.CallFunc("TAppMan.Var.GetValue", ["Descr"]))
+    print("Serial.CallFunc:TAppMan.Var.GetValue",       Serial.CallFunc("TAppMan.Var.GetValue('Descr')"))
     #print("Serial.CallFunc:TAppMan.Editor.GetPath",     Serial.CallFunc("TAppMan.Editor.GetPath"))
     #print("Serial.CallFunc:TAppMan.Util.FileRead",      Serial.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
-    print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_OS"]))
+    #print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_OS"]))
     #print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_PkgUpdate"]))
     #print("Serial.CallFunc:TAppMan.GetInfo",             Serial.CallFunc("TAppMan.GetInfo"))
     #print("Type", type(Serial.CasheObj))
@@ -110,3 +124,22 @@ TestAppMan(FileName)
 #TestSerial(FileName)
 #TestRegEx()
 
+#Str = "Func(par1,  par2)"
+#Params = re.findall(r'w+', Str)
+#print(Params)
+
+
+#Str = "Test1.MyFunc_1()"
+#Str = "Test1.MyFunc_1(arg1, arg2)"
+#Str = "Test1.MyFunc_1('arg1/xxx', 'arg2')"
+#m = re.match("(?P<function>\w+)\s?\((?P<args>(?P<arg>\w+(,\s?)?)+)\)", Str)
+#m = re.match("(?P<function>\w+)\((?P<args>(?P<arg>\w+(,\s?)?)+)\)", Str)
+#m = re.match("(?P<Name>\w+)\((?P<Arg>(\w+(,\s?)?)+)\)", Str)
+#m = re.match("(?P<Name>[\w\.]+)\((?P<Arg>(\w+(,\s?)?)+)\)", Str)
+#m = re.match("(?P<Name>[\w\.]+)\((?P<Arg>[\w\s,']+)\)", Str)
+#m = re.match("(?P<Name>[\w\.]+)\((?P<Arg>.*)\)", Str)
+
+
+#m = re.match("(\w+)", s)
+#print m.groupdict()
+#print(m)

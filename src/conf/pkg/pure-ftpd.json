@@ -1,26 +1,20 @@
 {
-    "Variable":{
+    "Var":{
         "App":{"Value":"pure-ftpd"},
         "Descr":{"Value":"$<App> is a simple File Transfer Protocol server"},
-        "Install":{"Value":"$<App>"},
-        "Service":{"Value":"$<App>"},
-        "MonitProcess":{"Value":false},
+        "PkgInstall":{"Value":"$<App>"},
+        "Service":{"Value":"$<App>", "Descr":"MyDescr"},
+        "Monit":{"Value":false},
         "Script":{"Value":"$<Path_Initd>/$<Service>"},
-        "Log":{"Value":"$<File_SysLog>"},
+        "LogFile":{"Value":"$<File_SysLog>|$<Process>"},
         "Port":{"Value":"20;21"},
-        "Pid":{"Value":"$<Path_Run>/$<App>/$<Service>.pid"},
+        "PidFile":{"Value":"$<Path_Run>/$<App>/$<Service>.pid"},
         "Man":{"Value":"$<App>"},
         "HomePage":{"Value":"https://www.pureftpd.org"},
         "Tag":{"Value":"service;file sharing;ftp"}
     },
     "Cmd":{
-        "ServiceStart":{"Value":"$<Service>"},
-        "ServiceStop":{"Value":"$<Service>"},
-        "PkgInstall":{"Value":"$<Install>"},
-        "ShowService":{"Value":"$<Service>"},
-        "ShowPort":{"Value":"$<Port>"},
-        "ShowLog":{"Value":"$<Log>|$<Service>", "Cmd":"$<Cmd_ShowLogGrep>"},
-        "ShowMan":{"Value":"$<Man>"}
+        "LogFile":{"CmdExec":"$<Cmd_ShowLogGrep>"}
     },
     "User":{
         "Add":{"Cmd":"useradd -M $<Arg1>"},
@@ -28,7 +22,7 @@
         "Enable":{"Cmd":"passwd --unlocks $<Arg1>"},
         "Disable":{"Cmd":"passwd --unlocks $<Arg1>"},
         "Password":{"Cmd":"echo $<Arg1>:$<Arg2> | chpasswd"},
-        "List":{"Cmd":"$<Util_ShowFile> $<File_Passwd> | awk -F: '($3 >= 1000) {print $1}' | sort"}
+        "List":{"Cmd":"$<Util_FileShow> $<File_Passwd> | awk -F: '($3 >= 1000) {print $1}' | sort"}
     },
     "Config":{
         "Main":{

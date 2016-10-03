@@ -12,6 +12,6 @@ class User(TSUser):
         return TShell.ExecM(aName)
 
 
-class Cmd(TSCmd):
+class Cmd1(TSCmd):
     def CreateDB(self, aName):
         return TShell.ExecM("mysql.sh DbCreate " + aName)

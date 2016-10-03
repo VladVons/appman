@@ -4,9 +4,10 @@
 # Echo client program
 
 import socket
+import re
+
 from Serial import *
 
-#---
 
 class TSockClient():
 
@@ -59,8 +60,22 @@ class TSockClient():
         Data = self.Receive()
         return json.loads(Data)["Data"]
 
-    def CallFunc(self, aFunc, *aArgs):
-        Data = self.Serial.EncodeFunc(aFunc, *aArgs)
+    def SplitFunc(self, aFuncStr):
+        Data = re.match("(?P<Name>[\w\.]+)\((?P<Arg>.*)\)", aFuncStr)
+        if (Data):
+            return Data.groupdict()
+        else:
+            return {}
+
+    def CallFunc(self, aFuncName, *aArgs):
+        Arr = self.SplitFunc(aFuncName)
+        if (Arr):
+            aFuncName = Arr["Name"]
+            Args      = Arr["Arg"].replace("'", "").split(",")
+            if (Args[0]):
+                aArgs = Args
+
+        Data = self.Serial.EncodeFunc(aFuncName, *aArgs)
         return self.Send(Data)
 
     def GetProp(self, aProp):

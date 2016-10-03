@@ -1,31 +1,21 @@
 {
-    "Variable":{
+    "Var":{
         "App":{"Value":"samba"},
         "Descr":{"Value":"$<App> is a SMB/CIFS networking protocol"},
-        "Install":{"Value":"$<App>;winbind"},
-        "Remove":{"Value":"samba-common;smbclient;libsmbclient"},
+        "PkgInstall":{"Value":"$<App>;winbind"},
+        "PkgRemove":{"Value":"samba-common;smbclient;libsmbclient"},
         "Service":{"Value":"smbd"},
-        "MonitProcess":{"Value":false},
+        "Monit":{"Value":false},
         "Process":{"Value":"smb;nmb;winbind"},
         "Script":{"Value":"$<Path_Initd>/$<Service>"},
-        "Log":{"Value":"$<Path_Log>/$<App>/$<Service>.log"},
+        "LogFile":{"Value":"$<Path_Log>/$<App>/$<Service>.log"},
         "Port":{"Value":"139;445"},
-        "Pid":{"Value":"$<Path_Run>/$<App>/$<Service>.pid"},
+        "PidFile":{"Value":"$<Path_Run>/$<App>/$<Service>.pid"},
         "Man":{"Value":"$<App>;smb.conf;limits.conf"},
         "HomePage":{"Value":"https://www.samba.org"},
         "Tag":{"Value":"service;file sharing;smb"}
     },
     "Cmd":{
-        "ServiceStart":{"Value":"$<Service>"},
-        "ServiceStop":{"Value":"$<Service>"},
-        "ServiceReload":{"Value":"smbcontrol all reload-config"},
-        "PkgInstall":{"Value":"$<Install>"},
-        "PkgRemove":{"Value":"$<Remove>"},
-        "ShowService":{"Value":"$<Service>"},
-        "ShowProcess":{"Value":"$<Process>"},
-        "ShowPort":{"Value":"$<Port>"},
-        "ShowLog":{"Value":"$<Log>"},
-        "ShowMan":{"Value":"$<Man>"}
     },
     "User":{
         "Add":{"Cmd":"useradd -M $<Arg1>;smbpasswd -s -a -n $<Arg1>"},

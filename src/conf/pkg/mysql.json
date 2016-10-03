@@ -1,32 +1,25 @@
 {
-    "Variable":{
+    "Var":{
         "App":{"Value":"mysql-server"},
         "Descr":{"Value":"$<App> is a database server"},
-        "Install":{"Value":"$<App>"},
+        "PkgInstall":{"Value":"$<App>"},
         "Service":{"Value":"mysql"},
         "Process":{"Value":"mysqld"},
-        "MonitProcess":{"Value":false},
+        "Monit":{"Value":true},
         "User":{"Value":"mysql"},
         "Script":{"Value":"$<Path_Initd>/$<Service>"},
-        "Log":{"Value":"$<File_SysLog>"},
+        "LogFile":{"Value":"$<File_SysLog>|$<Process>"},
         "Port":{"Value":"3306"},
-        "Pid":{"Value":"$<Path_Run>/$<Process>/$<Process>.pid"},
+        "PidFile":{"Value":"$<Path_Run>/$<Process>/$<Process>.pid"},
         "Man":{"Value":"$<App>"},
         "HomePage":{"Value":"https://www.pureftpd.org"},
         "Tag":{"Value":"service;database"},
         "_DbAdmin":{"Value":"root"},
         "_DbPassw":{"Value":"19710819"},
         "_Sql":{"Value":"mysql --user=$<_DbAdmin> --password=$<_DbPassw> --host=localhost --disable-column-names --batch --execute=\"$<Macro1>\""}
-     },
-     "Cmd":{
-        "ServiceStart":{"Value":"$<Service>"},
-        "ServiceStop":{"Value":"$<Service>"},
-        "PkgInstall":{"Value":"$<Install>"},
-        "ShowService":{"Value":"$<Process>"},
-        "ShowProcess":{"Value":"$<Process>"},
-        "ShowPort":{"Value":"$<Port>"},
-        "ShowLog":{"Value":"$<Log>|$<Service>", "Cmd":"$<Cmd_ShowLogGrep>"},
-        "ShowMan":{"Value":"$<Man>"}
+    },
+    "Cmd":{
+        "LogFile":{"CmdExec":"$<Cmd_ShowLogGrep>"}
     },
     "User":{
         "Add": {"Cmd":"$<_Sql>", "Macro1":"GRANT ALL PRIVILEGES ON $<Arg3>.* TO '$<Arg1>'@'localhost' IDENTIFIED BY '$<Arg2>'"},

@@ -7,7 +7,7 @@ import subprocess
 import re
 
 
-class TDicReplace:
+class TDictReplace:
     def __init__(self, aPrefix = "$<", aSufix = ">"):
         self.Data     = {}
         self.Err      = []

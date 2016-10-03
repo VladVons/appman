@@ -2,10 +2,13 @@
    "Include":{
         "File":{"Value":"$<Sys_Platform>.json"}
     },
-    "Variable":{
-        "App_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;Log;Pid;Port;Script;Service;Process"},
+    "Var":{
+        "App_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;LogFile;PidFile;Port;Script;Service;Process;MonitProcess"},
         "App_HideVar":{"Value":"_;Cmd_;Util_;File_;Path_;Sys_;App_"},
         "App_Util":{"Value":"OS;MemTotal;DiskFree;NetDev;IsRoot;_Top_;_PkgList_;_Reboot_"}
+    },
+    "Cmd":{
+        "PkgRemove3":{"Value":"PkgInstall"}
     },
     "Option":{
         "Policy":{

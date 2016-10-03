@@ -36,16 +36,16 @@ class TAppMan():
     def Clear(self):
         self.Editor   = None
 
-        self.Util     = TSUtil(self, "Util")
-        self.Option   = TSOption(self, "Option")
-        self.Variable = TSVariable(self, "Variable")
-        self.Config   = TSConfig(self, "Config")
-        self.Cmd      = TSCmd(self, "Cmd")
-        self.User     = TSUser(self, "User")
+        self.Util   = TSUtil(self, "Util")
+        self.Option = TSOption(self, "Option")
+        self.Var    = TSVar(self, "Var")
+        self.Config = TSConfig(self, "Config")
+        self.Cmd    = TSCmd(self, "Cmd")
+        self.User   = TSUser(self, "User")
 
         Items = self.GetInfo()
         for Item in Items:
-            self.Variable.SetItem(Item, {"Value":Items[Item]})
+            self.Var.SetItem(Item, {"Value":Items[Item]})
 
         self.__LoadFileSearch("appman.json")
 
@@ -78,10 +78,10 @@ class TAppMan():
         Objects = ast.parse(TFile.LoadFromFileToStr(aFileName))
         for Item in ast.walk(Objects):
             if (isinstance(Item, ast.ClassDef)):
-              TCl = getattr(Lib, Item.name)
-              Cl  = TCl(self, Item.name)
-              setattr(self, Item.name, Cl)
-              Cl._AddItems(TDict.FindNode(aNode, Item.name))
+                TCl = getattr(Lib, Item.name)
+                Cl  = TCl(self, Item.name)
+                setattr(self, Item.name, Cl)
+                Cl._AddItems(TDict.FindNode(aNode, Item.name))
 
     def __LoadFileSearch(self, aFileName):
         Result = False
@@ -102,11 +102,11 @@ class TAppMan():
             IncludeFile = TDict.FindNode(root, "Include/File/" + cFieldValue)
             if (IncludeFile):
                 for Item in IncludeFile.split(cObjDelim):
-                    Value = self.Variable.Parse(Item)
+                    Value = self.Var.Parse(Item)
                     self.__LoadFileSearch(Value)
 
             self.Option._Load(root)
-            self.Variable._Load(root)
+            self.Var._Load(root)
             self.Config._Load(root)
             self.Cmd._Load(root)
             self.User._Load(root)

@@ -24,7 +24,7 @@ class TFIndex(Form):
         import getpass
 
         self.UserOK  = User.OK()
-        self.Info    = User.Call("TAppMan.GetInfo")
+        self.Info    = User.Call("TAppMan.GetInfo()")
         self.UserWeb = getpass.getuser()
         return render_template(self.Teplate, Form = self)
 
@@ -61,13 +61,13 @@ class TFConfList(Form):
         else:
             GridColumns = ["_numbered", "File", "Version", "Run", "Tag", "Descr"]
             GridItems   = []
-            Files   = User.Call("TAppMan.GetListConf")
+            Files   = User.Call("TAppMan.GetListConf()")
             for File in Files:
                 User.Call("TAppMan.LoadFile", File)
                 Conf  = HTML.a(File, href="pkg_info?name=" + File)
-                Pairs = User.Call("TAppMan.Variable.GetPairs", "Value")
+                Pairs = User.Call("TAppMan.Var.GetPairs('Value')")
                 Run   = User.Call("TAppMan.Cmd.ShowService").strip() != ""
-                Ver   = User.Call("TAppMan.Cmd.PkgVersion")
+                Ver   = User.Call("TAppMan.Cmd.ExecValue", "PkgVersion")
                 GridItems.append( {"File": Conf, "Tag": Pairs.get("Tag"), "Version": Ver, "Descr": Pairs.get("Descr"), "Run": Run } )
             self.Grid = Grid(GridItems, GridColumns, order_direction = "dsc")
             return render_template(self.Teplate, Form = self)
@@ -102,37 +102,18 @@ class TFPkgInfo(Form):
     def GetVarList(self):
         Result = []
 
-        Xlat = {}
-        Xlat["Install"] = "TAppMan.Cmd.PkgVersion"
-        Xlat["Service"] = "TAppMan.Cmd.ShowService"
-        Xlat["Process"] = "TAppMan.Cmd.ShowProcess"
-        Xlat["Port"]    = "TAppMan.Cmd.ShowPort"
-
-        PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
-        HideVar  = User.Call("TAppMan.Variable.GetFieldList", "App_HideVar/Value")
+        PairsVar = User.Call("TAppMan.Var.GetPairs('Value')")
+        HideVar  = User.Call("TAppMan.Var.GetFieldList('App_HideVar/Value')")
         for Item in PairsVar:
             if (not Item.startswith(tuple(HideVar))):
-                if (Item in Xlat):
-                    CmdRes = User.Call(Xlat[Item])
-                elif (Item in ["Script", "Config", "Log", "Pid"]):
-                    File = PairsVar.get(Item)
-                    IsFile = User.Call("TAppMan.Util.FileExist", File)
-                    if (IsFile):
-                        if (Item == "Pid"):
-                            CmdRes = User.Call("TAppMan.Util.FileRead", File)
-                        else:
-                            CmdRes = HTML.a("more...", href="/file_show?name=" + File + "&type=" + Item)
-                    else:
-                        CmdRes = "Not found"
-                else:
-                    CmdRes = ""
+                CmdRes = User.Call("TAppMan.Cmd.ExecValue", Item, "CmdInfo")
                 Result.append( {"Field": Item, "Value": PairsVar.get(Item),  "Info": CmdRes} )
 
-        Prop = User.Call("TAppMan.Editor.GetPath")
-        if (Prop):
-            Result.append( {"Field": "Config", "Value": Prop, "Info": ""} )
+        #Prop = User.Call("TAppMan.Editor.GetPath()")
+        #if (Prop):
+        #    Result.append( {"Field": "Config", "Value": Prop, "Info": ""} )
 
-        self.SortOrd = User.Call("TAppMan.Variable.GetFieldList", "App_SortVar/Value")
+        self.SortOrd = User.Call("TAppMan.Var.GetFieldList('App_SortVar/Value')")
         if (len(self.SortOrd) > 0):
             Result.sort(self.CustomSort_GridVar)
         else:
@@ -155,8 +136,8 @@ class TFPkgInfo(Form):
                 GridUserItems = self.GetUserList()
                 if (len(GridUserItems) > 0):
                     GridUserColumns    = ["_numbered", "Field", "Value", "Info"]
-                    self.GridUser      = Grid(GridUserItems, GridUserColumns)
-                    self.GridUserTitle = "Users"
+                #    self.GridUser      = Grid(GridUserItems, GridUserColumns)
+                #    self.GridUserTitle = "Users"
 
             return render_template(self.Template, Form = self)
 
@@ -190,8 +171,8 @@ class TFUtil(Form):
             GridColumns = ["_numbered", "Name", "Command", "Result"]
             GridItems   = []
 
-            PairsVar = User.Call("TAppMan.Variable.GetPairs", "Value")
-            Utils    = User.Call("TAppMan.Variable.GetFieldList", "App_Util/Value")
+            PairsVar = User.Call("TAppMan.Var.GetPairs", "Value")
+            Utils    = User.Call("TAppMan.Var.GetFieldList", "App_Util/Value")
             for Util in Utils:
                 #Var      = HTML.a(Util, href="util1?name=" + Util)
                 Var      = Util

@@ -31,9 +31,12 @@ def SockConnect():
 def TestSocket(aJson):
     SockClient = SockConnect()
 
-    print("SockClient.CallFunc:TAppMan.GetInfo",             SockClient.CallFunc("TAppMan.GetInfo"))
-    print("SockClient.CallFunc:TAppMan.LoadFile",            SockClient.CallFunc("TAppMan.LoadFile", aJson))
-    print("SockClient.CallFunc:TAppMan.Variable.GetValue",   SockClient.CallFunc("TAppMan.Variable.GetValue", "Descr"))
+    print("SockClient.CallFunc:TAppMan.GetInfo",        SockClient.CallFunc("TAppMan.GetInfo()"))
+    print("SockClient.CallFunc:TAppMan.LoadFile",       SockClient.CallFunc("TAppMan.LoadFile", aJson))
+    print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue", "Descr"))
+    print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue(Descr)"))
+    print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "PkgVersion"))
+    print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "Port"))
 
     #print("SockClient.CallFunc:TAppMan.Editor.SectionSet",   SockClient.CallFunc("TAppMan.Editor.SectionSet", "mysqld"))
     #print("SockClient.CallFunc:TAppMan.Editor.KeyGet",       SockClient.CallFunc("TAppMan.Editor.Section.KeyGet", "socket"))

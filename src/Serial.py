@@ -102,8 +102,19 @@ class TSerial():
 
         return Result
 
+    def SplitFunc(self, aFuncStr):
+        # recognize string "ClassName.FuncName('Param')"
+        Match = re.match("(?P<Name>[\w\.]+)\((?P<Arg>.*)\)", aFuncStr)
+        if (Match):
+            return Match.groupdict()
+        else:
+            return {}
+
     def CallFunc(self, aFuncName, aArgs = []):
-        #print("CallFunc", aFuncName, aArgs)
+        Arr = self.SplitFunc(aFuncName)
+        if (Arr):
+            aFuncName = Arr["Name"]
+            aArgs     = Arr["Arg"].replace("'", "").split(",")
 
         Obj = self.GetObj(aFuncName)
         if (Obj):
@@ -111,7 +122,7 @@ class TSerial():
           if (ObjType in ["instancemethod", "function"]):
               return self.CallObj(Obj, aArgs)
           else:
-              return "TSerial->CallFunc Error: Object is not callable: " + aFuncName + " " + ObjType
+              self.LastError = "TSerial->CallFunc Error: Object is not callable: " + aFuncName + " " + ObjType
         else:
           return self.LastError
 
@@ -137,7 +148,6 @@ class TSerial():
             Data = {"Type": "Func", "Name": aFuncName}
         else:
             Data = {"Type": "Func", "Name": aFuncName, "Arg": aArgs}
-
         return json.dumps(Data)
 
     def EncodeProp(self, aPropName):
