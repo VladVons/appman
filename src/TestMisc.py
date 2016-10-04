@@ -52,9 +52,11 @@ def TestAppMan(aJson):
     #print("AppMan.User.List",           AppMan.User.List())
 
 
-    print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgVersion"))
-    print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("Port"))
-   #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgInstall"))
+    #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgVersion"))
+    #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("Port"))
+    print("AppMan.Cmd.ExecField",        AppMan.Cmd.ExecField("PkgVersion",   "CmdInfo"))
+    #print("AppMan.Cmd.ExecField",         AppMan.Cmd.ExecField("ServiceStatus", "CmdExec"))
+
 
     #print("AppMan.Cmd.PkgVersion",      AppMan.Cmd.PkgVersion())
     #print("AppMan.Cmd.PkgInstall",      AppMan.Cmd.PkgInstall())
@@ -115,10 +117,10 @@ def TestRegEx():
 
 
 #---
-#FileName = "samba.json"
+FileName = "samba.json"
 #FileName = "pure-ftpd.json"
 #FileName = "sysuser.json"
-FileName = "mysql.json"
+#FileName = "mysql.json"
 
 TestAppMan(FileName)
 #TestSerial(FileName)

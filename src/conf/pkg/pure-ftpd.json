@@ -2,19 +2,21 @@
     "Var":{
         "App":{"Value":"pure-ftpd"},
         "Descr":{"Value":"$<App> is a simple File Transfer Protocol server"},
-        "PkgInstall":{"Value":"$<App>"},
-        "Service":{"Value":"$<App>", "Descr":"MyDescr"},
-        "Monit":{"Value":false},
-        "Script":{"Value":"$<Path_Initd>/$<Service>"},
-        "LogFile":{"Value":"$<File_SysLog>|$<Process>"},
-        "Port":{"Value":"20;21"},
-        "PidFile":{"Value":"$<Path_Run>/$<App>/$<Service>.pid"},
-        "Man":{"Value":"$<App>"},
         "HomePage":{"Value":"https://www.pureftpd.org"},
-        "Tag":{"Value":"service;file sharing;ftp"}
+        "Man":{"Value":"$<App>"},
+        "Tag":{"Value":"service;file sharing;ftp"},
+
+        "PkgInstall":{"Value":"$<App>"},
+        "PkgRemove":{"Value":"$<PkgInstall>"},
+        "Monit":{"Value":false},
+        "Process":{"Value":"$<App>"},
+        "ServiceFile":{"Value":"$<Path_Initd>/$<Process>"},
+        "LogFile":{"Value":"$<File_SysLog>"},
+        "Port":{"Value":"21"},
+        "PidFile":{"Value":"$<Path_Run>/$<App>/$<Process>.pid"}
     },
     "Cmd":{
-        "LogFile":{"CmdExec":"$<Cmd_ShowLogGrep>"}
+        "LogFile":{"CmdExec":"$<Cmd_ShowLogGrep>", "Arg1":"$<LogFile>", "Arg2":"$<Process>"}
     },
     "User":{
         "Add":{"Cmd":"useradd -M $<Arg1>"},

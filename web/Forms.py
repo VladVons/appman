@@ -61,13 +61,20 @@ class TFConfList(Form):
         else:
             GridColumns = ["_numbered", "File", "Version", "Run", "Tag", "Descr"]
             GridItems   = []
-            Files   = User.Call("TAppMan.GetListConf()")
+            Files = User.Call("TAppMan.GetListConf")
             for File in Files:
                 User.Call("TAppMan.LoadFile", File)
-                Conf  = HTML.a(File, href="pkg_info?name=" + File)
                 Pairs = User.Call("TAppMan.Var.GetPairs('Value')")
-                Run   = User.Call("TAppMan.Cmd.ShowService").strip() != ""
-                Ver   = User.Call("TAppMan.Cmd.ExecValue", "PkgVersion")
+
+                Run = False
+                if ("Process" in Pairs):
+                    Run = User.Call("TAppMan.Cmd.ExecField", "Process").strip() != ""
+
+                Ver = ""
+                if ("PkgInstall" in Pairs):
+                    Ver = User.Call("TAppMan.Cmd.ExecField", "PkgVersion")
+
+                Conf  = HTML.a(File, href="pkg_info?name=" + File)
                 GridItems.append( {"File": Conf, "Tag": Pairs.get("Tag"), "Version": Ver, "Descr": Pairs.get("Descr"), "Run": Run } )
             self.Grid = Grid(GridItems, GridColumns, order_direction = "dsc")
             return render_template(self.Teplate, Form = self)
@@ -103,10 +110,14 @@ class TFPkgInfo(Form):
         Result = []
 
         PairsVar = User.Call("TAppMan.Var.GetPairs('Value')")
+        PairsCmd = User.Call("TAppMan.Cmd.GetPairs('Value')")
         HideVar  = User.Call("TAppMan.Var.GetFieldList('App_HideVar/Value')")
         for Item in PairsVar:
             if (not Item.startswith(tuple(HideVar))):
-                CmdRes = User.Call("TAppMan.Cmd.ExecValue", Item, "CmdInfo")
+                CmdRes = ""
+                if (Item in PairsCmd):
+                    CmdRes = User.Call("TAppMan.Cmd.ExecField", Item, "CmdInfo")
+
                 Result.append( {"Field": Item, "Value": PairsVar.get(Item),  "Info": CmdRes} )
 
         #Prop = User.Call("TAppMan.Editor.GetPath()")

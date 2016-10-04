@@ -51,14 +51,21 @@
         "Cmd_ShowMan":    {"Value":"$<Util_Manual> $<Arg1>"}
     },
     "Cmd":{
-        "PkgInstall":{"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgInstall>"},
-        "PkgVersion":{"CmdExec":"$<Cmd_PkgVersion>", "Value":"PkgInstall"},
-        "PkgRemove":{"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgRemove>"},
-        "Process":{"CmdInfo":"$<Cmd_ShowProcess>"},
-        "User":{"CmdInfo":"$<Cmd_ProcessUser>"},
-        "LogFile":{"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<Cmd_ShowLog>"},
-        "Port":{"CmdInfo":"$<Cmd_ShowPort>", "CmdExec":"$<Cmd_ShowPort>"},
-        "Script":{"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<Cmd_FileShow>"},
-        "PidFile":{"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<Cmd_FileShow>"}
+        "ServiceStart":   {"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<ServiceFile> start",   "Arg1":"$<ServiceFile>"},
+        "ServiceStop":    {"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<ServiceFile> stop",    "Arg1":"$<ServiceFile>"},
+        "ServiceRestart": {"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<ServiceFile> restart", "Arg1":"$<ServiceFile>"},
+        "ServiceStatus":  {"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<ServiceFile> status",  "Arg1":"$<ServiceFile>"},
+
+        "PkgInstall":{"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgInstall>", "Arg1":"$<PkgInstall>"},
+        "PkgVersion":{"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgVersion>", "Arg1":"$<PkgInstall>"},
+        "PkgRemove": {"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgRemove>",  "Arg1":"$<PkgRemove>"},
+
+        "Process":   {"CmdInfo":"$<Cmd_ShowProcess>", "CmdExec":"$<Cmd_ShowProcess>", "Arg1":"$<Process>"},
+        "User":      {"CmdInfo":"$<Cmd_ProcessUser>", "CmdExec":"$<Cmd_ProcessUser>", "Arg1":"$<User>"},
+        "Port":      {"CmdInfo":"$<Cmd_ShowPort>",    "CmdExec":"$<Cmd_ShowPort>",    "Arg1":"$<Port>"},
+
+        "LogFile":    {"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<Cmd_ShowLog>",  "Arg1":"$<LogFile>"},
+        "ServiceFile":{"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<Cmd_FileShow>", "Arg1":"$<ServiceFile>"},
+        "PidFile":    {"CmdInfo":"$<Cmd_FileExist>", "CmdExec":"$<Cmd_FileShow>", "Arg1":"$<PidFile>"}
     }
 }

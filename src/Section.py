@@ -107,8 +107,10 @@ class TSectionVarExec(TSectionVar):
         self.__DictReplace.CallBack = self.__Replace
 
     def __Replace(self, aName):
-        Path = self.__DictReplace.CurField + "/" + aName
-        return self.GetField(Path)
+        Path   = self.__DictReplace.CurField + "/" + aName
+        Result = self.GetField(Path)
+        #print("--- TSectionVarExec->Replace", Path, Result)
+        return Result
 
     def ExecStr(self, aStr, aFindRepl = {}):
         Result  = ""
@@ -123,7 +125,9 @@ class TSectionVarExec(TSectionVar):
         self.__DictReplace.CurField = aName
         CmdOrig = self.GetField(aName + "/" + aField)
         Cmd     = self.__DictReplace.Parse(CmdOrig)
-        return self.ExecStr(Cmd, aFindRepl)
+        print("--- TSectionVarExec->ExecField", aName, aField, Cmd)
+        Result  = self.ExecStr(Cmd, aFindRepl)
+        return Result
 
     def ExecFieldList(self, aName, aField, aArg = []):
         FindRepl = {}
@@ -136,7 +140,6 @@ class TSectionVarExec(TSectionVar):
         Result = ""
 
         Value = self.GetVar(self.GetValue(aName), self.GetVar(aName)).strip()
-        print("----1", aName, aField, Value)
         if (Value):
             for Item in Value.split(cObjDelim):
                 Idx = 0
@@ -147,6 +150,9 @@ class TSectionVarExec(TSectionVar):
                     FindRepl[Key] = Arg
                 Result += self.ExecFieldDict(aName, aField, FindRepl)
         return Result
+
+    def ExecField(self, aName, aField = cFieldCmdExec):
+        return self.ExecFieldDict(aName, aField)
 
     def ExecVar(self, aName, aArg = ""):
         Value = self.GetVar(aName)

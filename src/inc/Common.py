@@ -82,7 +82,7 @@ class TShell():
         Pipe = subprocess.Popen(aCmd, shell=True, stdout=subprocess.PIPE)
         Result = Pipe.communicate()[0]
 
-        #print("Exec out: " + Result)
+        print("Exec out: " + Result)
         return Result
 
 

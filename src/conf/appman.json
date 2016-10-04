@@ -3,7 +3,7 @@
         "File":{"Value":"$<Sys_Platform>.json"}
     },
     "Var":{
-        "App_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Install;Config;User;LogFile;PidFile;Port;Script;Service;Process;MonitProcess"},
+        "App_SortVar":{"Value":"App;Descr;Tag;HomePage;Man;Monit;PkgInstall;PkgRemove;Config;User;LogFile;PidFile;Port;ServiceFile;Process"},
         "App_HideVar":{"Value":"_;Cmd_;Util_;File_;Path_;Sys_;App_"},
         "App_Util":{"Value":"OS;MemTotal;DiskFree;NetDev;IsRoot;_Top_;_PkgList_;_Reboot_"}
     },
@@ -49,7 +49,7 @@
             "IpAllow":{"Value":".*"},
             "MonitTime":{"Value":0, "Descr":"Check if services are running every xxx seconds. 0 - disable"},
             "DebugLevel":{"Value":0},
-            "DebugConsole":{"Value":true}
+            "DebugConsole":{"Value":false}
         }
     }
 }
