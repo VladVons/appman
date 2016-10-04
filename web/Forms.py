@@ -114,11 +114,12 @@ class TFPkgInfo(Form):
         HideVar  = User.Call("TAppMan.Var.GetFieldList('App_HideVar/Value')")
         for Item in PairsVar:
             if (not Item.startswith(tuple(HideVar))):
-                CmdRes = ""
                 if (Item in PairsCmd):
-                    CmdRes = User.Call("TAppMan.Cmd.ExecField", Item, "CmdInfo")
-
-                Result.append( {"Field": Item, "Value": PairsVar.get(Item),  "Info": CmdRes} )
+                    CmdRes   = User.Call("TAppMan.Cmd.ExecField", Item, "CmdInfo")
+                    LastExec = User.GetProp("TAppMan.Cmd.LastExec")
+                    Result.append( {"Field": Item, "Value": PairsVar.get(Item), "Info": CmdRes,  "Command": LastExec} )
+                else:
+                    Result.append( {"Field": Item, "Value": PairsVar.get(Item), "Info": "",  "Command": ""} )
 
         #Prop = User.Call("TAppMan.Editor.GetPath()")
         #if (Prop):
@@ -140,7 +141,7 @@ class TFPkgInfo(Form):
                 User.Call("TAppMan.LoadFile", aFile)
 
                 GridVarItems      = self.GetVarList()
-                GridVarColumns    = ["_numbered", "Field", "Value", "Info"]
+                GridVarColumns    = ["_numbered", "Field", "Value", "Info", "Command"]
                 self.GridVar      = Grid(GridVarItems, GridVarColumns)
                 self.GridVarTitle = "Variables"
 

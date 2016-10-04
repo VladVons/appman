@@ -102,6 +102,7 @@ class TSectionVar(TSection):
 class TSectionVarExec(TSectionVar):
     def __init__(self, aParent, aName ):
         TSectionVar.__init__(self, aParent, aName)
+        self.LastExec = ""
 
         self.__DictReplace = TDictReplace(cVarPrefix, cVarSufix)
         self.__DictReplace.CallBack = self.__Replace
@@ -117,8 +118,8 @@ class TSectionVarExec(TSectionVar):
         Items   = aStr.split(cObjDelim)
         if (Items):
             for Item in Items:
-                Parsed  = TStr.MultiRepl(Item, aFindRepl)
-                Result += TShell.ExecM(Parsed) + "\n"
+                self.LastExec = TStr.MultiRepl(Item, aFindRepl)
+                Result += TShell.ExecM(self.LastExec) + "\n"
         return Result
 
     def ExecFieldDict(self, aName, aField, aFindRepl = {}):
