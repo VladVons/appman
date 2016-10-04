@@ -21,26 +21,31 @@ class TDictReplace:
 
     # search macros $<xxx> in aStr and repalce it with value returned by aFunc
     def Parse(self, aStr):
-        if (aStr and (type(aStr) in [str, unicode]) and (aStr.find(self.Prefix) != -1)):
-            Items = re.findall(self.Pattern, aStr)
-            if (Items):
-                self.Err = []
-                for Item in Items:
-                    Item = Item.strip()
-                    if (self.CallBack):
-                        Repl = self.CallBack(Item)
-                    else:
-                        Repl = self.Data.get(Item, "")
+        Items = self.GetMatch(aStr)
+        if (Items):
+            self.Err = []
+            for Item in Items:
+                Item = Item.strip()
+                if (self.CallBack):
+                    Repl = self.CallBack(Item)
+                else:
+                    Repl = self.Data.get(Item, "")
 
-                    if (Repl == ""):
-                        self.Err.append(Item)
-                    else:
-                        aStr = aStr.replace(self.Prefix + Item + self.Sufix, Repl)
+                if (Repl == ""):
+                    self.Err.append(Item)
+                else:
+                    aStr = aStr.replace(self.Prefix + Item + self.Sufix, Repl)
 
-                if (len(self.Err) == 0):
-                    aStr = self.Parse(aStr)
+            if (len(self.Err) == 0):
+                aStr = self.Parse(aStr)
         return aStr
 
+    def GetMatch(self, aStr):
+        if (aStr and (type(aStr) in [str, unicode]) and (aStr.find(self.Prefix) != -1)):
+            Result = re.findall(self.Pattern, aStr)
+        else:
+            Result = []
+        return Result
 
 #---
 class TStr():

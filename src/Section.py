@@ -109,7 +109,7 @@ class TSectionVarExec(TSectionVar):
     def __Replace(self, aName):
         Path   = self.__DictReplace.CurField + "/" + aName
         Result = self.GetField(Path)
-        #print("--- TSectionVarExec->Replace", Path, Result)
+        print("--- TSectionVarExec->Replace", Path, Result)
         return Result
 
     def ExecStr(self, aStr, aFindRepl = {}):
