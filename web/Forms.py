@@ -121,9 +121,9 @@ class TFPkgInfo(Form):
                 else:
                     Result.append( {"Field": Item, "Value": PairsVar.get(Item), "Info": "",      "Command": ""} )
 
-        #Prop = User.Call("TAppMan.Editor.GetPath()")
-        #if (Prop):
-        #    Result.append( {"Field": "Config", "Value": Prop, "Info": ""} )
+        Prop = User.Call("TAppMan.Editor.GetPath")
+        if (Prop):
+            Result.append( {"Field": "Config", "Value": Prop, "Info": "", "Command": ""} )
 
         self.SortOrd = User.Call("TAppMan.Var.GetFieldList('App_SortVar/Value')")
         if (len(self.SortOrd) > 0):

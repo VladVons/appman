@@ -1,0 +1,32 @@
+{
+    "Var":{
+        "App":{"Value":"ntp"},
+        "Descr":{"Value":"Network Time Protocol (NTP) for clock synchronization"},
+        "Tag":{"Value":"service;time"},
+
+        "PkgInstall":{"Value":"$<App>"},
+        "PkgRemove":{"Value":"$<PkgInstall>"},
+        "Process":{"Value":"ntpd"},
+        "ServiceFile":{"Value":"$<Path_Initd>/$<Process>"},
+        "LogFile":{"Value":"$<File_SysLog>"},
+        "Port":{"Value":"123"},
+        "PidFile":{"Value":"$<Path_Run>/$<App>/$<Process>.pid"}
+    },
+    "Cmd":{
+        "LogFile":{"CmdExec":"$<Cmd_ShowLogGrep>", "Arg1":"$<LogFile>", "Arg2":"$<Process>"}
+    },
+    "Config":{
+        "Main":{
+            "Type":"Conf",
+            "Path":"/etc/ntp.conf",
+            "Validate":true,
+            "Comment":"#",
+            "Descr":"main config file",
+            "Field":{
+                "NoAnonymous":{"Value":"yes", "Type":"YN"},
+                "PAMAuthentication":{"Value":"Yes", "Type":"YN"},
+                "FSCharset":{"Value":"UTF-8", "Type":"String"}
+            }
+        }
+    }
+}

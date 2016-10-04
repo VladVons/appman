@@ -29,7 +29,7 @@
     "Config":{
         "Main":{
             "Type":"Ini",
-            "Path":"/etc/$<App>/smb.conf",
+            "Path":"/etc/samba/smb.conf",
             "Validate":true,
             "Comment":"#",
             "Check":"testparm",
