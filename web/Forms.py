@@ -119,7 +119,7 @@ class TFPkgInfo(Form):
                     LastExec = User.GetProp("TAppMan.Cmd.LastExec")
                     Result.append( {"Field": Item, "Value": PairsVar.get(Item), "Info": CmdRes,  "Command": LastExec} )
                 else:
-                    Result.append( {"Field": Item, "Value": PairsVar.get(Item), "Info": "",  "Command": ""} )
+                    Result.append( {"Field": Item, "Value": PairsVar.get(Item), "Info": "",      "Command": ""} )
 
         #Prop = User.Call("TAppMan.Editor.GetPath()")
         #if (Prop):
