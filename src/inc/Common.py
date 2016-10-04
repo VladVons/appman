@@ -19,6 +19,16 @@ class TDictReplace:
         self.Sufix    = aSufix
         self.Pattern  = "\\" + self.Prefix + "([^" + "\\" + self.Prefix + self.Sufix + "]*)" + self.Sufix
 
+    def GetMatch(self, aStr):
+        if (aStr and (type(aStr) in [str, unicode]) and (aStr.find(self.Prefix) != -1)):
+            Result = re.findall(self.Pattern, aStr)
+        else:
+            Result = []
+        return Result
+
+    def Replace(self, aStr, aFind, aRepl):
+        return aStr.replace(self.Prefix + aFind + self.Sufix, aRepl)
+
     # search macros $<xxx> in aStr and repalce it with value returned by aFunc
     def Parse(self, aStr):
         Items = self.GetMatch(aStr)
@@ -34,18 +44,12 @@ class TDictReplace:
                 if (Repl == ""):
                     self.Err.append(Item)
                 else:
-                    aStr = aStr.replace(self.Prefix + Item + self.Sufix, Repl)
+                    aStr = self.Replace(aStr, Item , Repl)
 
             if (len(self.Err) == 0):
                 aStr = self.Parse(aStr)
         return aStr
 
-    def GetMatch(self, aStr):
-        if (aStr and (type(aStr) in [str, unicode]) and (aStr.find(self.Prefix) != -1)):
-            Result = re.findall(self.Pattern, aStr)
-        else:
-            Result = []
-        return Result
 
 #---
 class TStr():

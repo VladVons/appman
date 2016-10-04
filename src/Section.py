@@ -109,7 +109,7 @@ class TSectionVarExec(TSectionVar):
     def __Replace(self, aName):
         Path   = self.__DictReplace.CurField + "/" + aName
         Result = self.GetField(Path)
-        print("--- TSectionVarExec->Replace", Path, Result)
+        #print("--- TSectionVarExec->Replace", Path, Result)
         return Result
 
     def ExecStr(self, aStr, aFindRepl = {}):
@@ -152,7 +152,22 @@ class TSectionVarExec(TSectionVar):
         return Result
 
     def ExecField(self, aName, aField = cFieldCmdExec):
-        return self.ExecFieldDict(aName, aField)
+        Result = ""
+
+        CmdOrig = self.GetField(aName + "/" + aField)
+        Macros = self.__DictReplace.GetMatch(CmdOrig)
+        if (Macros): 
+            # go via <Arg1>, <ArgY>
+            for Macro in Macros:
+                Args = self.GetField(aName + "/" + Macro).split(cObjDelim)
+                # go via Val1;ValY
+                for Arg in Args:
+                    Cmd = self.__DictReplace.Replace(CmdOrig, Macro, Arg.strip())
+                    Result += self.ExecStr(Cmd) + "\n"
+        else:
+            Result = self.ExecStr(CmdOrig)
+
+        return Result
 
     def ExecVar(self, aName, aArg = ""):
         Value = self.GetVar(aName)
