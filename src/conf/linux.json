@@ -59,6 +59,7 @@
         "PkgInstall":{"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgInstall>", "Arg1":"$<PkgInstall>"},
         "PkgVersion":{"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgVersion>", "Arg1":"$<PkgInstall>"},
         "PkgRemove": {"CmdInfo":"$<Cmd_PkgVersion>", "CmdExec":"$<Cmd_PkgRemove>",  "Arg1":"$<PkgRemove>"},
+        "PkgAddPpa": {"CmdInfo":"$<Cmd_PkgAddPpa>",  "CmdExec":"$<Cmd_PkgAddPpa>",  "Arg1":"$<PkgPpa>"},
 
         "Process":   {"CmdInfo":"$<Cmd_ShowProcess>", "CmdExec":"$<Cmd_ShowProcess>", "Arg1":"$<Process>"},
         "User":      {"CmdInfo":"$<Cmd_ProcessUser>", "CmdExec":"$<Cmd_ProcessUser>", "Arg1":"$<User>"},

@@ -14,11 +14,13 @@ import re
 import datetime
 
 from inc.Common import *
-from SectionExec import *
+from Section import *
 from Editor import *
 
 
+sys.path.insert(0, './conf')
 sys.path.insert(0, './conf/pkg')
+
 
 __version__ = {"Sys_AppVer": "1.031", "Sys_Mail": "VladVons@gmail.com"}
 cPathConf   = "conf/pkg"
@@ -36,12 +38,9 @@ class TAppMan():
     def Clear(self):
         self.Editor   = None
 
-        self.Util   = TSUtil(self, "Util")
         self.Option = TSOption(self, "Option")
         self.Var    = TSVar(self, "Var")
         self.Config = TSConfig(self, "Config")
-        self.Cmd    = TSCmd(self, "Cmd")
-        self.User   = TSUser(self, "User")
 
         Items = self.GetInfo()
         for Item in Items:
@@ -71,9 +70,10 @@ class TAppMan():
             else:
                 print("Unknown editor type")
 
-    # Dynamicly add classes with "_Ex" from a aFile
+    # Dynamicly add classes from a aFile
     # Add class Items from json file by ClassName
     def __AddModule(self, aFileName, aCoreName, aNode):
+        print("AddModule", aFileName, aCoreName)
         Lib = importlib.import_module(aCoreName)
         Objects = ast.parse(TFile.LoadFromFileToStr(aFileName))
         for Item in ast.walk(Objects):
@@ -108,8 +108,6 @@ class TAppMan():
             self.Option._Load(root)
             self.Var._Load(root)
             self.Config._Load(root)
-            self.Cmd._Load(root)
-            self.User._Load(root)
 
             CoreName = TFile.GetCoreName(aFileName)
             Files = TFile.Find(CoreName + ".py", self.Path)

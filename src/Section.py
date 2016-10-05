@@ -65,6 +65,9 @@ class TSection():
     def GetKeys(self):
         return self.Data.keys()
 
+    def HasKey(self, aKey):
+        return (aKey in self.Data)
+
 
 #---
 class TSectionVar(TSection):
@@ -126,7 +129,7 @@ class TSectionVarExec(TSectionVar):
         self.__DictReplace.CurField = aName
         CmdOrig = self.GetField(aName + "/" + aField)
         Cmd     = self.__DictReplace.Parse(CmdOrig)
-        print("--- TSectionVarExec->ExecField", aName, aField, Cmd)
+        #print("--- TSectionVarExec->ExecField", aName, aField, Cmd)
         Result  = self.ExecStr(Cmd, aFindRepl)
         return Result
 
@@ -137,10 +140,14 @@ class TSectionVarExec(TSectionVar):
             FindRepl[Key] = aArg[Idx]
         return self.ExecFieldDict(aName, FindRepl)
 
-    def ExecValue(self, aName, aField = cFieldCmdExec):
+    def ExecValue(self, aName, aField = cFieldCmdExec, aValue = ""):
         Result = ""
 
-        Value = self.GetVar(self.GetValue(aName), self.GetVar(aName)).strip()
+        if (aValue):
+            Value = aValue
+        else: 
+            Value = self.GetVar(self.GetValue(aName), self.GetVar(aName)).strip()
+
         if (Value):
             for Item in Value.split(cObjDelim):
                 Idx = 0

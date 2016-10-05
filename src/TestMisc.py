@@ -55,6 +55,7 @@ def TestAppMan(aJson):
     #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgVersion"))
     #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("Port"))
     print("AppMan.Cmd.ExecField",        AppMan.Cmd.ExecField("PkgVersion",   "CmdInfo"))
+    print("AppMan.Cmd.GetValue",         AppMan.Cmd.HasKey("ServiceRestart"))
     #print("AppMan.Cmd.ExecField",         AppMan.Cmd.ExecField("ServiceStatus", "CmdExec"))
 
 
