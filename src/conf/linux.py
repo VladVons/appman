@@ -21,16 +21,19 @@ class Cmd(TSectionVarExec):
 
     def PkgInstall(self):
         Result = ""
-
         if (self.HasKey("PkgAddPpa")):
-            Result  = self.ExecField("PkgAddPpa") + "\n"
+            Result =  self.ExecField("PkgAddPpa") + "\n"
+            Result += self.ExecVar("Util_PkgUpdate") + "\n"
 
         Result += self.ExecField("PkgInstall")
         return Result
 
     def PkgVersion(self):
-        PkgName = TStr.GetPart(self.GetVar("PkgInstall"), 0, cObjDelim)
-        return self.ExecField("PkgVersion", PkgName)
+        Result = self.GetArg("PkgVersion")
+        if (Result):
+            Arg = TStr.GetPart(Result, 0, cObjDelim)
+            Result = self.ExecFieldList("PkgVersion", cFieldCmdExec, [Arg])
+        return Result
 
 
 #---

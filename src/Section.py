@@ -28,7 +28,6 @@ class TSection():
     def Clear(self):
         self.Data = {}
 
-
     def _AddItems(self, aItems, aAddComma = False):
         if (aItems):
             for Item in aItems:
@@ -86,8 +85,8 @@ class TSectionVar(TSection):
     def GetValue(self, aName, aDef = ""):
         return self.GetField(aName + "/" + cFieldValue, aDef)
 
-    def GetCmd(self, aName, aDef = ""):
-        return self.GetField(aName + "/" + cFieldCmd, aDef)
+    def GetArg(self, aName, aIdx = 1):
+        return self.GetField(aName + "/Arg" + str(aIdx))
 
     def GetVar(self, aName, aDef = ""):
         return self.Parent.Var.GetValue(aName, aDef)
@@ -138,33 +137,14 @@ class TSectionVarExec(TSectionVar):
         for Idx in range(0, len(aArg)):
             Key = cVarPrefix + cVarArg + str(Idx + 1) + cVarSufix
             FindRepl[Key] = aArg[Idx]
-        return self.ExecFieldDict(aName, FindRepl)
-
-    def ExecValue(self, aName, aField = cFieldCmdExec, aValue = ""):
-        Result = ""
-
-        if (aValue):
-            Value = aValue
-        else: 
-            Value = self.GetVar(self.GetValue(aName), self.GetVar(aName)).strip()
-
-        if (Value):
-            for Item in Value.split(cObjDelim):
-                Idx = 0
-                FindRepl = {}
-                for Arg in Item.split("|"):
-                    Idx += 1
-                    Key = cVarPrefix + cVarArg + str(Idx) + cVarSufix
-                    FindRepl[Key] = Arg
-                Result += self.ExecFieldDict(aName, aField, FindRepl)
-        return Result
+        return self.ExecFieldDict(aName, aField, FindRepl)
 
     def ExecField(self, aName, aField = cFieldCmdExec):
         Result = ""
 
         CmdOrig = self.GetField(aName + "/" + aField)
         Macros = self.__DictReplace.GetMatch(CmdOrig)
-        if (Macros): 
+        if (Macros):
             # go via <Arg1>, <ArgY>
             for Macro in Macros:
                 Args = self.GetField(aName + "/" + Macro).split(cObjDelim)

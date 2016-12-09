@@ -13,7 +13,7 @@ ExecM()
 }
 
 
-PkgUpdate()
+PkgUpgrade()
 # ------------------------
 {
   ExecM "dpkg --configure -a" "repair"
@@ -33,6 +33,6 @@ PkgUpdate()
 
 
 case $1 in
-    PkgUpdate)  $1 $2 $3 $4 $5 ;;
+    PkgUpgrade)  $1 $2 $3 $4 $5 ;;
 esac
 

@@ -21,7 +21,8 @@
         "Util_FileShow":{"Value":"cat"},
         "Util_Manual":{"Value":"man"},
 
-        "Util_PkgUpdate":   {"Value":"linux.sh PkgUpdate"},
+        "Util_PkgUpgrade":  {"Value":"linux.sh PkgUpdate"},
+        "Util_PkgUpdate":   {"Value":"apt-get update --yes"},
         "Util_PkgList":     {"Value":"dpkg -l"},
         "Util_PkgInfo":     {"Value":"dpkg -s"},
         "Util_PkgInstall":  {"Value":"apt-get install --yes"},

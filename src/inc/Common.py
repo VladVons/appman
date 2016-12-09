@@ -9,9 +9,9 @@ import re
 
 class TDictReplace:
     def __init__(self, aPrefix = "$<", aSufix = ">"):
-        self.Data     = {}
-        self.Err      = []
-        self.CallBack = None
+        self.Data      = {}
+        self.Err       = []
+        self.CallBack  = None
         self.SetDelim(aPrefix, aSufix)
 
     def SetDelim(self, aPrefix, aSufix):
@@ -30,24 +30,25 @@ class TDictReplace:
         return aStr.replace(self.Prefix + aFind + self.Sufix, aRepl)
 
     # search macros $<xxx> in aStr and repalce it with value returned by aFunc
-    def Parse(self, aStr):
+    def Parse(self, aStr, aSkip = []):
         Items = self.GetMatch(aStr)
         if (Items):
             self.Err = []
             for Item in Items:
                 Item = Item.strip()
-                if (self.CallBack):
-                    Repl = self.CallBack(Item)
-                else:
-                    Repl = self.Data.get(Item, "")
+                if (not Item in aSkip):
+                    if (self.CallBack):
+                        Repl = self.CallBack(Item)
+                    else:
+                        Repl = self.Data.get(Item, "")
 
-                if (Repl == ""):
-                    self.Err.append(Item)
-                else:
-                    aStr = self.Replace(aStr, Item , Repl)
+                    if (Repl == ""):
+                        self.Err.append(Item)
+                    else:
+                        aStr = self.Replace(aStr, Item , Repl)
 
             if (len(self.Err) == 0):
-                aStr = self.Parse(aStr)
+                aStr = self.Parse(aStr, aSkip)
         return aStr
 
 

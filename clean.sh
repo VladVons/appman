@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source ./install.sh
+source ./git.sh
 
 Clean

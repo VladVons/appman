@@ -52,10 +52,11 @@ def TestAppMan(aJson):
     #print("AppMan.User.List",           AppMan.User.List())
 
 
+    print("AppMan.Cmd.PkgVersion",        AppMan.Cmd.PkgVersion())
     #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgVersion"))
     #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("Port"))
-    print("AppMan.Cmd.ExecField",        AppMan.Cmd.ExecField("PkgVersion",   "CmdInfo"))
-    print("AppMan.Cmd.GetValue",         AppMan.Cmd.HasKey("ServiceRestart"))
+    #print("AppMan.Cmd.ExecField",        AppMan.Cmd.ExecField("PkgVersion",   "CmdInfo"))
+    #print("AppMan.Cmd.GetValue",         AppMan.Cmd.HasKey("ServiceRestart"))
     #print("AppMan.Cmd.ExecField",         AppMan.Cmd.ExecField("ServiceStatus", "CmdExec"))
 
 
@@ -123,7 +124,7 @@ FileName = "samba.json"
 #FileName = "sysuser.json"
 #FileName = "mysql.json"
 
-TestAppMan(FileName)
+#TestAppMan(FileName)
 #TestSerial(FileName)
 #TestRegEx()
 
@@ -146,3 +147,19 @@ TestAppMan(FileName)
 #m = re.match("(\w+)", s)
 #print m.groupdict()
 #print(m)
+
+def CallFunc(aArgs, aKeys, aIdx):
+    if aIdx > 0:
+        CallFunc(aArgs, aKeys, aIdx - 1)
+        Pars = aArgs.get(aKeys[aIdx])
+        for Par in Pars.split(";"):
+            print(Par)
+
+
+    #for Key in aArg.keys():
+    #    for Par in aArg.get(Key).split(";"):
+    #        print(Key, Par)
+
+Args = {"Arg1":"1;2;3", "Arg2":"a;b;c;d", "Arg3":"x;y"}
+Keys = Args.keys()
+CallFunc(Args, Keys, len(Keys))
