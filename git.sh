@@ -21,7 +21,7 @@ Clean()
 
 GitCreate()
 {
-  # create new project on disk
+  # create new project on disk 1
   git init
 
   # sign with eMail
