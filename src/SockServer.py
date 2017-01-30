@@ -220,11 +220,11 @@ class TSockServer():
         OptMaxConn = self.Option.GetValue("Server/MaxConn", 5)
         OptIpAllow = self.Option.GetValue("Server/IpAllow", "127.0.0.1")
 
-        OptMonitTime = self.Option.GetValue("Server/MonitTime", 60)
+        OptMonitTime = self.Option.GetValue("Server/MonitTime", 60) 
         if (OptMonitTime > 0):
             self.__CreateThread(self.__RunThreadMonit, ())
 
-        self.logger.info("Listening host '%s' on port '%s'", OptHost, OptPort)
+        self.logger.info("Listening host '%s', interface '%s', on port '%s'", OptHost, TSocket.GetLocalIP(), OptPort)
         self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.Sock.bind((OptHost, OptPort))
         self.Sock.listen(OptMaxConn)

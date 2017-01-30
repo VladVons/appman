@@ -49,7 +49,7 @@
             "IpAllow":{"Value":".*"},
             "MonitTime":{"Value":0, "Descr":"Check if services are running every xxx seconds. 0 - disable"},
             "DebugLevel":{"Value":0},
-            "DebugConsole":{"Value":false}
+            "DebugConsole":{"Value":true}
         }
     }
 }
