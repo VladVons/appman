@@ -30,7 +30,7 @@ GitCache()
 
 GitCreate()
 {
-  # create new project on disk 1
+  # create new project on disk
   git init
   GitCache
 
