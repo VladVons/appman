@@ -85,9 +85,10 @@ GitToServ()
 
 clear
 case $1 in
-    Clean)          "$1"        "$2" "$3" ;;
-    GitCreate)      "$1"        "$2" "$3" ;;
-    GitToServ|t)    GitToServ   "$2" "$3" ;;
-    GitFromServ|f)  GitFromServ "$2" "$3" ;;
+    Clean)              "$1"        "$2" "$3" ;;
+    GitCreate)          "$1"        "$2" "$3" ;;
+    GitToServ|t)        GitToServ   "$2" "$3" ;;
+    GitFromServ|f)      GitFromServ "$2" "$3" ;;
+    GitClone)           "$1"        "$2" "$3" ;;
 esac
 
