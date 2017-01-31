@@ -72,7 +72,7 @@ class TAppMan():
     # Dynamicly add classes from a aFile
     # Add class Items from json file by ClassName
     def __AddModule(self, aFileName, aCoreName, aNode):
-        print("--- __AddModule", aFileName, aCoreName)
+        #print("--- __AddModule", aFileName, aCoreName)
         Lib = importlib.import_module(aCoreName)
         Objects = ast.parse(TFile.LoadFromFileToStr(aFileName))
         for Item in ast.walk(Objects):
@@ -91,7 +91,7 @@ class TAppMan():
         return Result
 
     def __LoadFile(self, aFileName):
-        print("--- __LoadFile", aFileName)
+        #print("--- __LoadFile", aFileName)
 
         Result = os.path.isfile(aFileName)
         if (Result):
@@ -116,7 +116,7 @@ class TAppMan():
         return Result
 
     def LoadFile(self, aFileName):
-        print("--- LoadFile", aFileName)
+        #print("--- LoadFile", aFileName)
         self.Clear()
         Result = self.__LoadFileSearch(aFileName)
         self.LoadEditor("Main")
