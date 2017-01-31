@@ -22,12 +22,11 @@ sys.path.insert(0, './conf')
 sys.path.insert(0, './conf/pkg')
 
 
-__version__ = {"Sys_AppVer": "1.031", "Sys_Mail": "VladVons@gmail.com"}
+__version__ = {"Sys_AppVer": "1.032", "Sys_Mail": "VladVons@gmail.com"}
 cPathConf   = "conf/pkg"
 
 #---
 class TAppMan():
-
     def __init__(self):
         self.Path = ["/etc/appman", "conf", cPathConf]
         os.environ["PATH"] += os.pathsep + os.pathsep.join(self.Path)
@@ -73,7 +72,7 @@ class TAppMan():
     # Dynamicly add classes from a aFile
     # Add class Items from json file by ClassName
     def __AddModule(self, aFileName, aCoreName, aNode):
-        #print("AddModule", aFileName, aCoreName)
+        print("--- __AddModule", aFileName, aCoreName)
         Lib = importlib.import_module(aCoreName)
         Objects = ast.parse(TFile.LoadFromFileToStr(aFileName))
         for Item in ast.walk(Objects):
@@ -92,7 +91,7 @@ class TAppMan():
         return Result
 
     def __LoadFile(self, aFileName):
-        #print("LoadFile", aFileName)
+        print("--- __LoadFile", aFileName)
 
         Result = os.path.isfile(aFileName)
         if (Result):
@@ -117,6 +116,7 @@ class TAppMan():
         return Result
 
     def LoadFile(self, aFileName):
+        print("--- LoadFile", aFileName)
         self.Clear()
         Result = self.__LoadFileSearch(aFileName)
         self.LoadEditor("Main")

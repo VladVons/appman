@@ -31,12 +31,13 @@ def SockConnect():
 def TestSocket(aJson):
     SockClient = SockConnect()
 
-    print("SockClient.CallFunc:TAppMan.GetInfo",        SockClient.CallFunc("TAppMan.GetInfo()"))
-    print("SockClient.CallFunc:TAppMan.LoadFile",       SockClient.CallFunc("TAppMan.LoadFile", aJson))
+    #print("SockClient.CallFunc:TAppMan.GetInfo",        SockClient.CallFunc("TAppMan.GetInfo()"))
+    print("SockClient.CallFunc:TAppMan.LoadFile(" + aJson + ")",  SockClient.CallFunc("TAppMan.LoadFile", aJson))
     print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue", "Descr"))
-    print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue(Descr)"))
-    print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "PkgVersion"))
-    print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "Port"))
+    #print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue(Descr)"))
+
+    #print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "PkgVersion"))
+    #print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "Port"))
 
     #print("SockClient.CallFunc:TAppMan.Editor.SectionSet",   SockClient.CallFunc("TAppMan.Editor.SectionSet", "mysqld"))
     #print("SockClient.CallFunc:TAppMan.Editor.KeyGet",       SockClient.CallFunc("TAppMan.Editor.Section.KeyGet", "socket"))
@@ -74,10 +75,12 @@ def TestSocket(aJson):
     #print("SockClient.CallFunc:TAppMan.Util.Top",            SockClient.CallFunc("TAppMan.Util.Top"))
     #print("SockClient.CallFunc:TAppMan.Util.Reboot",         SockClient.CallFunc("TAppMan.Util.Reboot"))
 
-    ## Plugin
-    #print("SockClient.CallFunc:TAppMan.User.TestShell",      SockClient.CallFunc("TAppMan.User.TestShell", "mysql.sh"))
-    #print("SockClient.CallFunc:TAppMan.TMyClass.MyFunc",     SockClient.CallFunc("TAppMan.TMyClass.MyFunc"))
-    #print("SockClient.CallFunc:TAppMan.TMyClass.GetValue",   SockClient.CallFunc("TAppMan.TMyClass.GetValue", "my_value"))
+    ## Plugin MySQL
+    #print("SockClient.CallFunc:TAppMan.User.TestShell",      SockClient.CallFunc("TAppMan.User1.TestShell", "mysql.sh"))
+    #print("SockClient.CallFunc:TAppMan.Cmd.CreateDB",        SockClient.CallFunc("TAppMan.Cmd.CreateDB", "MyDB"))
+
+    ## Plugin OLe_1c
+    #print("SockClient.CallFunc:TAppMan.TOle1c.Connect",      SockClient.CallFunc("TAppMan.TOle1c.Connect", "myName", "myPassw"))
 
 
 #----------
@@ -85,6 +88,7 @@ def TestSocket(aJson):
 #FileName = "pure-ftpd.json"
 #FileName = "sysuser.json"
 FileName = "mysql.json"
+#FileName = "ole1c.json"
 
 TestSocket(FileName)
 

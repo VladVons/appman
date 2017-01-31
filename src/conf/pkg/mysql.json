@@ -2,7 +2,7 @@
     "Var":{
         "App":{"Value":"mysql-server"},
         "Descr":{"Value":"$<App> is a database server"},
-        "HomePage":{"Value":"https://www.pureftpd.org"},
+        "HomePage":{"Value":"https://www.mysql.com"},
         "Man":{"Value":"$<App>"},
         "Tag":{"Value":"service;database"},
 

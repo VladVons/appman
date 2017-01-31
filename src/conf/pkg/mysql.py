@@ -1,7 +1,7 @@
-from SectionExec import *
+from Section import *
 
 
-class User(TSUser):
+class User1(TSectionVarExec):
     def Add(self, aName, aPassw, aDbName):
         return self.ExecCmd("Add", [aName, aPassw, aDbName])
 
@@ -12,6 +12,6 @@ class User(TSUser):
         return TShell.ExecM(aName)
 
 
-class Cmd1(TSCmd):
+class Cmd(TSectionVarExec):
     def CreateDB(self, aName):
         return TShell.ExecM("mysql.sh DbCreate " + aName)

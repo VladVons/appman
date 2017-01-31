@@ -19,7 +19,7 @@ Clean()
   find . -name '*.json' | xargs wc
 }
 
-GitCache()
+GitAuth()
 {
   # sign with eMail
   git config --global user.email "vladvons@gmail.com"
@@ -32,7 +32,7 @@ GitCreate()
 {
   # create new project on disk
   git init
-  GitCache
+  GitAuth
 
   # remote git server location
   git remote add origin https://github.com/VladVons/py-appman.git
@@ -43,7 +43,7 @@ GitClone()
 {
   # restore clone copy fromserver to disk 
   git clone https://github.com/VladVons/py-appman.git
-  GitCache
+  GitAuth
 
   #web admin access here
   #https://github.com/VladVons/appman

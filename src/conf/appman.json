@@ -39,9 +39,9 @@
             }
         },
         "Server":{
-            "Port":{"Value":51017},
-            "Host":{"Value":"127.0.0.1"},
-            "AuthUser":{"Value":true, "Descr":"require user login"},
+            "Port":{"Value":51018},
+            "Host":{"Value":""},
+            "AuthUser":{"Value":false, "Descr":"require user login"},
             "AuthApi":{"Value":false, "Descr":"reqire api_allow / api_deny"},
             "MaxConn":{"Value":5},
             "LogFile":{"Value":"/var/log/appman.log"},
