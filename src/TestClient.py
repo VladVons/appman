@@ -11,6 +11,7 @@ from AppMan import *
 def SockConnect():
     AppMan = TAppMan()
     Host = 'localhost'
+    #Host = '192.168.2.111'
     Port = AppMan.Option.GetValue("Server/Port", 50017)
     print("Client", Host, Port)
 
@@ -31,9 +32,10 @@ def SockConnect():
 def TestSocket(aJson):
     SockClient = SockConnect()
 
-    #print("SockClient.CallFunc:TAppMan.GetInfo",        SockClient.CallFunc("TAppMan.GetInfo()"))
-    print("SockClient.CallFunc:TAppMan.LoadFile(" + aJson + ")",  SockClient.CallFunc("TAppMan.LoadFile", aJson))
-    print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue", "Descr"))
+    print("SockClient.CallFunc:TAppMan.GetEcho",        SockClient.CallFunc("TAppMan.GetEcho()", "123"))
+
+    #print("SockClient.CallFunc:TAppMan.LoadFile(" + aJson + ")",  SockClient.CallFunc("TAppMan.LoadFile", aJson))
+    #print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue", "Descr"))
     #print("SockClient.CallFunc:TAppMan.Var.GetValue",   SockClient.CallFunc("TAppMan.Var.GetValue(Descr)"))
 
     #print("SockClient.CallFunc:TAppMan.Cmd.ExecValue",  SockClient.CallFunc("TAppMan.Cmd.ExecValue", "PkgVersion"))

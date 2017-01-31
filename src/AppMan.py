@@ -150,6 +150,9 @@ class TAppMan():
     def GetListApi(self):
         return self.__GetApi(self,  TObject.GetName(self) + ".")
 
+    def GetEcho(self, aStr):
+        return 'GetEcho: ' + aStr
+
     def GetListConf(self):
         Result = []
         for File in os.listdir(cPathConf):
