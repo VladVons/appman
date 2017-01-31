@@ -80,8 +80,9 @@ def TestSocket(aJson):
     #print("SockClient.CallFunc:TAppMan.Cmd.CreateDB",        SockClient.CallFunc("TAppMan.Cmd.CreateDB", "MyDB"))
 
     ## Plugin OLe_1c
-    #print("SockClient.CallFunc:TAppMan.TOle1c.GetDescr",      SockClient.CallFunc("TAppMan.TOle1c.GetDescr"))
-    #print("SockClient.CallFunc:TAppMan.TOle1c.Connect",      SockClient.CallFunc("TAppMan.TOle1c.Connect", "myName", "myPassw"))
+    #print("SockClient.CallFunc:TAppMan.TOle1c.GetDescr",     SockClient.CallFunc("TAppMan.TOle1c.GetDescr"))
+    #print("SockClient.CallFunc:TAppMan.TOle1c.Connect",      SockClient.CallFunc("TAppMan.TOle1c.Connect"))
+    #print("SockClient.CallFunc:TAppMan.TOle1c.GetDocDelivery", SockClient.CallFunc("TAppMan.TOle1c.GetDocDelivery", "1"))
 
 
 #----------
