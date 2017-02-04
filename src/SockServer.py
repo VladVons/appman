@@ -243,7 +243,7 @@ class TSockServer():
                 Error = "Error: Maximum connections reached"
 
             if (Error == ""):
-                self.logger.info("Start thread")
+                self.logger.info("Starting thread")
                 Conn.sendall(TSerial.CEncodeData("OK"))
                 self.__CreateThread( self.__RunThreadConn, (Conn, Address))
             else:
