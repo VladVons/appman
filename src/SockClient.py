@@ -35,7 +35,9 @@ class TSockClient():
             self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
                 self.Sock.connect((aHost, aPort))
-                Data = self.ReceiveData()
+
+                # web browser GET standart has 'r\n' at the end of each line. Last line must have '\r\n'
+                Data = self.Send('TSockClient.Connect\r\n\r\n')
                 if (Data != "OK"):
                     self.LastError = Data
                     self.Close()
@@ -58,7 +60,10 @@ class TSockClient():
 
     def ReceiveData(self):
         Data = self.Receive()
-        return json.loads(Data)["Data"]
+        if (Data):
+            return json.loads(Data)["Data"] 
+        else:
+            return ''
 
     def SplitFunc(self, aFuncStr):
         Data = re.match("(?P<Name>[\w\.]+)\((?P<Arg>.*)\)", aFuncStr)
