@@ -61,7 +61,7 @@ class TSockClient():
     def ReceiveData(self):
         Data = self.Receive()
         if (Data):
-            return json.loads(Data)["Data"] 
+            return json.loads(Data).get('Data') 
         else:
             return ''
 
@@ -93,6 +93,7 @@ class TSockClient():
 
     def Login(self, aUser, aPassw):
         Data = self.Serial.EncodeFuncAuth(aUser, aPassw)
+        print('---3', Data)
         Result = self.Send(Data)
         if (Result):
             self.UserName = aUser
