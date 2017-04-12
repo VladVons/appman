@@ -83,15 +83,8 @@ class TSerial():
 
         self.LastError = ""
         try:
-            ArgCnt = len(aArgs)
-            if   (ArgCnt == 1):
-                Result = aObj(aArgs[0])
-            elif (ArgCnt == 2):
-                Result = aObj(aArgs[0], aArgs[1])
-            elif (ArgCnt == 3):
-                Result = aObj(aArgs[0], aArgs[1], aArgs[2])
-            elif (ArgCnt == 4):
-                Result = aObj(aArgs[0], aArgs[1], aArgs[2], aArgs[3])
+            if (aArgs):
+                Result = aObj(*aArgs)
             else:
                 Result = aObj()
         except Exception as E:
