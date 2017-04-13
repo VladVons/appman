@@ -33,7 +33,7 @@ class TSerial():
         self.Data = Data
         return Result
 
-    def SetObj(self, aName, aObj):
+    def AddObj(self, aName, aObj):
         self.LastError = ""
         try:
             #globals()[aName]()

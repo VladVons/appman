@@ -28,9 +28,9 @@ class TSockSession():
 
         self.Serial  = TSerial()
         # export functions
-        self.Serial.SetObj("AuthUser", self.AuthUser)
-        self.Serial.SetObj("Log",      self.Log)
-        self.Serial.SetObj("Purge",    self.Serial.Purge)
+        self.Serial.AddObj("AuthUser", self.AuthUser)
+        self.Serial.AddObj("Log",      self.Log)
+        self.Serial.AddObj("Purge",    self.Serial.Purge)
 
     def __del__(self):
         self.Conn.close()
