@@ -6,7 +6,7 @@
 import socket
 import re
 
-from Serial import *
+from Serialize import *
 
 
 class TSockClient():
@@ -15,7 +15,7 @@ class TSockClient():
         self.BufSize   = 4096
         self.UserName  = ""
         self.Sock      = None
-        self.Serial    = TSerial()
+        self.Serialize = TSerial()
         self.LastError = ""
         self.Connect(aHost, aPort)
 
@@ -80,19 +80,19 @@ class TSockClient():
             if (Args[0]):
                 aArgs = Args
 
-        Data = self.Serial.EncodeFunc(aFuncName, *aArgs)
+        Data = self.Serialize.EncodeFunc(aFuncName, *aArgs)
         return self.Send(Data)
 
     def GetProp(self, aProp):
-        Data = self.Serial.EncodeProp(aProp)
+        Data = self.Serialize.EncodeProp(aProp)
         return self.Send(Data)
 
     def Purge(self, aName):
-        Data = self.Serial.EncodeFunc("Purge", aName)
+        Data = self.Serialize.EncodeFunc("Purge", aName)
         return self.Send(Data)
 
     def Login(self, aUser, aPassw):
-        Data = self.Serial.EncodeFuncAuth(aUser, aPassw)
+        Data = self.Serialize.EncodeFuncAuth(aUser, aPassw)
         print('---3', Data)
         Result = self.Send(Data)
         if (Result):

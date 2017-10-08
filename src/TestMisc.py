@@ -89,20 +89,20 @@ def TestAppMan(aJson):
 def TestSerial(aJson):
     Serial = TSerial()
     #print type(TestSerial).__name__
-    #print type(Serial.CallFunc).__name__
-    #print isinstance(Serial.CallFunc, instancemethod)
+    #print type(Serialize.CallFunc).__name__
+    #print isinstance(Serialize.CallFunc, instancemethod)
     #return
 
-    #print("Serial.CallFunc:TAppMan.GetInfo",            Serial.CallFunc("TAppMan.GetInfo"))
-    print("Serial.CallFunc:TAppMan.LoadFile",           Serial.CallFunc("TAppMan.LoadFile", [aJson]))
-    print("Serial.CallFunc:TAppMan.Var.GetValue",       Serial.CallFunc("TAppMan.Var.GetValue", ["Descr"]))
-    print("Serial.CallFunc:TAppMan.Var.GetValue",       Serial.CallFunc("TAppMan.Var.GetValue('Descr')"))
-    #print("Serial.CallFunc:TAppMan.Editor.GetPath",     Serial.CallFunc("TAppMan.Editor.GetPath"))
-    #print("Serial.CallFunc:TAppMan.Util.FileRead",      Serial.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
-    #print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_OS"]))
-    #print("Serial.CallFunc:TAppMan.Util.ExecVar",       Serial.CallFunc("TAppMan.Util.ExecVar", ["Util_PkgUpdate"]))
-    #print("Serial.CallFunc:TAppMan.GetInfo",             Serial.CallFunc("TAppMan.GetInfo"))
-    #print("Type", type(Serial.CasheObj))
+    #print("Serialize.CallFunc:TAppMan.GetInfo",            Serialize.CallFunc("TAppMan.GetInfo"))
+    print("Serialize.CallFunc:TAppMan.LoadFile",           Serialize.CallFunc("TAppMan.LoadFile", [aJson]))
+    print("Serialize.CallFunc:TAppMan.Var.GetValue",       Serialize.CallFunc("TAppMan.Var.GetValue", ["Descr"]))
+    print("Serialize.CallFunc:TAppMan.Var.GetValue",       Serialize.CallFunc("TAppMan.Var.GetValue('Descr')"))
+    #print("Serialize.CallFunc:TAppMan.Editor.GetPath",     Serialize.CallFunc("TAppMan.Editor.GetPath"))
+    #print("Serialize.CallFunc:TAppMan.Util.FileRead",      Serialize.CallFunc("TAppMan.Util.FileRead", ["/var/run/mysqld/mysqld.pid"]))
+    #print("Serialize.CallFunc:TAppMan.Util.ExecVar",       Serialize.CallFunc("TAppMan.Util.ExecVar", ["Util_OS"]))
+    #print("Serialize.CallFunc:TAppMan.Util.ExecVar",       Serialize.CallFunc("TAppMan.Util.ExecVar", ["Util_PkgUpdate"]))
+    #print("Serialize.CallFunc:TAppMan.GetInfo",             Serialize.CallFunc("TAppMan.GetInfo"))
+    #print("Type", type(Serialize.CasheObj))
 
 
 def TestRegEx():

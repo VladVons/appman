@@ -12,7 +12,7 @@ import logging
 import re
 
 
-from Serial import *
+from Serialize import *
 from AppMan import *
 
 
@@ -26,11 +26,11 @@ class TSockSession():
         self.UserGroup  = ""
         self.OptBufSize = self.Parent.Option.GetValue("Server/BufSize", 4096)
 
-        self.Serial  = TSerial()
+        self.Serialize  = TSerialize()
         # export functions
-        self.Serial.AddObj("AuthUser", self.AuthUser)
-        self.Serial.AddObj("Log",      self.Log)
-        self.Serial.AddObj("Purge",    self.Serial.Purge)
+        self.Serialize.AddObj("AuthUser", self.AuthUser)
+        self.Serialize.AddObj("Log",      self.Log)
+        self.Serialize.AddObj("Purge",    self.Serialize.Purge)
 
     def __del__(self):
         self.Conn.close()
@@ -45,14 +45,14 @@ class TSockSession():
         return Result
 
     def Send(self, aData):
-        Data = self.Serial.EncodeData(aData)
+        Data = self.Serialize.EncodeData(aData)
         self.Log("Send:" + Data)
         self.Conn.sendall(Data)
 
     def Login(self):
         Data = self.Receive()
         # jump to AuthUser
-        Result = self.Serial.Decode(Data)
+        Result = self.Serialize.Decode(Data)
         self.Log("Login status " + str(Result))
         self.Send(Result)
         return Result
@@ -86,13 +86,13 @@ class TSockSession():
         if (OptAuthApi == False):
             return True
 
-        FuncName = self.Serial.DecodeFuncName(aData)
+        FuncName = self.Serialize.DecodeFuncName(aData)
         return self.Parent.Option.IsAllow("Api", self.UserGroup, FuncName)
 
     def AuthConf(self, aData):
-        FuncName = self.Serial.DecodeFuncName(aData)
+        FuncName = self.Serialize.DecodeFuncName(aData)
         if (FuncName == "TAppMan.LoadFile"):
-            FuncArg = self.Serial.DecodeFuncArg(aData)
+            FuncArg = self.Serialize.DecodeFuncArg(aData)
             return self.Parent.Option.IsAllow("Conf", self.UserGroup, FuncArg[0])
 
         return True
@@ -115,7 +115,7 @@ class TSockSession():
                     elif (not self.AuthConf(DataIn)):
                         DataOut = "Option->Policy->Conf permission failed"
                     else:
-                        DataOut = self.Serial.Decode(DataIn)
+                        DataOut = self.Serialize.Decode(DataIn)
 
                     self.Send(DataOut)
         except Exception as E:
@@ -244,9 +244,9 @@ class TSockServer():
 
             if (Error == ""):
                 self.logger.info("Starting thread")
-                Conn.sendall(TSerial.CEncodeData("OK"))
+                Conn.sendall(TSerialize.CEncodeData("OK"))
                 self.__CreateThread( self.__RunThreadConn, (Conn, Address))
             else:
                 self.logger.info(Error)
-                Conn.sendall(TSerial.CEncodeData(Error))
+                Conn.sendall(TSerialize.CEncodeData(Error))
                 Conn.close()
