@@ -80,6 +80,9 @@ GitToServ()
   GitSyncToServ
 }
 
+Diff(){
+  diff -r dir1 dir2 | sed '/Binary\ files\ /d' > diff.txt
+}
 
 #GitUpdate
 

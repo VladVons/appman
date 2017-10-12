@@ -6,7 +6,7 @@
 
 import re
 from AppMan import *
-from Serial import *
+from Serialize import *
 
 
 def TestAppMan(aJson):
@@ -87,7 +87,7 @@ def TestAppMan(aJson):
 
 #---
 def TestSerial(aJson):
-    Serial = TSerial()
+    Serialize = TSerialize()
     #print type(TestSerial).__name__
     #print type(Serialize.CallFunc).__name__
     #print isinstance(Serialize.CallFunc, instancemethod)
@@ -160,6 +160,6 @@ def CallFunc(aArgs, aKeys, aIdx):
     #    for Par in aArg.get(Key).split(";"):
     #        print(Key, Par)
 
-Args = {"Arg1":"1;2;3", "Arg2":"a;b;c;d", "Arg3":"x;y"}
-Keys = Args.keys()
-CallFunc(Args, Keys, len(Keys))
+#Args = {"Arg1":"1;2;3", "Arg2":"a;b;c;d", "Arg3":"x;y"}
+#Keys = Args.keys()
+#CallFunc(Args, Keys, len(Keys))

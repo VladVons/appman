@@ -15,7 +15,7 @@ class TSockClient():
         self.BufSize   = 4096
         self.UserName  = ""
         self.Sock      = None
-        self.Serialize = TSerial()
+        self.Serialize = TSerialize()
         self.LastError = ""
         self.Connect(aHost, aPort)
 
@@ -34,10 +34,11 @@ class TSockClient():
         if (not self.Connected()):
             self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             try:
+                #web browser GET standart has 'r\n' at the end of each line. Last line must have '\r\n'
+                #Data = self.Send('TSockClient.Connect\r\n\r\n')
+ 
                 self.Sock.connect((aHost, aPort))
-
-                # web browser GET standart has 'r\n' at the end of each line. Last line must have '\r\n'
-                Data = self.Send('TSockClient.Connect\r\n\r\n')
+                Data = self.ReceiveData()
                 if (Data != "OK"):
                     self.LastError = Data
                     self.Close()
@@ -61,7 +62,7 @@ class TSockClient():
     def ReceiveData(self):
         Data = self.Receive()
         if (Data):
-            return json.loads(Data).get('Data') 
+            return json.loads(Data).get('Data')
         else:
             return ''
 
@@ -93,7 +94,6 @@ class TSockClient():
 
     def Login(self, aUser, aPassw):
         Data = self.Serialize.EncodeFuncAuth(aUser, aPassw)
-        print('---3', Data)
         Result = self.Send(Data)
         if (Result):
             self.UserName = aUser

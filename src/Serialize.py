@@ -148,7 +148,7 @@ class TSerialize():
         return json.dumps(Data)
 
     def Decode(self, aData):
-        Result = ""
+        Result = ''
 
         if (aData):
             try:
