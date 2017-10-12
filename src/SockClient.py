@@ -13,10 +13,10 @@ class TSockClient():
 
     def __init__(self, aHost, aPort):
         self.BufSize   = 4096
-        self.UserName  = ""
+        self.UserName  = ''
         self.Sock      = None
         self.Serialize = TSerialize()
-        self.LastError = ""
+        self.LastError = ''
         self.Connect(aHost, aPort)
 
     def __del__(self):
@@ -29,7 +29,7 @@ class TSockClient():
             print("TSockClient.Close")
 
     def Connect(self, aHost, aPort):
-        self.LastError = ""
+        self.LastError = ''
 
         if (not self.Connected()):
             self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
