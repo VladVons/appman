@@ -10,9 +10,9 @@ from AppMan import *
 
 def SockConnect():
     AppMan = TAppMan()
-    Host = 'localhost'
-    #Host = '192.168.2.111'
-    Port = AppMan.Option.GetValue("Server/Port", 50017)
+    #Host = 'localhost'
+    Host = '192.168.2.12'
+    Port = AppMan.Option.GetValue("Server/Port", 50018)
     print("Client", Host, Port)
 
     SockClient = TSockClient(Host, Port)

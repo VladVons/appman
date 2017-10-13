@@ -7,6 +7,7 @@
 import re
 from AppMan import *
 from Serialize import *
+#from inc.Common import *
 
 
 def TestAppMan(aJson):
@@ -21,10 +22,12 @@ def TestAppMan(aJson):
             #    print(AppMan.Var.Parse(CmdInfo), AppMan.Var.GetValue(Item))
 
     AppMan = TAppMan()
-    #print("AppMan.GetVersion",          AppMan.GetVersion())
-    #print("AppMan.GetListConf",         AppMan.GetListConf())
-    print("AppMan.LoadFile",            AppMan.LoadFile(aJson))
-    #print("AppMan.Var.GetValue",      AppMan.Var.GetValue("Descr"))
+    print("AppMan.TGpio.Test",         AppMan.TGpio.Test())
+
+    #print("AppMan.GetInfo",          AppMan.GetInfo())
+    #print("AppMan.GetListPlugin",         AppMan.GetListPlugin())
+    #print("AppMan.LoadFile",            AppMan.LoadFile(aJson))
+    print("AppMan.Var.GetValue",      AppMan.Var.GetValue("Descr"))
     #print("AppMan.Var.GetField",      AppMan.Var.GetField("App"))
     #print("AppMan.Cmd.ExecValue",       AppMan.Cmd.ExecValue("LogFile", "CmdExec"))
     #print("AppMan.Var.GetPairs",      AppMan.Var.GetPairs("Value"))
@@ -52,7 +55,7 @@ def TestAppMan(aJson):
     #print("AppMan.User.List",           AppMan.User.List())
 
 
-    print("AppMan.Cmd.PkgVersion",        AppMan.Cmd.PkgVersion())
+    #print("AppMan.Cmd.PkgVersion",        AppMan.Cmd.PkgVersion())
     #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("PkgVersion"))
     #print("AppMan.Cmd.ExecValue",        AppMan.Cmd.ExecValue("Port"))
     #print("AppMan.Cmd.ExecField",        AppMan.Cmd.ExecField("PkgVersion",   "CmdInfo"))
@@ -119,12 +122,20 @@ def TestRegEx():
 
 
 #---
-FileName = "samba.json"
+#FileName = "samba.json"
 #FileName = "pure-ftpd.json"
 #FileName = "sysuser.json"
 #FileName = "mysql.json"
+FileName = "gpio.json"
 
-#TestAppMan(FileName)
+TestAppMan(FileName)
+
+#AppMan = TAppMan()
+
+#List = TDir.FindFile('plugin', ['mysql.json', 'appman.json'], True)
+#List = TDir.FindFile(['plugin', 'inc'], ['.json', 'Common'], True)
+#print(List)
+
 #TestSerial(FileName)
 #TestRegEx()
 
@@ -148,12 +159,12 @@ FileName = "samba.json"
 #print m.groupdict()
 #print(m)
 
-def CallFunc(aArgs, aKeys, aIdx):
-    if aIdx > 0:
-        CallFunc(aArgs, aKeys, aIdx - 1)
-        Pars = aArgs.get(aKeys[aIdx])
-        for Par in Pars.split(";"):
-            print(Par)
+#def CallFunc(aArgs, aKeys, aIdx):
+#    if aIdx > 0:
+#        CallFunc(aArgs, aKeys, aIdx - 1)
+#        Pars = aArgs.get(aKeys[aIdx])
+#        for Par in Pars.split(";"):
+#            print(Par)
 
 
     #for Key in aArg.keys():

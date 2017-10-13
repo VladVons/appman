@@ -18,17 +18,13 @@ from Section import *
 from Editor import *
 
 
-sys.path.insert(0, './conf')
-sys.path.insert(0, './conf/pkg')
-
-
 __version__ = {"Sys_AppVer": "1.032", "Sys_Mail": "VladVons@gmail.com"}
-cPathConf   = "conf/pkg"
+cPathPlugin  = "plugin"
 
 #---
 class TAppMan():
     def __init__(self):
-        self.Path = ["/etc/appman", "conf", cPathConf]
+        self.Path = ["/etc/appman", cPathPlugin]
         os.environ["PATH"] += os.pathsep + os.pathsep.join(self.Path)
         self.TimeStart = datetime.datetime.now()
 
@@ -72,7 +68,10 @@ class TAppMan():
     # Dynamicly add classes from a aFile
     # Add class Items from json file by ClassName
     def __AddModule(self, aFileName, aCoreName, aNode):
-        #print("--- __AddModule", aFileName, aCoreName)
+        DirName = os.path.dirname(aFileName);
+        if (DirName):
+            sys.path.insert(0, DirName)
+
         Lib = importlib.import_module(aCoreName)
         Objects = ast.parse(TFile.LoadFromFileToStr(aFileName))
         for Item in ast.walk(Objects):
@@ -84,19 +83,23 @@ class TAppMan():
 
     def __LoadFileSearch(self, aFileName):
         Result = False
-        Files = TFile.Find(aFileName, self.Path)
+        Files = TDir.FindFile(self.Path, [aFileName], True)
         for File in Files:
-            Result |= self.__LoadFile(File)
+            Result |= self.__LoadFileJson(File)
 
         return Result
 
-    def __LoadFile(self, aFileName):
-        #print("--- __LoadFile", aFileName)
+    def __LoadFileJson(self, aFileName):
+        #print("--- __LoadFileJson", aFileName)
 
         Result = os.path.isfile(aFileName)
         if (Result):
             with open(aFileName) as File:
-                root = json.load(File)
+                try:
+                    root = json.load(File)
+                except Exception as E:
+                    Err = "TAppMan->__LoadFileJson Error:" + E.message
+                    print(Err)
 
             IncludeFile = TDict.FindNode(root, "Include/File/" + cFieldValue)
             if (IncludeFile):
@@ -108,10 +111,10 @@ class TAppMan():
             self.Var._Load(root)
             self.Config._Load(root)
 
-            CoreName = TFile.GetCoreName(aFileName)
-            Files = TFile.Find(CoreName + ".py", self.Path)
-            for File in Files:
-                self.__AddModule(File, CoreName, root)
+            FilePy = TFile.ChangeExt(aFileName, '.py')
+            if (os.path.isfile(FilePy)):
+                CoreName = TFile.GetCoreName(aFileName)
+                self.__AddModule(FilePy, CoreName, root)
 
         return Result
 
@@ -153,10 +156,9 @@ class TAppMan():
     def GetEcho(self, aStr):
         return 'GetEcho: ' + aStr
 
-    def GetListConf(self):
+    def GetListPlugin(self):
         Result = []
-        for File in os.listdir(cPathConf):
-            if File.endswith('.json'):
-                Result.append(File)
+        for File in TDir.FindFile([cPathPlugin], ['.json'], True):
+            Result.append(File)
         Result.sort()
         return Result

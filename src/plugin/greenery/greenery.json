@@ -1,0 +1,20 @@
+{
+    "Var":{
+        "App":{"Value":"Greenery"},
+        "Descr":{"Value":"$<App> is a greenery service"},
+        "HomePage":{"Value":"https://oster.com.ua"},
+        "TimerRange_Day":{"Value":[{"Begin":"07:00", "End":"19:00"}]},
+        "TimerCycle_Pump":{"On":"1m", "Off":"5m"},
+        "TimerCycle_LampGrow":{"On":"1h", "Off":"1m"},
+        "Startup":{"Value":"WaterPump;LampGrow;TemperatureIndoor;TemperatureWater"}
+    },
+    "Gpio":{
+        "WaterPump":{"Mode":"Pio", "Pin":"1", "Access":"Write", "Control":"WaterPumpControl", "TimerCycle":"TimerCycle_Pump"},
+        "WaterPumpControl":{"Mode":"Pio", "Pin":"2", "Access":"Read", "Value":"1"},
+
+        "LampGrow":{"Mode":"Pio", "Pin":"3", "Access":"Write", "TimerRange":"TimerRange_Day", "TimerCycle":"TimerCycle_LampGrow"},
+        "LightGrow":{"Mode":"Pio", "Pin":"2", "Access":"Read", "Min":{"Value":"100", "Gpio":["LampGrow"]}},
+
+        "TemperatureIndoor":{"Mode":"1Wire", "Pin":"1", "Access":"Read", "MaxDiff":"5"}
+    }
+}

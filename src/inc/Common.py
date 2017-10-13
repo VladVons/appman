@@ -96,6 +96,24 @@ class TShell():
         print("Exec out: " + Result)
         return Result
 
+#---
+class TDir():
+    @staticmethod
+    def FindFile(aDirs, aFiles, aSubDir = False):
+        Result = []
+
+        for Dir in aDirs:
+            for Root, Folders, Files in os.walk(Dir):
+                    for File1 in aFiles:
+                        for File2 in Files:
+                            if (File1 in File2):
+                                Result.append(Root + '/' + File2)
+
+            if (not aSubDir):
+                break;
+
+        return Result
+
 
 #---
 class TFile():
@@ -128,19 +146,12 @@ class TFile():
                 Result = File.readlines()
  
     @staticmethod
-    def Find(aName, aDirs):
-        Result = []
-        for Dir in aDirs:
-            Path = Dir + "/" + aName
-            if (os.path.isfile(Path)):
-                Result.append(Path)
-
-        return Result
-
-    @staticmethod
     def GetCoreName(aPath):
         return os.path.splitext(os.path.basename(aPath))[0]
 
+    @staticmethod
+    def ChangeExt(aPath, aExt):
+        return os.path.splitext(aPath)[0] + aExt
 
 
 class TDict():
