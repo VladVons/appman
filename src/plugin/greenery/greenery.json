@@ -9,7 +9,7 @@
         "Startup":{"Value":"WaterPump;LampGrow;TemperatureIndoor;TemperatureWater"}
     },
     "Gpio":{
-        "WaterPump":{"Mode":"Pio", "Pin":"1", "Access":"Write", "Control":"WaterPumpControl", "TimerCycle":"TimerCycle_Pump"},
+        "WaterPump":{"Value":"oster", "Mode":"Pio", "Pin":"1", "Access":"Write", "Control":"WaterPumpControl", "TimerCycle":"TimerCycle_Pump"},
         "WaterPumpControl":{"Mode":"Pio", "Pin":"2", "Access":"Read", "Value":"1"},
 
         "LampGrow":{"Mode":"Pio", "Pin":"3", "Access":"Write", "TimerRange":"TimerRange_Day", "TimerCycle":"TimerCycle_LampGrow"},

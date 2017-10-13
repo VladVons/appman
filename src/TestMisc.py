@@ -22,12 +22,16 @@ def TestAppMan(aJson):
             #    print(AppMan.Var.Parse(CmdInfo), AppMan.Var.GetValue(Item))
 
     AppMan = TAppMan()
-    print("AppMan.TGpio.Test",         AppMan.TGpio.Test())
+    #print("AppMan.TGpio.Test",         AppMan.TGpio.Test())
 
     #print("AppMan.GetInfo",          AppMan.GetInfo())
     #print("AppMan.GetListPlugin",         AppMan.GetListPlugin())
     #print("AppMan.LoadFile",            AppMan.LoadFile(aJson))
     print("AppMan.Var.GetValue",      AppMan.Var.GetValue("Descr"))
+    print("AppMan.Gpio.Run",         AppMan.Gpio.Run())
+    #print("AppMan.Cmd1.Test",     AppMan.Cmd1.Test())
+
+
     #print("AppMan.Var.GetField",      AppMan.Var.GetField("App"))
     #print("AppMan.Cmd.ExecValue",       AppMan.Cmd.ExecValue("LogFile", "CmdExec"))
     #print("AppMan.Var.GetPairs",      AppMan.Var.GetPairs("Value"))

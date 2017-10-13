@@ -154,7 +154,7 @@ class TAppMan():
         return self.__GetApi(self,  TObject.GetName(self) + ".")
 
     def GetEcho(self, aStr):
-        return 'GetEcho: ' + aStr
+        return 'TappMan->GetEcho: ' + aStr
 
     def GetListPlugin(self):
         Result = []

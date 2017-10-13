@@ -222,7 +222,7 @@ class TSockServer():
 
         OptMonitTime = self.Option.GetValue("Server/MonitTime", 60) 
         if (OptMonitTime > 0):
-            self.__CreateThread(self.__RunThreadMonit, ())
+            self.__CreateThread(self.__RunThreadMonit, [])
 
         self.logger.info("Listening host '%s', interface '%s', on port '%s'", OptHost, TSocket.GetLocalIP(), OptPort)
         self.Sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -245,7 +245,7 @@ class TSockServer():
             if (Error == ""):
                 self.logger.info("Starting thread")
                 Conn.sendall(TSerialize.CEncodeData("OK"))
-                self.__CreateThread( self.__RunThreadConn, (Conn, Address))
+                self.__CreateThread( self.__RunThreadConn, [Conn, Address])
             else:
                 self.logger.info(Error)
                 Conn.sendall(TSerialize.CEncodeData(Error))

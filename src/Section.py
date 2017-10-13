@@ -70,6 +70,8 @@ class TSection():
 
 #---
 class TSectionVar(TSection):
+    def __init__(self, aParent, aName):
+        TSection.__init__(self, aParent, aName)
 
     def GetField(self, aName, aDef = ""):
         Value = self.GetItem(aName, aDef)
@@ -102,7 +104,7 @@ class TSectionVar(TSection):
 
 #---
 class TSectionVarExec(TSectionVar):
-    def __init__(self, aParent, aName ):
+    def __init__(self, aParent, aName):
         TSectionVar.__init__(self, aParent, aName)
         self.LastExec = ""
 
