@@ -1,9 +1,7 @@
-#!/usr/bin/python
 # Created: 15.10.2017
 # Vladimir Vons, VladVons@gmail.com
 
 
-import json
 import datetime
 import time
 

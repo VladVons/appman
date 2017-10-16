@@ -2,7 +2,7 @@
 # Vladimir Vons, VladVons@gmail.com
 
 import time
-
+import libtimer
 
 #---
 class TGpioSession():
@@ -16,4 +16,3 @@ class TGpioSession():
             #print('Item', self.Name, self.Parent.GetVar('Startup'), self.Parent.Data)
             print('Item', self.Name, self.Parent.GetItem(self.Name))
             time.sleep(3) 
-
