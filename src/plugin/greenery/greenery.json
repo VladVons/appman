@@ -3,9 +3,9 @@
         "App":{"Value":"Greenery"},
         "Descr":{"Value":"$<App> is a greenery service"},
         "HomePage":{"Value":"https://oster.com.ua"},
-        "TimerRange_Day":{"Value":[{"Begin":"07:00", "End":"19:00"}]},
-        "TimerCycle_Pump":{"On":"1m", "Off":"5m"},
-        "TimerCycle_LampGrow":{"On":"1h", "Off":"1m"},
+        "TimerRange_Day":[{ "On":"07:00", "Off": "19:00"}, { "On":"21:00", "Off": "22:00"}],
+        "TimerCycle_Pump":[{"On":"1m", "Off":"6m"}, {"On":"30s", "Off":"5m"}],
+        "TimerCycle_LampGrow":[{"On":"1h", "Off":"1m"}],
         "Startup":{"Value":"WaterPump;LampGrow;TemperatureIndoor;TemperatureWater"}
     },
     "Gpio":{

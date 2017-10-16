@@ -82,6 +82,10 @@ class TStr():
         else:
             return ""
 
+    @staticmethod
+    def ReplaceIdx(aStr, aIdx, aReplace):
+        return aStr[:aIdx] + aReplace + aStr[aIdx + len(aReplace):]
+
 #---
 class TShell():
 
