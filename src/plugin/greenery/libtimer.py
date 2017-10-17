@@ -119,7 +119,7 @@ class TTimeRange(TBaseRange):
 
     def _Load(self, aOn, aOff):
         if (aOn >= aOff):
-            raise ValueError('(Off %s) must be greater then (On %s)' % (aOff, aOn))
+            raise ValueError('(On %s) is greater then (Off %s)' % (aOn, aOff))
 
         self.Range.append(aOn)
         self.Range.append(aOff)

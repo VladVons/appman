@@ -2,18 +2,47 @@
     "Var":{
         "App":{"Value":"Greenery"},
         "Descr":{"Value":"$<App> is a greenery service"},
-        "HomePage":{"Value":"https://oster.com.ua"},
-        "DayRange_Lamp":{"Range":[{ "On":"07:00", "Off": "19:00"}]},
-        "CycleRange_Pump":{"Range":[{"On":"30-S", "Off":"5-M"}]},
-        "Startup":{"Value":"WaterPump;LampGrow;TemperatureIndoor;TemperatureWater"}
+        "HomePage":{"Value":"https://oster.com.ua"}
     },
     "Gpio":{
-        "WaterPump":{"Value":"oster", "Mode":"Pio", "Pin":"1", "Access":"Write", "Control":"WaterPumpControl", "CycleRange":"CycleRange_Pump""},
-        "WaterPumpControl":{"Mode":"Pio", "Pin":"2", "Access":"Read", "Value":"1"},
-
-        "LampGrow":{"Mode":"Pio", "Pin":"3", "Access":"Write", "DayRange":"DayRange_Lamp"},
-        "LightGrow":{"Mode":"Pio", "Pin":"2", "Access":"Read", "Min":{"Value":"100", "Gpio":["LampGrow"]}},
-
-        "TemperatureIndoor":{"Mode":"1Wire", "Pin":"1", "Access":"Read", "MaxDiff":"5"}
+        "Startup":{
+            "Class":"TStartup",
+            "Value":"WaterPump;LampGrow_;TemperatureIndoor_;TemperatureWater_"
+        },
+        "CycleRange_Pump":{
+            "Class":"TCycleRange", 
+            "Value":{"Range":[{"On":"2-S", "Off":"5-S"}]}
+        },
+        "DayRange_Lamp":{
+            "Class":"TDayRange", 
+            "Value":{"Range":[{ "On":"07:15", "Off": "19:00"}]}
+        },
+        "WaterPump":{
+            "Class":"TPio", 
+            "Value":{"Pin":"1", "Access":"Write"}, 
+            "Control":"WaterPumpControl",
+            "Timer":"CycleRange_Pump"
+        },
+        "WaterPumpControl":{
+            "Class":"TPio",
+            "Value":{"Pin":"2", "Access":"Read"}
+        },
+        "LampGrow":{
+            "Class":"TPio", 
+            "Value":{"Pin":"3", "Access":"Write"}, 
+            "Timer":"DayRange_Lamp"
+        },
+        "LightGrow":{
+            "Class":"TPio", 
+            "Value":{
+                "Pin":"2", 
+                "Access":"Read", 
+                "Min":{"Value":"100", "Device":"LampGrow"}
+            }
+        },
+        "TemperatureIndoor":{
+            "Class":"TOneWire", 
+            "Value":{"Pin":"1", "Access":"Read", "MaxDiff":"5"}
+        }
     }
 }

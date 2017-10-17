@@ -34,7 +34,10 @@ class Gpio(TSectionVarExec):
 
             Str = self.GetVar('Startup')
             for Item in Str.split(cObjDelim):
-                self.__CreateThread(self.__RunThread, [Item])
+                if (Item in self.GetKeys()):
+                    self.__CreateThread(self.__RunThread, [Item])
+                else:
+                    print('Gpio has no %s' % Item)
 
             while True:
-                time.sleep(3) 
+                time.sleep(10) 
