@@ -2,13 +2,10 @@
     "Var":{
         "App":{"Value":"Greenery"},
         "Descr":{"Value":"$<App> is a greenery service"},
-        "HomePage":{"Value":"https://oster.com.ua"}
+        "HomePage":{"Value":"https://oster.com.ua"},
+        "Startup":{"Value":"WaterPump;LampGrow_;TemperatureIndoor_;TemperatureWater_"}
     },
     "Gpio":{
-        "Startup":{
-            "Class":"TStartup",
-            "Value":"WaterPump;LampGrow_;TemperatureIndoor_;TemperatureWater_"
-        },
         "CycleRange_Pump":{
             "Class":"TCycleRange", 
             "Value":{"Range":[{"On":"2-S", "Off":"5-S"}]}

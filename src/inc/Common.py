@@ -164,7 +164,11 @@ class TDict():
     def FindNode(aNode, aPath):
         for Item in aPath.strip("/").split("/"):
             if (Item != ""):
-                Value = aNode.get(Item)
+                try:
+                    Value = aNode.get(Item)
+                except:
+                    Value = None
+
                 if (Value == None):
                     return None
                 else:

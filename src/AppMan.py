@@ -77,9 +77,11 @@ class TAppMan():
         for Item in ast.walk(Objects):
             if (isinstance(Item, ast.ClassDef)):
                 TCl = getattr(Lib, Item.name)
-                Cl  = TCl(self, Item.name)
-                setattr(self, Item.name, Cl)
-                Cl._AddItems(TDict.FindNode(aNode, Item.name))
+                if ('_AddItems' in dir(TCl)):
+                    Cl  = TCl(self, Item.name)
+                    setattr(self, Item.name, Cl)
+                    Cl._AddItems(TDict.FindNode(aNode, Item.name))
+
 
     def __LoadFileSearch(self, aFileName):
         Result = False

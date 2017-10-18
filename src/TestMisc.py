@@ -27,7 +27,7 @@ def TestAppMan(aJson):
     #print("AppMan.GetInfo",          AppMan.GetInfo())
     #print("AppMan.GetListPlugin",         AppMan.GetListPlugin())
     #print("AppMan.LoadFile",            AppMan.LoadFile(aJson))
-    print("AppMan.Var.GetValue",      AppMan.Var.GetValue("Descr"))
+    #print("AppMan.Var.GetValue",      AppMan.Var.GetValue("Descr"))
     print("AppMan.Gpio.Run",         AppMan.Gpio.Run())
     #print("AppMan.Cmd1.Test",     AppMan.Cmd1.Test())
 

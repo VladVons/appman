@@ -10,10 +10,17 @@ from session import *
 
 
 #---
+class TLoad():
+    def Test(self):
+        print('Name')
+
+
+#---
 class Gpio(TSectionVarExec):
     def __init__(self, aParent, aName):
         TSectionVarExec.__init__(self, aParent, aName)
         self.Running = False
+        #self.Obj = {}
 
     def Test(self):
         print('Name', self.Name, 'Startup', self.GetVar('Startup'), 'GetKeys', self.GetKeys(), 'Gpio', self.GetValue('WaterPump'), self.Data)
@@ -35,9 +42,11 @@ class Gpio(TSectionVarExec):
             Str = self.GetVar('Startup')
             for Item in Str.split(cObjDelim):
                 if (Item in self.GetKeys()):
-                    self.__CreateThread(self.__RunThread, [Item])
+                    #self.__CreateThread(self.__RunThread, [Item])
+                    print('Start %s' % Item)
                 else:
                     print('Gpio has no %s' % Item)
 
             while True:
-                time.sleep(10) 
+                time.sleep(10)
+
