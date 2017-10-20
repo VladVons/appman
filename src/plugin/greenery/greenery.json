@@ -2,44 +2,48 @@
     "Var":{
         "App":{"Value":"Greenery"},
         "Descr":{"Value":"$<App> is a greenery service"},
-        "HomePage":{"Value":"https://oster.com.ua"},
-        "Startup":{"Value":"WaterPump;LampGrow_;TemperatureIndoor_;TemperatureWater_"}
+        "HomePage":{"Value":"https://oster.com.ua"}
     },
     "Gpio":{
-        "CycleRange_Pump":{
-            "Class":"TCycleRange", 
-            "Value":{"Range":[{"On":"2-S", "Off":"5-S"}]}
-        },
-        "DayRange_Lamp":{
-            "Class":"TDayRange", 
-            "Value":{"Range":[{ "On":"07:15", "Off": "19:00"}]}
-        },
-        "WaterPump":{
-            "Class":"TPio", 
-            "Value":{"Pin":"1", "Access":"Write"}, 
-            "Control":"WaterPumpControl",
-            "Timer":"CycleRange_Pump"
-        },
-        "WaterPumpControl":{
-            "Class":"TPio",
-            "Value":{"Pin":"2", "Access":"Read"}
-        },
-        "LampGrow":{
-            "Class":"TPio", 
-            "Value":{"Pin":"3", "Access":"Write"}, 
-            "Timer":"DayRange_Lamp"
-        },
-        "LightGrow":{
-            "Class":"TPio", 
-            "Value":{
-                "Pin":"2", 
-                "Access":"Read", 
-                "Min":{"Value":"100", "Device":"LampGrow"}
+        "Class":[
+            {
+                "Class":"TPio",
+                "Alias": "LedLamp",
+                "Param":{"Pin":"3", "Access":"Write"}, 
+                "Checks":[
+                    {
+                        "Class":"TTimeRangeDay", 
+                        "Alias":"TimeRangeDay",
+                        "Param":{"Range":[{ "On":"07:15", "Off": "23:50"}]}
+                    }
+                ]
+            },
+            {
+                "Class":"TPio", 
+                "Alias": "WaterPump",
+                "Param":{"Pin":"1", "Access":"Write"}, 
+                "Controls":[
+                    {
+                        "Class":"TPio",
+                        "Alias":"WaterPumpControl", 
+                        "Param":{"Pin":"2", "Access":"Read"}
+                    }
+                ],
+                "Checks":[
+                    {
+                        "Module":"libtimer", 
+                        "Class":"TTimeRangeCycle", 
+                        "Alias":"TimeRangeCycle",
+                        "Param":{"Range":[{"On":"2-S", "Off":"5-S"}]},
+                        "Enable":"True"
+                    },
+                    {
+                        "Class":"TTimeRangeDay", 
+                        "Alias": "TimeRangeDay",
+                        "Param":{"Range":[{ "On":"00:01", "Off": "23:59"}]}
+                    }
+                ]
             }
-        },
-        "TemperatureIndoor":{
-            "Class":"TOneWire", 
-            "Value":{"Pin":"1", "Access":"Read", "MaxDiff":"5"}
-        }
+        ]
     }
 }

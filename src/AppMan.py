@@ -76,6 +76,7 @@ class TAppMan():
         Objects = ast.parse(TFile.LoadFromFileToStr(aFileName))
         for Item in ast.walk(Objects):
             if (isinstance(Item, ast.ClassDef)):
+                #TCl = globals()[Item.name]
                 TCl = getattr(Lib, Item.name)
                 if ('_AddItems' in dir(TCl)):
                     Cl  = TCl(self, Item.name)

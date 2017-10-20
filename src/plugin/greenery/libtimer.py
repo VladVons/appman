@@ -4,36 +4,25 @@
 
 import datetime
 import time
-
-class TCheckRange():
-    def __init__(self, aObj = []):
-        self.Obj = aObj
-
-    def Clear(self):
-        self.Obj = []
-
-    def Add(self, aObj):
-        self.Obj.append(aObj)
-
-    def Validate(self):
-        for Obj in self.Obj:
-            if (not Obj.Check()):
-                return False
-        return True
+from control import TControl
 
 
-class TBaseRange():
-    def __init__(self):
+__all__ = ['TTimeRangeCycle', 'TTimeRangeDay', 'TTimeRangeWeek', 'TTimeRangeMonth', 'TTimeRangeYear']
+
+class TBaseRange(TControl):
+    def __init__(self, aParent):
+        TControl.__init__(self, aParent)
         self.Range   = []
         self.Invert  = False
         self.Delim   = ''
         self.PadLen  = 2
 
-    def Load(self, aValue):
-        self.Invert = aValue.get('Invert', False)
+    def LoadParam(self, aParam):
+        #print('TBaseRange->LoadParam', 'Alias', self.Alias, aParam)
+        self.Invert = aParam.get('Invert', False)
 
         self.Range = []
-        for Range in aValue.get('Range'):
+        for Range in aParam.get('Range'):
             On  = self._Adjust(Range.get('On'))
             Off = self._Adjust(Range.get('Off'))
 
@@ -49,9 +38,9 @@ class TBaseRange():
         raise NotImplementedError("Method not Implemented")
 
 
-class TCycleRange(TBaseRange):
-    def __init__(self):
-        TBaseRange.__init__(self)
+class TTimeRangeCycle(TBaseRange):
+    def __init__(self, aParent):
+        TBaseRange.__init__(self, aParent)
         self.Delim    = '-'
         self.Start    = int(time.time())
 
@@ -96,9 +85,8 @@ class TCycleRange(TBaseRange):
 
 
 class TTimeRange(TBaseRange):
-    def __init__(self, aRange = []):
-        TBaseRange.__init__(self)
-        self.Range = aRange  
+    def __init__(self, aParent):
+        TBaseRange.__init__(self, aParent)
 
     def _Adjust(self, aValue):
         # 7 to 07:00:00, 07:5 to 07:05:00, etc
@@ -135,33 +123,33 @@ class TTimeRange(TBaseRange):
 
 
 #Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
-class TDayRange(TTimeRange):
-    def __init__(self):
-        TTimeRange.__init__(self)
+class TTimeRangeDay(TTimeRange):
+    def __init__(self, aParent):
+        TTimeRange.__init__(self, aParent)
         self.Delim  = ':'
         self.Mask   = '00:00:00'
         self.Format = '%H:%M:%S'
 
 #Data = '{"Timer_Week":{ "Range":[ { "On":"0", "Off": "2"}] }}'
-class TWeekRange(TTimeRange):
+class TTimeRangeWeek(TTimeRange):
     # 0 is Sunday 
-    def __init__(self):
-        TTimeRange.__init__(self)
+    def __init__(self, aParent):
+        TTimeRange.__init__(self, aParent)
         self.Mask   = '0'
         self.Format = '%w'
         self.PadLen = 1
 
 #Data = '{"Timer_Month":{ "Range":[ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"}] }}'
-class TMonthRange(TTimeRange):
-    def __init__(self):
-        TTimeRange.__init__(self)
+class TTimeRangeMonth(TTimeRange):
+    def __init__(self, aParent):
+        TTimeRange.__init__(self, aParent)
         self.Mask   = '00'
         self.Format = '%m'
 
 #Data = '{"Timer_Year":{ "Range":[ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"}] }}'
-class TYearRange(TTimeRange):
-    def __init__(self):
-        TTimeRange.__init__(self)
+class TTimeRangeYear(TTimeRange):
+    def __init__(self, aParent):
+        TTimeRange.__init__(self, aParent)
         self.Delim  = '.'
         self.Mask   = '00.01'
         self.Format = '%m.%d'
