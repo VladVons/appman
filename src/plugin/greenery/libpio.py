@@ -10,7 +10,7 @@ class TPio(TControl):
         TControl.__init__(self, aParent)
 
     def LoadParam(self, aParam):
-        self.Pin    = aParam.get('Pin')
+        self.Pin    = int(aParam.get('Pin'))
         self.Access = aParam.get('Access')
         self.State  = None
 
@@ -24,6 +24,7 @@ class TPio(TControl):
     def Set(self, aValue):
         if (self.State != aValue):
             self.State = aValue
+            self.DoState()
 
             if (aValue == True):
                 GPIO.output(self.Pin, GPIO.HIGH)

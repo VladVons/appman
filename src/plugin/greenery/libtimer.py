@@ -65,17 +65,23 @@ class TTimeRangeCycle(TBaseRange):
         self.Range.append(aOff)
 
     def Check(self):
+        Result = False
+
         Duration = self.GetDuration()
         Elapsed  = int(time.time() - self.Start)
         Offset   = Elapsed % Duration
         Idx      = 0
         for i in range(0, len(self.Range), 2):
             if ( (Offset >= Idx) and (Offset < Idx + self.Range[i]) ):
-                return True
-
+                Result = True
+                break
             Idx += self.Range[i] + self.Range[i + 1]
 
-        return False
+        if (self.State != Result):
+            self.State = Result
+            self.DoState()
+
+        return Result
 
     def GetDuration(self):
         Result = 0
@@ -113,13 +119,20 @@ class TTimeRange(TBaseRange):
         self.Range.append(aOff)
 
     def Check(self):
+        Result = False
         Now = datetime.datetime.now().strftime(self.Format)
 
         #print(self.Range)
         for i in range(0, len(self.Range), 2):
             if ( (Now >= self.Range[i]) and (Now < self.Range[i + 1]) ):
-                return (True != self.Invert)
-        return (False != self.Invert)
+                Result = True
+                break
+
+        if (self.State != Result):
+            self.State = Result
+            self.DoState()
+
+        return (Result != self.Invert)
 
 
 #Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'

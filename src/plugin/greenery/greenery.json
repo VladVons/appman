@@ -27,7 +27,7 @@
             {
                 "Class":"TPio", 
                 "Alias": "WaterPump",
-                "Param":{"Pin":"1", "Access":"Write"}, 
+                "Param":{"Pin":"17", "Access":"Write"}, 
                 "Controls":[
                     {
                         "Class":"TPio",
@@ -40,7 +40,7 @@
                         "Module":"libtimer", 
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
-                        "Param":{"Range":[{"On":"2-S", "Off":"5-S"}]},
+                        "Param":{"Range":[{"On":"3-S", "Off":"5-S"}]},
                         "Enable":true
                     },
                     {
