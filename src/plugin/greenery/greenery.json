@@ -7,6 +7,12 @@
     "Gpio":{
         "Class":[
             {
+                "Enable":true,
+                "Class":"TTimeRangeDay", 
+                "Alias": "TimeRangeDay",
+                "Param":{"Range":[{ "On":"00:01", "Off": "13:59"}]}
+            },
+            {
                 "Class":"TPio",
                 "Alias": "LedLamp",
                 "Param":{"Pin":"3", "Access":"Write"}, 
@@ -35,12 +41,10 @@
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
                         "Param":{"Range":[{"On":"2-S", "Off":"5-S"}]},
-                        "Enable":"True"
+                        "Enable":true
                     },
                     {
-                        "Class":"TTimeRangeDay", 
-                        "Alias": "TimeRangeDay",
-                        "Param":{"Range":[{ "On":"00:01", "Off": "23:59"}]}
+                        "Ref":"TimeRangeDay"
                     }
                 ]
             }

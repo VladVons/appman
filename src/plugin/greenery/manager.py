@@ -31,25 +31,37 @@ class TManager():
         return Class
 
     def _LoadClass(self, aData, aParent):
-        Class = self._CreateClass(aData, aParent)
+        Enable = aData.get('Enable', True)
+        if (not Enable):
+            return None
+  
+        Ref = aData.get('Ref')
+        if (Ref):
+            Class = self.Obj.get(Ref)
+            if (not Class):
+                print('Warn: Ref "%s" not found' % (Ref))
+        else:
+            Class = self._CreateClass(aData, aParent)
 
-        Param = aData.get('Param')
-        if (Param):
-            Class.LoadParam(Param)
+            Param = aData.get('Param')
+            if (Param):
+                Class.LoadParam(Param)
 
-        for Section in ['Checks', 'Controls']:
-            Items = aData.get(Section)
-            if (Items):
-                for Item in Items:
-                    ClassSection = self._LoadClass(Item, Class)
-                    getattr(Class, Section)[ClassSection.Alias] = ClassSection
+            for Section in ['Checks', 'Controls']:
+                Items = aData.get(Section)
+                if (Items):
+                    for Item in Items:
+                        ClassSection = self._LoadClass(Item, Class)
+                        if (ClassSection):
+                            getattr(Class, Section)[ClassSection.Alias] = ClassSection
 
         return Class
 
     def Load(self, aData):
         for Item in aData:
             Class = self._LoadClass(Item, self)
-            self.Obj[Class.Alias] = Class
+            if (Class):
+                self.Obj[Class.Alias] = Class
 
     def Signal(self, aList = []):
         if (len(aList) == 0):
@@ -58,4 +70,4 @@ class TManager():
             Keys = aList
 
         for Key in Keys:
-            print('TManager->Signal', 'Key', Key, self.Obj[Key].CheckChild())
+            print('TManager->Signal', 'Key', Key, self.Obj[Key].Check())
