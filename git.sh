@@ -2,6 +2,11 @@
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
 
+User="VladVons"
+Mail="vladvons@gmail.com"
+Url="https://github.com/$User/py-appman.git"
+
+
 Log()
 {
   aMsg="$1";
@@ -33,7 +38,8 @@ GitAuth()
   sudo chown -R $USER .
 
   # sign with eMail
-  git config --global user.email "vladvons@gmail.com"
+  git config --global user.email $Mail
+  git config --global user.name $User
 
   # no password 
   git config --global credential.helper 'cache --timeout=36000'
@@ -48,7 +54,7 @@ GitCreate()
   GitAuth
 
   # remote git server location
-  git remote add origin https://github.com/VladVons/py-appman.git
+  git remote add origin $Url
 
 }
 
@@ -57,7 +63,7 @@ GitClone()
   Log "$0->$FUNCNAME"
 
   # restore clone copy fromserver to disk 
-  git clone https://github.com/VladVons/py-appman.git
+  git clone $Url
   GitAuth
 
   #web admin access here
