@@ -21,6 +21,7 @@ class TBaseRange(TControl):
         #print('TBaseRange->LoadParam', 'Alias', self.Alias, aParam)
         self.Invert = aParam.get('Invert', False)
 
+        self.Clear()
         self.Range = []
         for Range in aParam.get('Range'):
             On  = self._Adjust(Range.get('On'))
@@ -33,9 +34,6 @@ class TBaseRange(TControl):
                 raise ValueError('Off is empty')
 
             self._Load(On, Off)
-
-    def Check(self):
-        raise NotImplementedError("Method not Implemented")
 
 
 class TTimeRangeCycle(TBaseRange):

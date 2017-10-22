@@ -28,6 +28,18 @@
                 "Class":"TPio", 
                 "Alias": "WaterPump",
                 "Param":{"Pin":"17", "Access":"Write"}, 
+                "Triggers":[
+                    {
+                        "Class":"TPio",
+                        "Alias":"WaterPumpTrigger1", 
+                        "Param":{"Pin":"18", "Access":"Write", "Invert":true}
+                    },
+                    {
+                        "Class":"TPio",
+                        "Alias":"WaterPumpTrigger2", 
+                        "Param":{"Pin":"22", "Access":"Write", "Invert":true}
+                    }
+                ],
                 "Controls":[
                     {
                         "Class":"TPio",

@@ -70,7 +70,7 @@ class TManager():
             if (Param):
                 Class.LoadParam(Param)
 
-            for Section in ['Checks', 'Controls']:
+            for Section in ['Checks', 'Controls', 'Triggers']:
                 Items = aData.get(Section)
                 if (Items):
                     for Item in Items:
