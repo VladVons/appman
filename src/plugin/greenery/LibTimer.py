@@ -4,20 +4,21 @@
 
 import datetime
 import time
-from control import TControl
+#
+from LibCommon import TControl
 
 
 __all__ = ['TTimeRangeCycle', 'TTimeRangeDay', 'TTimeRangeWeek', 'TTimeRangeMonth', 'TTimeRangeYear']
 
 class TBaseRange(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
         self.Invert  = False
         self.Delim   = ''
         self.PadLen  = 2
 
     def Clear(self):
-        TControl.Clear(self)
+        super().Clear()
         self.Range = []
 
     def LoadParam(self, aParam):
@@ -40,7 +41,7 @@ class TBaseRange(TControl):
 
 class TTimeRangeCycle(TBaseRange):
     def __init__(self, aParent):
-        TBaseRange.__init__(self, aParent)
+        super().__init__(aParent)
         self.Delim    = '-'
         self.Start    = int(time.time())
 
@@ -92,7 +93,7 @@ class TTimeRangeCycle(TBaseRange):
 
 class TTimeRange(TBaseRange):
     def __init__(self, aParent):
-        TBaseRange.__init__(self, aParent)
+        super().__init__(aParent)
 
     def _Adjust(self, aValue):
         # 7 to 07:00:00, 07:5 to 07:05:00, etc
@@ -138,7 +139,7 @@ class TTimeRange(TBaseRange):
 #Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
 class TTimeRangeDay(TTimeRange):
     def __init__(self, aParent):
-        TTimeRange.__init__(self, aParent)
+        super().__init__(aParent)
         self.Delim  = ':'
         self.Mask   = '00:00:00'
         self.Format = '%H:%M:%S'
@@ -147,7 +148,7 @@ class TTimeRangeDay(TTimeRange):
 class TTimeRangeWeek(TTimeRange):
     # 0 is Sunday 
     def __init__(self, aParent):
-        TTimeRange.__init__(self, aParent)
+        super().__init__(aParent)
         self.Mask   = '0'
         self.Format = '%w'
         self.PadLen = 1
@@ -155,14 +156,14 @@ class TTimeRangeWeek(TTimeRange):
 #Data = '{"Timer_Month":{ "Range":[ { "On":"2", "Off": "03"}, { "On":"10", "Off": "11"}] }}'
 class TTimeRangeMonth(TTimeRange):
     def __init__(self, aParent):
-        TTimeRange.__init__(self, aParent)
+        super().__init__(aParent)
         self.Mask   = '00'
         self.Format = '%m'
 
 #Data = '{"Timer_Year":{ "Range":[ { "On":"8", "Off": "08.12"}, { "On":"10.16", "Off": "10.17"}] }}'
 class TTimeRangeYear(TTimeRange):
     def __init__(self, aParent):
-        TTimeRange.__init__(self, aParent)
+        super().__init__(aParent)
         self.Delim  = '.'
         self.Mask   = '00.01'
         self.Format = '%m.%d'

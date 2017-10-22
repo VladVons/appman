@@ -21,7 +21,8 @@ class TDictReplace:
         self.Pattern  = "\\" + self.Prefix + "([^" + "\\" + self.Prefix + self.Sufix + "]*)" + self.Sufix
 
     def GetMatch(self, aStr):
-        if (aStr and (type(aStr) in [str, unicode]) and (aStr.find(self.Prefix) != -1)):
+        #if (aStr and (type(aStr) in [str, unicode]) and (aStr.find(self.Prefix) != -1)):
+        if (aStr and (type(aStr) in [str]) and (aStr.find(self.Prefix) != -1)):
             Result = re.findall(self.Pattern, aStr)
         else:
             Result = []

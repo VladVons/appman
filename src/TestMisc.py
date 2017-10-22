@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Created: 21.08.2016
 # Vladimir Vons, VladVons@gmail.com, OK

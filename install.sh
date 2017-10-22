@@ -18,6 +18,9 @@ Install()
   fi
 
   #pip uninstall webhelpers
+
+  #http://www.raspberry-projects.com/pi/software_utilities/email/ssmtp-to-send-emails
+  apt-get install ssmtp mailutils
 }
 
 

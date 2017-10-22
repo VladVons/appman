@@ -1,9 +1,11 @@
-#!/usr/bin/python
+# Created: 20.10.2017
+# Vladimir Vons, VladVons@gmail.com
+
 
 import logging
 #
-from libtimer import *
-from libpio import *
+from LibTimer import *
+from LibPio import *
 
 
 class TManager():

@@ -2,9 +2,10 @@
 
 import json
 import time
-from libtimer import *
-from control import *
-from manager import *
+#
+from LibTimer import *
+from LibCommon import *
+from Manager import *
 
 
 

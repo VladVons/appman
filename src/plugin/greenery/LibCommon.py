@@ -1,9 +1,17 @@
+# Created: 15.10.2017
+# Vladimir Vons, VladVons@gmail.com
 
-class TControl():
+
+class TObject():
     def __init__(self, aParent):
-        self.Parent = aParent
-        self.State    = None
+        self.Parent   = aParent
         self.Alias    = None
+
+
+class TControl(TObject):
+    def __init__(self, aParent):
+        super().__init__(aParent)
+        self.State    = None
         self.OnState  = None
         self.Clear()
 
@@ -23,6 +31,9 @@ class TControl():
         return True
 
     def Check(self):
+        raise NotImplementedError("Method not Implemented")
+
+    def LoadParam(self):
         raise NotImplementedError("Method not Implemented")
 
     def DoState(self):

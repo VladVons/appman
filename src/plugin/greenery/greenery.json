@@ -35,10 +35,25 @@
                         "Param":{"Pin":"18", "Access":"Write", "Invert":true}
                     },
                     {
+                        "Enable":false,
                         "Class":"TPio",
                         "Alias":"WaterPumpTrigger2", 
                         "Param":{"Pin":"22", "Access":"Write", "Invert":true}
+                    },
+                    {
+                        "Module":"LibMisc", 
+                        "Class":"TShell",
+                        "Alias":"WaterPumpShell", 
+                        "Param":{"Command":"date >> /tmp/TShell.log"}
+                    },
+                    {
+                        "Enable":false,
+                        "Module":"LibMisc", 
+                        "Class":"TMail",
+                        "Alias":"WaterPumpMail", 
+                        "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
                     }
+
                 ],
                 "Controls":[
                     {
@@ -49,11 +64,11 @@
                 ],
                 "Checks":[
                     {
-                        "Module":"libtimer", 
+                        "Enable":true,
+                        "Module":"LibTimer", 
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
-                        "Param":{"Range":[{"On":"3-S", "Off":"5-S"}]},
-                        "Enable":true
+                        "Param":{"Range":[{"On":"3-S", "Off":"5-S"}]}
                     },
                     {
                         "Ref":"TimeRangeDay"

@@ -3,16 +3,16 @@
 
 import time
 import multiprocessing
-
+#
 from inc.Common import *
 from Section import *
-from manager import TManager
+from Manager import TManager
 
 
 #---
 class Gpio(TSectionVarExec):
     def __init__(self, aParent, aName):
-        TSectionVarExec.__init__(self, aParent, aName)
+        super().__init__(aParent, aName)
         self.Running = False
         self.Manager = TManager()
 

@@ -1,13 +1,18 @@
-import RPi.GPIO as GPIO
+# Created: 15.10.2017
+# Vladimir Vons, VladVons@gmail.com
 
-from control import TControl
+
+import RPi.GPIO as GPIO
+#
+from LibCommon import TControl
+
 
 __all__ = ["TPio"]
 
 
 class TPio(TControl):
     def __init__(self, aParent):
-        TControl.__init__(self, aParent)
+        super().__init__(aParent)
 
     def LoadParam(self, aParam):
         self.Clear()
