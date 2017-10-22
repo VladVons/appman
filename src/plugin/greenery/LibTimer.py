@@ -92,9 +92,6 @@ class TTimeRangeCycle(TBaseRange):
 
 
 class TTimeRange(TBaseRange):
-    def __init__(self, aParent):
-        super().__init__(aParent)
-
     def _Adjust(self, aValue):
         # 7 to 07:00:00, 07:5 to 07:05:00, etc
         Result = self.Mask

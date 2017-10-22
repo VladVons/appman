@@ -8,9 +8,6 @@ from LibCommon import TObject
 
 
 class TMail(TObject):
-    def __init__(self, aParent):
-        super().__init__(aParent)
-
     def LoadParam(self, aParam):
         # Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
         self.MailTo   = aParam.get('MailTo')
@@ -52,9 +49,6 @@ class TMail(TObject):
 
 
 class TShell(TObject):
-    def __init__(self, aParent):
-        super().__init__(aParent)
-
     def LoadParam(self, aParam):
         self.Command = aParam.get('Command')
 

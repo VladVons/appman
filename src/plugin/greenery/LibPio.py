@@ -7,32 +7,30 @@ import RPi.GPIO as GPIO
 from LibCommon import TControl
 
 
-__all__ = ["TPio"]
+__all__ = ['TPioOut', 'TPioIn']
 
 
 class TPio(TControl):
-    def __init__(self, aParent):
-        super().__init__(aParent)
-
     def LoadParam(self, aParam):
         self.Clear()
+        self.State  = None
 
         self.Pin    = int(aParam.get('Pin'))
-        self.Access = aParam.get('Access')
         self.Invert = aParam.get('Invert', False)
-        self.State  = None
 
         GPIO.setmode(GPIO.BCM)
 
-        if (self.Access == 'Write'):
-            GPIO.setup(self.Pin, GPIO.OUT)
-        else:
-            GPIO.setup(self.Pin, GPIO.IN)
+
+class TPioOut(TPio):
+    def LoadParam(self, aParam):
+        super().LoadParam(aParam)
+        GPIO.setup(self.Pin, GPIO.OUT)
 
     def Set(self, aValue):
         if (self.State != aValue):
             self.State = aValue
             self.DoState()
+            #self.Post(1, p1 = 2)
 
             if (aValue == self.Invert):
                 GPIO.output(self.Pin, GPIO.LOW)
@@ -43,4 +41,22 @@ class TPio(TControl):
     def Check(self):
         Result = self.CheckChild()
         self.Set(Result)
+        return Result
+
+
+class TPioIn(TPio):
+    def LoadParam(self, aParam):
+        super().LoadParam(aParam)
+        GPIO.setup(self.Pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+
+    def Get(self):
+        State = (GPIO.input(self.Pin) ^ int(self.Invert))
+        if (self.State != State):
+            self.State = State
+
+            self.DoState()
+
+    def Check(self):
+        Result = self.CheckChild()
+        self.Get()
         return Result

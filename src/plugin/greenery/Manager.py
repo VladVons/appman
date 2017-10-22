@@ -24,8 +24,8 @@ class TManager():
                             filename=aFile,
                             filemode='a')
             Result = True
-        except IOError (errno, strerror):
-            print ('TManager->SetLoger Error: %s: %s' % (strerror, aFile))
+        except IOError as E:
+            print ('TManager->SetLoger Error: %s: %s' % (E, aFile))
         return Result
 
     def _CreateClass(self, aData, aParent):

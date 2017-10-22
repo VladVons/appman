@@ -7,6 +7,9 @@ class TObject():
         self.Parent   = aParent
         self.Alias    = None
 
+    def Post(self, aSignal, **aParam):
+        #raise NotImplementedError("Method not implemented")
+        print('Post', aSignal, aParam)
 
 class TControl(TObject):
     def __init__(self, aParent):
@@ -31,9 +34,6 @@ class TControl(TObject):
         return True
 
     def Check(self):
-        raise NotImplementedError("Method not Implemented")
-
-    def LoadParam(self):
         raise NotImplementedError("Method not Implemented")
 
     def DoState(self):

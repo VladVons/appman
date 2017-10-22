@@ -10,12 +10,12 @@
                 "Enable":true,
                 "Class":"TTimeRangeDay", 
                 "Alias": "TimeRangeDay",
-                "Param":{"Range":[{ "On":"00:01", "Off": "13:59"}]}
+                "Param":{"Range":[{ "On":"00:01", "Off": "23:00"}]}
             },
             {
-                "Class":"TPio",
+                "Class":"TPioOut",
                 "Alias": "LedLamp",
-                "Param":{"Pin":"3", "Access":"Write"}, 
+                "Param":{"Pin":"18"}, 
                 "Checks":[
                     {
                         "Class":"TTimeRangeDay", 
@@ -25,20 +25,20 @@
                 ]
             },
             {
-                "Class":"TPio", 
+                "Class":"TPioOut", 
                 "Alias": "WaterPump",
-                "Param":{"Pin":"17", "Access":"Write"}, 
+                "Param":{"Pin":"17"}, 
                 "Triggers":[
                     {
-                        "Class":"TPio",
+                        "Class":"TPioOut",
                         "Alias":"WaterPumpTrigger1", 
-                        "Param":{"Pin":"18", "Access":"Write", "Invert":true}
+                        "Param":{"Pin":"18", "Invert":true}
                     },
                     {
                         "Enable":false,
-                        "Class":"TPio",
+                        "Class":"TPioOut",
                         "Alias":"WaterPumpTrigger2", 
-                        "Param":{"Pin":"22", "Access":"Write", "Invert":true}
+                        "Param":{"Pin":"22", "Invert":true}
                     },
                     {
                         "Module":"LibMisc", 
@@ -57,9 +57,9 @@
                 ],
                 "Controls":[
                     {
-                        "Class":"TPio",
+                        "Class":"TPioIn",
                         "Alias":"WaterPumpControl", 
-                        "Param":{"Pin":"2", "Access":"Read"}
+                        "Param":{"Pin":"2"}
                     }
                 ],
                 "Checks":[
