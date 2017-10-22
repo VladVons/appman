@@ -8,10 +8,13 @@ Install()
   Installed=$(pip list | grep Flask)
   if [ ! "$Installed" ]; then
     apt-get install python-pip
+    #apt-get install python3-pip
     #
     pip install Flask
     pip install Flask-WTF
     pip install webhelpers
+
+    #pip3 install RPi.GPIO
   fi
 
   #pip uninstall webhelpers

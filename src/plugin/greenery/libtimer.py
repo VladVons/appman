@@ -12,17 +12,19 @@ __all__ = ['TTimeRangeCycle', 'TTimeRangeDay', 'TTimeRangeWeek', 'TTimeRangeMont
 class TBaseRange(TControl):
     def __init__(self, aParent):
         TControl.__init__(self, aParent)
-        self.Range   = []
         self.Invert  = False
         self.Delim   = ''
         self.PadLen  = 2
+
+    def Clear(self):
+        TControl.Clear(self)
+        self.Range = []
 
     def LoadParam(self, aParam):
         #print('TBaseRange->LoadParam', 'Alias', self.Alias, aParam)
         self.Invert = aParam.get('Invert', False)
 
         self.Clear()
-        self.Range = []
         for Range in aParam.get('Range'):
             On  = self._Adjust(Range.get('On'))
             Off = self._Adjust(Range.get('Off'))
