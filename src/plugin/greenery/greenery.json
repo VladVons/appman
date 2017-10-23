@@ -41,10 +41,10 @@
             {
                 "Class":"TPioOut", 
                 "Alias":"WaterPump",
-                "Param":{"Pin":17}, 
+                "Param":{"Pin":17, "Invert":true}, 
                 "Triggers":[
                     {
-                        "Enable":true,
+                        "Enable":false,
                         "Class":"TPioOut",
                         "Alias":"WaterPumpTrigger1", 
                         "Param":{"Pin":18, "Invert":true}
@@ -89,7 +89,7 @@
                         "Module":"LibTimer", 
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
-                        "Param":{"Range":[{"On":"3-S", "Off":"2-S"}, {"On":"10-S", "Off":"2-S"}]}
+                        "Param":{"Range":[{"On":"5-S", "Off":"2-S"}, {"On":"10-S", "Off":"2-S"}]}
                     },
                     {
                         "Ref":"TimeRangeDay"
