@@ -2,6 +2,7 @@
 
 import json
 import time
+import sys
 #
 from LibTimer import *
 from LibCommon import *
@@ -37,6 +38,10 @@ def Test1():
     TimeRangeDay.Load(root.get('Timer_Day'))
     print(TimeRangeDay.Check())
 
+
+def Test2a():
+        print('Test2a', sys._getframe(1).f_code.co_name)
+
 def Test2():
     File = 'greenery.json'
     with open(File) as FileData:    
@@ -50,6 +55,9 @@ def Test2():
             print('Err ' + str(Diff))
         else:
             print('OK')
+
+        Test2a()
+        print('Test2', sys._getframe(0).f_code.co_name)
 
 def Test4():
     File = 'greenery.json'

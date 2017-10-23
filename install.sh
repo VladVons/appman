@@ -15,6 +15,8 @@ Install()
     pip install webhelpers
 
     #pip3 install RPi.GPIO
+    #pip3 install pytest
+
   fi
 
   #pip uninstall webhelpers

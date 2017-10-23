@@ -19,7 +19,7 @@
                 "Enable":true,
                 "Class":"TTimeRangeDay", 
                 "Alias":"TimeRangeDay",
-                "Param":{"Range":[{ "On":"00:01", "Off": "23:00"}]}
+                "Param":{"Range":[{ "On":"00:01", "Off": "00:03"}]}
             },
             {
                 "Class":"TPiosOut",
@@ -80,18 +80,18 @@
                     {
                         "Class":"TPioIn",
                         "Alias":"WaterPumpControl", 
-                        "Param":{"Pin":2}
+                        "Param":{"Pin":2, "Delay":3}
                     }
                 ],
                 "Checks":[
                     {
                         "Enable":true,
-                        "Module":"LibTimer", 
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
                         "Param":{"Range":[{"On":"5-S", "Off":"2-S"}, {"On":"10-S", "Off":"2-S"}]}
                     },
                     {
+                        "Enable":false,
                         "Ref":"TimeRangeDay"
                     }
                 ]

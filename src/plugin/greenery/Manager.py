@@ -36,6 +36,7 @@ class TManager():
 
     def _CreateClass(self, aData, aParent):
         Alias = aData.get('Alias')
+        #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
         if (not Alias):
             self._Error('TManager->_CreateClass. Key `Alias` is empty')
 
