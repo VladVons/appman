@@ -5,17 +5,31 @@
         "HomePage":{"Value":"https://oster.com.ua"}
     },
     "Gpio":{
+        "JobStart":[
+            "PiosInit"
+        ], 
+        "Job":[
+            "WaterPump"
+        ],
+        "JobFinish":[
+
+        ],
         "Class":[
             {
                 "Enable":true,
                 "Class":"TTimeRangeDay", 
-                "Alias": "TimeRangeDay",
+                "Alias":"TimeRangeDay",
                 "Param":{"Range":[{ "On":"00:01", "Off": "23:00"}]}
             },
             {
+                "Class":"TPiosOut",
+                "Alias":"PiosInit",
+                "Param":{"Pin":[17, 18, 22, 27], "Invert":false} 
+            },
+            {
                 "Class":"TPioOut",
-                "Alias": "LedLamp",
-                "Param":{"Pin":"18"}, 
+                "Alias":"LedLamp",
+                "Param":{"Pin":18}, 
                 "Checks":[
                     {
                         "Class":"TTimeRangeDay", 
@@ -26,13 +40,14 @@
             },
             {
                 "Class":"TPioOut", 
-                "Alias": "WaterPump",
-                "Param":{"Pin":"17"}, 
+                "Alias":"WaterPump",
+                "Param":{"Pin":17}, 
                 "Triggers":[
                     {
+                        "Enable":true,
                         "Class":"TPioOut",
                         "Alias":"WaterPumpTrigger1", 
-                        "Param":{"Pin":"18", "Invert":true}
+                        "Param":{"Pin":18, "Invert":true}
                     },
                     {
                         "Enable":false,
@@ -41,6 +56,7 @@
                         "Param":{"Pin":"22", "Invert":true}
                     },
                     {
+                        "Enable":false,
                         "Module":"LibMisc", 
                         "Class":"TShell",
                         "Alias":"WaterPumpShell", 
@@ -52,14 +68,19 @@
                         "Class":"TMail",
                         "Alias":"WaterPumpMail", 
                         "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
+                    },
+                    {
+                        "Enable":false,
+                        "Module":"LibMisc", 
+                        "Class":"TStop",
+                        "Alias":"StopJob"
                     }
-
                 ],
                 "Controls":[
                     {
                         "Class":"TPioIn",
                         "Alias":"WaterPumpControl", 
-                        "Param":{"Pin":"2"}
+                        "Param":{"Pin":2}
                     }
                 ],
                 "Checks":[
@@ -68,7 +89,7 @@
                         "Module":"LibTimer", 
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
-                        "Param":{"Range":[{"On":"3-S", "Off":"5-S"}, {"On":"3-M", "Off":"1-M"}]}
+                        "Param":{"Range":[{"On":"3-S", "Off":"2-S"}, {"On":"10-S", "Off":"2-S"}]}
                     },
                     {
                         "Ref":"TimeRangeDay"

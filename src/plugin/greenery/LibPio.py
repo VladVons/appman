@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO
 from LibCommon import TControl
 
 
-__all__ = ['TPioOut', 'TPioIn']
+__all__ = ['TPioOut', 'TPiosOut', 'TPioIn']
 
 
 class TPio(TControl):
@@ -15,11 +15,10 @@ class TPio(TControl):
         self.Clear()
         self.State  = None
 
-        self.Pin    = int(aParam.get('Pin'))
+        self.Pin    = aParam.get('Pin')
         self.Invert = aParam.get('Invert', False)
 
         GPIO.setmode(GPIO.BCM)
-
 
 class TPioOut(TPio):
     def LoadParam(self, aParam):
@@ -60,3 +59,9 @@ class TPioIn(TPio):
         Result = self.CheckChild()
         self.Get()
         return Result
+
+
+class TPiosOut(TPioOut):
+    def LoadParam(self, aParam):
+        super().LoadParam(aParam)
+

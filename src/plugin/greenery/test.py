@@ -13,11 +13,10 @@ class TA():
         print('TA->Test1')
 
     def GetClassPath(self, aClass, aPath = ''):
-        Class = list(aClass.__bases__)
-        for Base in Class:
-            aPath = self.GetClassPath(Base, aPath)
+        Class = aClass.__bases__
+        if (Class):
+            aPath = self.GetClassPath(Class[0], aPath)
         return aPath + '/' + aClass.__name__
-
 
 class TB(TA):
     def Test2(self):
@@ -41,30 +40,30 @@ def Test1():
 def Test2():
     File = 'greenery.json'
     with open(File) as FileData:    
-        Data = json.load(FileData)
-        print(Data)
-
-def GetClassPath(aClass, aPath):
-    Class = list(aClass.__bases__)
-    for Base in Class:
-        aPath = GetClassPath(Base, aPath)
-    return aPath + '/' + aClass.__name__
+        Data1 = json.load(FileData)
+        Data2 = Data1['Gpio']['Class']
+        Keys1 = Data2[0].keys()
+        Keys2 = ['Enable', 'Param', 'Class', 'Alias', 'Ref']
+        #print([i for i in Keys1 if i in Keys2])
+        Diff = set(Keys1) - set(Keys2)
+        if (Diff):
+            print('Err ' + str(Diff))
+        else:
+            print('OK')
 
 def Test4():
     File = 'greenery.json'
     with open(File) as FileData:
         Data = json.load(FileData)
-    Manager = TManager()
-    Manager.Load(Data['Gpio']['Class'])
-    while True:
-        Manager.Signal(['WaterPump'])
-        time.sleep(1)
 
-#Test4()
-#Test3()
+    Manager = TManager()
+    Manager.Run(Data['Gpio'])
+
+Test4()
+#Test2()
 #print(ClassPath(TC, ''))
 
-C = TC()
-C.GetPath()
-
+#C = TC()
+#C.GetPath()
+#print(TC.__bases__[0])
 

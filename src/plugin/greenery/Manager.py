@@ -3,6 +3,7 @@
 
 
 import logging
+import time
 #
 from LibTimer import *
 from LibPio import *
@@ -11,6 +12,11 @@ from LibPio import *
 class TManager():
     def __init__(self):
         self.Obj = {}
+        self.InRun = False 
+
+    def _Error(self, aMsg):
+        self.Logger.error(aMsg)
+        raise ValueError(aMsg)
 
     def _SetLoger(self, aFile):
         Result = False
@@ -31,15 +37,11 @@ class TManager():
     def _CreateClass(self, aData, aParent):
         Alias = aData.get('Alias')
         if (not Alias):
-            Msg = 'TManager->_CreateClass. Key Alias is empty'
-            self.Logger.error(Msg)
-            raise ValueError(Msg)
+            self._Error('TManager->_CreateClass. Key `Alias` is empty')
 
         ClassName = aData.get('Class')
         if (not ClassName):
-            Msg = 'Key Class is empty'
-            self.Logger.error(Msg)
-            raise ValueError(Msg)
+            self._Error('TManager->_CreateClass. Key `Class` is empty')
 
         ModuleName = aData.get('Module')
         if (ModuleName):
@@ -49,13 +51,18 @@ class TManager():
         else:
             TClass = globals()[ClassName]
 
-        Class  = TClass(aParent)
-        Class.Alias = Alias
-        Class.Logger = self.Logger
-
+        Class = TClass(aParent)
+        Class.Alias      = Alias
+        Class.Logger     = self.Logger
+        Class.ParentRoot = self
         return Class
 
     def _LoadClass(self, aData, aParent):
+        Params = ['Enable', 'Module', 'Param', 'Class', 'Alias', 'Checks', 'Triggers', 'Controls', 'Ref']
+        Diff   = set(aData.keys()) - set(Params)
+        if (Diff):
+            self._Error('TManager->_CreateClass. Unknown key %s' % (str(Diff)))
+
         Enable = aData.get('Enable', True)
         if (not Enable):
             return None
@@ -64,7 +71,7 @@ class TManager():
         if (Ref):
             Class = self.Obj.get(Ref)
             if (not Class):
-                 self.Logger.info('TManager->_LoadClass. Ref "%s" not found' % (Ref))
+                 self.Logger.info('TManager->_LoadClass. Ref `%s` not found' % (Ref))
         else:
             Class = self._CreateClass(aData, aParent)
 
@@ -91,18 +98,40 @@ class TManager():
         if (OptEchoConsole):
             self.Logger.addHandler(logging.StreamHandler())
 
-        self.Logger.info("TManager->Load")
+        self.Logger.info('TManager->Load')
 
-        for Item in aData:
+        for Item in aData['Class']:
             Class = self._LoadClass(Item, self)
             if (Class):
                 self.Obj[Class.Alias] = Class
 
-    def Signal(self, aList = []):
-        if (len(aList) == 0):
-            Keys = self.Obj
-        else:
-            Keys = aList
+    def _Signal(self, aKeys):
+        for Key in aKeys:
+            Obj = self.Obj.get(Key)
+            if (Obj):
+                Obj.Check()
+            else:
+                self._Error('TManager->Signal. Key `%s` not found' % (Key))
 
-        for Key in Keys:
-            print('TManager->Signal', 'Key', Key, self.Obj[Key].Check())
+    def Run(self, aData):
+        self.Load(aData)
+
+        JobStart = aData.get('JobStart')
+        if (JobStart):
+            self._Signal(JobStart)
+
+        Job = aData.get('Job')
+        if (Job):
+            self.InRun = True
+            while self.InRun:
+                self._Signal(Job)
+                time.sleep(1)
+        else:
+            self.Logger.warn('TManager->Run. `Job` is empty')
+
+        JobFinish = aData.get('JobFinish')
+        if (JobFinish):
+            self._Signal(JobFinish)
+
+    def Stop(self):
+        self.InRun = False

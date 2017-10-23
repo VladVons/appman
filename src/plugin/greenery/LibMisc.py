@@ -55,3 +55,7 @@ class TShell(TObject):
     def Set(self, aValue):
         Pipe = subprocess.Popen(self.Command, shell = True, stdout = subprocess.PIPE)
         return Pipe.communicate()[0]
+
+class TStop(TObject):
+    def Set(self, aValue):
+        self.ParentRoot.Stop()

@@ -4,13 +4,14 @@
 
 class TObject():
     def __init__(self, aParent):
-        self.Parent   = aParent
-        self.Alias    = None
+        self.Parent     = aParent
+        self.ParentRoot = None
+        self.Alias      = None
 
     def GetClassPath(self, aClass, aPath = ''):
-        Class = list(aClass.__bases__)
-        for Base in Class:
-            aPath = self.GetClassPath(Base, aPath)
+        Class = aClass.__bases__
+        if (Class):
+            aPath = self.GetClassPath(Class[0], aPath)
         return aPath + '/' + aClass.__name__
 
     def Post(self, aSignal, **aParam):
@@ -41,12 +42,14 @@ class TControl(TObject):
         return True
 
     def Check(self):
-        raise NotImplementedError("Method not Implemented")
+        raise NotImplementedError('Method not Implemented')
 
     def DoState(self):
-        self.Logger.info('%s->DoState. State %s. Alias %s' % (self.GetClassPath(self.__class__), self.State, self.Alias))
+        ClassPath = self.GetClassPath(self.__class__)
+        self.Logger.info('%s->DoState. State %s. Alias %s' % (ClassPath, self.State, self.Alias))
 
         for Key in self.Triggers:
+            self.Logger.info('%s->DoState. Trigger %s' % (ClassPath, Key))
             self.Triggers[Key].Set(self.State)
 
         if (self.OnState):
