@@ -8,6 +8,28 @@ from LibCommon import *
 from Manager import *
 
 
+class TA():
+    def Test1(self, aClass):
+        print('TA->Test1')
+
+    def GetClassPath(self, aClass, aPath = ''):
+        Class = list(aClass.__bases__)
+        for Base in Class:
+            aPath = self.GetClassPath(Base, aPath)
+        return aPath + '/' + aClass.__name__
+
+
+class TB(TA):
+    def Test2(self):
+        print('TB->Test2')
+
+class TC(TB):
+    def Test3(self):
+        print('TC->Test3')
+
+    def GetPath(self):
+        print(self.GetClassPath(self.__class__))
+
 
 def Test1():
     Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "10:39:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
@@ -22,6 +44,12 @@ def Test2():
         Data = json.load(FileData)
         print(Data)
 
+def GetClassPath(aClass, aPath):
+    Class = list(aClass.__bases__)
+    for Base in Class:
+        aPath = GetClassPath(Base, aPath)
+    return aPath + '/' + aClass.__name__
+
 def Test4():
     File = 'greenery.json'
     with open(File) as FileData:
@@ -32,8 +60,11 @@ def Test4():
         Manager.Signal(['WaterPump'])
         time.sleep(1)
 
+#Test4()
+#Test3()
+#print(ClassPath(TC, ''))
 
-
-Test4()
+C = TC()
+C.GetPath()
 
 

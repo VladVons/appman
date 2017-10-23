@@ -20,7 +20,7 @@
                     {
                         "Class":"TTimeRangeDay", 
                         "Alias":"TimeRangeDay",
-                        "Param":{"Range":[{ "On":"07:15", "Off": "23:50"}]}
+                        "Param":{"Range":[{ "On":"07:15", "Off": "10:50"}, { "On":"13:15", "Off": "17:50"}]}
                     }
                 ]
             },
@@ -68,7 +68,7 @@
                         "Module":"LibTimer", 
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
-                        "Param":{"Range":[{"On":"3-S", "Off":"5-S"}]}
+                        "Param":{"Range":[{"On":"3-S", "Off":"5-S"}, {"On":"3-M", "Off":"1-M"}]}
                     },
                     {
                         "Ref":"TimeRangeDay"
