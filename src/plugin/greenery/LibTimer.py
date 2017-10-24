@@ -43,7 +43,6 @@ class TTimeRangeCycle(TBaseRange):
     def __init__(self, aParent):
         super().__init__(aParent)
         self.Delim    = '-'
-        self.Start    = int(time.time())
 
     def _Adjust(self, aValue):
         Items = aValue.split(self.Delim)

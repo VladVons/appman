@@ -202,7 +202,9 @@ class TList():
             return aList.index(aData)
         return -1
 
-
+    @staticmethod
+    def Diff(aData1, aData2):
+        return set(aData1) - set(aData2)
 
 #---
 class TSocket():
@@ -238,3 +240,22 @@ class TObject():
     @staticmethod
     def GetName(aObj):
         return aObj.__class__.__name__
+
+    @staticmethod
+    #GetClassPath(self.__class__)
+    def GetClassPath(aClass, aPath = '', aDepth = 99):
+        Class = aClass.__bases__
+        if ( (Class) and (aDepth > 0) ):
+            aPath = TObject.GetClassPath(Class[0], aPath, aDepth - 1)
+        return aPath + '/' + aClass.__name__
+
+
+#---
+class TDebug():
+    @staticmethod
+    def Info():
+        #https://docs.python.org/3/library/inspect.html
+        function_name = sys._getframe(1).f_code.co_name
+        filename      = sys._getframe(1).f_code.co_filename
+        #class_name    = sys._getframe(1).__class__
+        return filename + '->' + function_name

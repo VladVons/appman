@@ -5,6 +5,8 @@
 
 Install()
 {
+  #pip search Flask
+
   Installed=$(pip list | grep Flask)
   if [ ! "$Installed" ]; then
     apt-get install python-pip
@@ -16,13 +18,16 @@ Install()
 
     #pip3 install RPi.GPIO
     #pip3 install pytest
-
   fi
 
   #pip uninstall webhelpers
 
   #http://www.raspberry-projects.com/pi/software_utilities/email/ssmtp-to-send-emails
   apt-get install ssmtp mailutils
+
+  #https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c
+  #https://alselectro.wordpress.com/2016/05/12/serial-lcd-i2c-module-pcf8574/
+  #apt-get install i2c-tools python-smbus
 }
 
 
