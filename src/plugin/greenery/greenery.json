@@ -9,17 +9,37 @@
             "PiosInit"
         ], 
         "Job":[
-            "WaterPump"
+            "I2COut_1"
         ],
         "JobFinish":[
 
         ],
         "Class":[
             {
+                "Enable":false,
+                "Module":"LibMisc", 
+                "Class":"TMail",
+                "Alias":"WaterPumpMail", 
+                "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com"}
+            },
+            {
                 "Enable":true,
                 "Class":"TTimeRangeDay", 
-                "Alias":"TimeRangeDay",
+                "Alias":"TimeRangeDay1",
                 "Param":{"Range":[{ "On":"00:01", "Off": "00:03"}]}
+            },
+            {
+                "Class":"TI2COut",
+                "Alias":"I2COut_1",
+                "Param":{"Bus":1, "Address":39, "Pin":16}, 
+                "Checks":[
+                    {
+                        "Enable":true,
+                        "Class":"TTimeRangeCycle",
+                        "Alias":"TimeRangeCycle2",
+                        "Param":{"Range":[{"On":"3-S", "Off":"2-S"}]}
+                    }
+                ]
             },
             {
                 "Class":"TPiosOut",
@@ -33,7 +53,7 @@
                 "Checks":[
                     {
                         "Class":"TTimeRangeDay", 
-                        "Alias":"TimeRangeDay",
+                        "Alias":"TimeRangeDay2",
                         "Param":{"Range":[{ "On":"07:15", "Off": "10:50"}, { "On":"13:15", "Off": "17:50"}]}
                     }
                 ]
@@ -88,7 +108,7 @@
                         "Enable":true,
                         "Class":"TTimeRangeCycle", 
                         "Alias":"TimeRangeCycle",
-                        "Param":{"Range":[{"On":"5-S", "Off":"2-S"}, {"On":"10-S", "Off":"2-S"}]}
+                        "Param":{"Range":[{"On":"3-S", "Off":"1-S"}, {"On":"5-S", "Off":"2-S"}]}
                     },
                     {
                         "Enable":false,

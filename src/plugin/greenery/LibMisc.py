@@ -4,20 +4,14 @@
 import subprocess
 import smtplib
 #
-from LibCommon import TObject
+from LibCommon import TControl
 
 
-class TMail(TObject):
+class TMail(TControl):
     def LoadParam(self, aParam):
         # Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
-        self.MailTo   = aParam.get('MailTo')
-        self.Subject  = aParam.get('Subject', 'TGMail')
-        #
-        self.User     = aParam.get('User', '')
-        self.Password = aParam.get('Password')
-        self.Port     = aParam.get('Port', 0)
-        self.Relay    = aParam.get('Relay', 'localhost')
-        self.SSL      = aParam.get('SSL', True)
+        Pattern = {'MailTo':None, 'Subject':'TGMail', 'User':'', 'Password':'', 'Port':0, 'Relay':'localhost', 'SSL':True}
+        self.LoadParamPattern(aParam, Pattern)
 
     def Set(self, aValue):
         self.Send('Caller Alias: ' + self.Parent.Alias)
@@ -47,16 +41,30 @@ class TMail(TObject):
         except smtplib.SMTPAuthenticationError as E: 
             print('TSendMail->Set. Authentication Error', E)
 
+    def _Check(self, aValue):
+        self.Set(aValue)
+        return True
 
-class TShell(TObject):
+
+class TShell(TControl):
     def LoadParam(self, aParam):
-        self.Command = aParam.get('Command')
+        Pattern = {'Command':None}
+        self.LoadParamPattern(aParam, Pattern)
 
     def Set(self, aValue):
         Pipe = subprocess.Popen(self.Command, shell = True, stdout = subprocess.PIPE)
         return Pipe.communicate()[0]
 
+    def _Check(self, aValue):
+        self.Set(aValue)
+        return True
 
-class TStop(TObject):
+
+
+class TStop(TControl):
     def Set(self, aValue):
         self.ParentRoot.Stop()
+
+    def _Check(self, aValue):
+        self.Set(aValue)
+        return True

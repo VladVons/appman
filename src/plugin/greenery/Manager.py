@@ -11,8 +11,9 @@ from LibPio import *
 
 class TManager():
     def __init__(self):
-        self.Obj = {}
-        self.InRun = False 
+        self.Obj      = {}
+        self.InRun    = False 
+        self.Periodic = 1 
 
     def _Error(self, aMsg):
         self.Logger.error(aMsg)
@@ -56,6 +57,12 @@ class TManager():
         Class.Alias      = Alias
         Class.Logger     = self.Logger
         Class.ParentRoot = self
+
+        if (Alias in self.Obj):
+            self._Error('TManager->_CreateClass. Alias already exists %s' % (Alias))
+
+        self.Obj[Alias] = Class
+
         return Class
 
     def _LoadClass(self, aData, aParent):
@@ -126,7 +133,7 @@ class TManager():
             self.InRun = True
             while self.InRun:
                 self._Signal(Job)
-                time.sleep(1)
+                time.sleep(self.Periodic)
         else:
             self.Logger.warn('TManager->Run. `Job` is empty')
 

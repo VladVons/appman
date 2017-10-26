@@ -3,20 +3,18 @@
 
 
 import RPi.GPIO as GPIO
+import smbus
 #
 from LibCommon import TControl
 
 
-__all__ = ['TPioOut', 'TPiosOut', 'TPioIn']
+__all__ = ['TPioOut', 'TPiosOut', 'TPioIn', 'TI2COut']
 
 
 class TPio(TControl):
     def LoadParam(self, aParam):
-        self.Clear()
-        self.State  = None
-
-        self.Pin    = aParam.get('Pin')
-        self.Invert = aParam.get('Invert', False)
+        Pattern = {'Pin':None, 'Invert':False, 'Delay':0}
+        self.LoadParamPattern(aParam, Pattern)
 
         GPIO.setmode(GPIO.BCM)
 
@@ -27,20 +25,29 @@ class TPioOut(TPio):
 
     def Set(self, aValue):
         if (self.State != aValue):
-            self.State = aValue
-            self.DoState()
-            #self.Post(1, p1 = 2)
+            GPIO.output(self.Pin, int(aValue))
 
-            if (aValue == self.Invert):
-                GPIO.output(self.Pin, GPIO.LOW)
-            else:
-                GPIO.output(self.Pin, GPIO.HIGH)
+    def _Check(self, aValue):
+        self.Set(aValue)
+        return aValue
 
 
-    def Check(self):
-        Result = self.CheckChild()
-        self.Set(Result)
-        return Result
+class TI2C(TControl):
+    def LoadParam(self, aParam):
+        Pattern = {'Bus':1, 'Address':None, 'Pin':None, 'Invert':False}
+        self.LoadParamPattern(aParam, Pattern)
+
+
+class TI2COut(TI2C):
+    def Set(self, aValue):
+        if (self.State != aValue):
+            print(self.Alias, self.Bus, self.Address, int(aValue))
+            Bus = smbus.SMBus(self.Bus)
+            Bus.write_byte(self.Address, int(aValue))
+
+    def _Check(self, aValue):
+        self.Set(aValue)
+        return True
 
 
 class TPioIn(TPio):
@@ -49,19 +56,11 @@ class TPioIn(TPio):
         GPIO.setup(self.Pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
     def Get(self):
-        State = (GPIO.input(self.Pin) ^ int(self.Invert))
-        if (self.State != State):
-            self.State = State
+        return GPIO.input(self.Pin)
 
-            self.DoState()
-
-    def Check(self):
-        Result = self.CheckChild()
-        self.Get()
-        return Result
-
+    def _Check(self, aValue):
+        return self.Get()
 
 class TPiosOut(TPioOut):
     def LoadParam(self, aParam):
         super().LoadParam(aParam)
-

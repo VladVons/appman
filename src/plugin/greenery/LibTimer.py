@@ -38,7 +38,6 @@ class TBaseRange(TControl):
 
             self._Load(On, Off)
 
-
 class TTimeRangeCycle(TBaseRange):
     def __init__(self, aParent):
         super().__init__(aParent)
@@ -64,24 +63,17 @@ class TTimeRangeCycle(TBaseRange):
         self.Range.append(aOn)
         self.Range.append(aOff)
 
-    def Check(self):
-        Result = False
-
+    def _Check(self, aValue):
         Duration = self.GetDuration()
         Elapsed  = int(time.time() - self.Start)
         Offset   = Elapsed % Duration
         Idx      = 0
         for i in range(0, len(self.Range), 2):
             if ( (Offset >= Idx) and (Offset < Idx + self.Range[i]) ):
-                Result = True
-                break
+                return True
             Idx += self.Range[i] + self.Range[i + 1]
 
-        if (self.State != Result):
-            self.State = Result
-            self.DoState()
-
-        return Result
+        return False
 
     def GetDuration(self):
         Result = 0
@@ -115,21 +107,14 @@ class TTimeRange(TBaseRange):
         self.Range.append(aOn)
         self.Range.append(aOff)
 
-    def Check(self):
-        Result = False
+    def _Check(self):
         Now = datetime.datetime.now().strftime(self.Format)
 
-        #print(self.Range)
         for i in range(0, len(self.Range), 2):
             if ( (Now >= self.Range[i]) and (Now < self.Range[i + 1]) ):
-                Result = True
-                break
+                return True
 
-        if (self.State != Result):
-            self.State = Result
-            self.DoState()
-
-        return (Result != self.Invert)
+        return False
 
 
 #Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "09:19:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'

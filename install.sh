@@ -27,7 +27,7 @@ Install()
 
   #https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c
   #https://alselectro.wordpress.com/2016/05/12/serial-lcd-i2c-module-pcf8574/
-  #apt-get install i2c-tools python-smbus
+  #apt-get install i2c-tools python3-smbus
 }
 
 
