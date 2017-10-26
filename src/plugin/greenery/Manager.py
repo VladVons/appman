@@ -36,14 +36,17 @@ class TManager():
         return Result
 
     def _CreateClass(self, aData, aParent):
-        Alias = aData.get('Alias')
-        #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
-        if (not Alias):
-            self._Error('TManager->_CreateClass. Key `Alias` is empty')
-
         ClassName = aData.get('Class')
         if (not ClassName):
             self._Error('TManager->_CreateClass. Key `Class` is empty')
+
+        Alias = aData.get('Alias')
+        #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
+        if (not Alias):
+            Alias = ClassName + '_' + str(len(self.Obj) + 1)
+        else:
+            if (Alias in self.Obj):
+                self._Error('TManager->_CreateClass. Alias already exists %s' % (Alias))
 
         ModuleName = aData.get('Module')
         if (ModuleName):
@@ -57,11 +60,7 @@ class TManager():
         Class.Alias      = Alias
         Class.Logger     = self.Logger
         Class.ParentRoot = self
-
-        if (Alias in self.Obj):
-            self._Error('TManager->_CreateClass. Alias already exists %s' % (Alias))
-
-        self.Obj[Alias] = Class
+        self.Obj[Alias]  = Class
 
         return Class
 
@@ -109,7 +108,7 @@ class TManager():
         self.Logger.info('TManager->Load')
 
         for Item in aData['Class']:
-            Class = self._LoadClass(Item, self)
+            Class = self._LoadClass(Item, None)
             if (Class):
                 self.Obj[Class.Alias] = Class
 

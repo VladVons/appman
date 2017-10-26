@@ -3,7 +3,6 @@
 
 
 import datetime
-import time
 #
 from LibCommon import TControl
 
@@ -65,8 +64,7 @@ class TTimeRangeCycle(TBaseRange):
 
     def _Check(self, aValue):
         Duration = self.GetDuration()
-        Elapsed  = int(time.time() - self.Start)
-        Offset   = Elapsed % Duration
+        Offset   = self.Uptime() % Duration
         Idx      = 0
         for i in range(0, len(self.Range), 2):
             if ( (Offset >= Idx) and (Offset < Idx + self.Range[i]) ):

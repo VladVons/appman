@@ -13,6 +13,7 @@
         "Util_DiskFree":{"Value":"df -h"},
         "Util_IsRoot":{"Value":"whoami | grep root"},
         "Util_Reboot":{"Value":"reboot"},
+        "Util_Shutdown":{"Value":"poweroff"},
         "Util_Top":{"Value":"top -b -n 1 | head -n 25"},
         "Util_Process":{"Value":"pgrep -a"},
         "Util_ProcessUser":{"Value":"ps -eo comm,euser | awk '{ print $2}' | grep"},

@@ -13,7 +13,7 @@ __all__ = ['TPioOut', 'TPiosOut', 'TPioIn', 'TI2COut']
 
 class TPio(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Pin':None, 'Invert':False, 'Delay':0}
+        Pattern = {'Pin':None, 'Invert':False, 'Delay':0, 'Periodic':1}
         self.LoadParamPattern(aParam, Pattern)
 
         GPIO.setmode(GPIO.BCM)
@@ -34,7 +34,7 @@ class TPioOut(TPio):
 
 class TI2C(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Bus':1, 'Address':None, 'Pin':None, 'Invert':False}
+        Pattern = {'Bus':1, 'Address':None, 'Pin':None, 'Invert':False, 'Periodic':1}
         self.LoadParamPattern(aParam, Pattern)
 
 

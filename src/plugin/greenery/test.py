@@ -69,3 +69,7 @@ Test4()
 #C.GetPath()
 #print(TC.__bases__[0])
 
+
+#Val1 = 2
+#Dig1  = 11
+#print(Dig1 % Val1)

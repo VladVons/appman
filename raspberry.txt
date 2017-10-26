@@ -1,0 +1,10 @@
+
+find /lib/modules | grep therm
+sudo modprobe w1-gpio
+sudo modprobe w1-therm
+
+after connecting thereis a folder 
+ls /sys/bus/w1/devices/28*
+cd 28
+cat w1_slave
+

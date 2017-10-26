@@ -23,15 +23,19 @@ class TControl(TObject):
     def LoadParam(self, aParam):
         raise NotImplementedError('Method not Implemented')
 
+    def Uptime(self):
+        return int(time.time() - self.Start)
+
     def Clear(self):
-        self.Invert    = False
-        self.Start     = int(time.time())
-        self.State     = None
-        self.StateTime = None
-        self.OnState   = None
-        self.Checks    = {}
-        self.Controls  = {}
-        self.Triggers  = {}
+        self.Invert     = False
+        self.Periodic   = 1
+        self.Start      = int(time.time())
+        self.State      = None
+        self.StateTime  = None
+        self.OnState    = None
+        self.Checks     = {}
+        self.Controls   = {}
+        self.Triggers   = {}
 
     def LoadParamPattern(self, aParam, aPattern):
         self.Clear()
@@ -58,11 +62,14 @@ class TControl(TObject):
         return True
 
     def Check(self):
-        Value  = self.CheckChild() ^ self.Invert
-        Result = self._Check(Value)
-        if (self.State != Result):
-            self.State = Result
-            self.DoState()
+        if (self.Uptime() % self.Periodic == 0):
+            Value  = self.CheckChild() ^ self.Invert
+            Result = self._Check(Value)
+            if (self.State != Result):
+                self.State = Result
+                self.DoState()
+        else:
+            Result = self.State
 
         return Result ^ self.Invert
 
