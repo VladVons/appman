@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-
 import json
 import time
 import sys
+import logging
 #
 from LibTimer import *
 from LibCommon import *
@@ -31,6 +31,16 @@ class TC(TB):
         print(self.GetClassPath(self.__class__))
 
 
+def GetLogger():
+    Format = '[%(asctime)s], %(levelname)s:%(message)s'
+    logging.basicConfig(level=logging.INFO,
+                        format=Format,
+                        datefmt='%Y/%m/%d %H:%M:%S'
+                        )
+    Logger = logging.getLogger('Log1')
+    #Logger.addHandler(logging.StreamHandler())
+    return Logger
+
 def Test1():
     Data = '{"Timer_Day":{ "Range":[ { "On":"7", "Off": "10:39:30"}, { "On":"21:00:03", "Off": "22:00"}, { "On":"23:45", "Off": "23:46"} ]}}'
     root = json.loads(Data)
@@ -47,11 +57,25 @@ def Test2():
     with open(File) as FileData:
         Data1 = json.load(FileData)
         Data2 = Data1['Gpio']['Class'][0]['Param']
+
         #print('Data2', Data2)
-        I2COut= TI2COut(None)
-        Pattern = {'Bus1':1, 'Address': 0x27, 'Pin':1, 'Invert':False}
-        Pattern = {'MailTo':None, 'Relay':'localhost', 'Port':0, 'User':'', 'Password':None}
-        I2COut.LoadParamPattern(Data2, Pattern)
+        #I2COut  = TI2COut(None)
+        #Pattern = {'Bus1':1, 'Address': 0x27, 'Pin':1, 'Invert':False}
+        #Pattern = {'MailTo':None, 'Relay':'localhost', 'Port':0, 'User':'', 'Password':None}
+        #I2COut.LoadParamPattern(Data2, Pattern)
+
+        #print('Data2', Data2)
+        W1DS  = TW1DS(None)
+        W1DS.Logger = GetLogger()
+        W1DS.LoadParam(Data2)
+        W1DS.Check()
+        Value = W1DS.Get()
+        print('Value', Value)
+
+def OnSignal(aParent, aObj):
+    Alias = aObj.Alias
+    if (Alias == 'W1_Sensor_DS'):
+        print(aObj.Alias, aObj.Get())
 
 def Test4():
     File = 'greenery.json'
@@ -59,6 +83,7 @@ def Test4():
         Data = json.load(FileData)
 
     Manager = TManager()
+    Manager.OnSignal = OnSignal
     Manager.Run(Data['Gpio'])
 
 Test4()
@@ -70,6 +95,13 @@ Test4()
 #print(TC.__bases__[0])
 
 
-#Val1 = 2
-#Dig1  = 11
-#print(Dig1 % Val1)
+#Dic1 = {'a1':1, 'a2':2}
+#Dic2 = {'b1':1, 'b2':2, list(Dic1)}
+
+#print(Dic2.update(Dic1))
+#dest = dict(list(Dic1.items()) + list(Dic2.items()))
+#dest = dict(Dic1.items() + Dic2.items())
+#print(dest)
+
+
+

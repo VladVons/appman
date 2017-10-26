@@ -4,13 +4,13 @@
 import subprocess
 import smtplib
 #
-from LibCommon import TControl
+from LibCommon import TControl, _Required
 
 
 class TMail(TControl):
     def LoadParam(self, aParam):
         # Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
-        Pattern = {'MailTo':None, 'Subject':'TGMail', 'User':'', 'Password':'', 'Port':0, 'Relay':'localhost', 'SSL':True}
+        Pattern = {'MailTo':_Required, 'Subject':'TGMail', 'User':'', 'Password':'', 'Port':0, 'Relay':'localhost', 'SSL':True}
         self.LoadParamPattern(aParam, Pattern)
 
     def Set(self, aValue):
@@ -48,7 +48,7 @@ class TMail(TControl):
 
 class TShell(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Command':None}
+        Pattern = {'Command':_Required}
         self.LoadParamPattern(aParam, Pattern)
 
     def Set(self, aValue):

@@ -5,36 +5,48 @@ from time import sleep
 #from dth import DTH
 
 
-print(GPIO.RPI_INFO)
-print('mode', GPIO.getmode())
+def PinOut(aPin, aValue):
+    print('aPin', aPin, 'aValue', aValue)
+    GPIO.output(aPin, aValue)
 
-GPIO.setmode(GPIO.BCM)
 
-#Pins = [2,3,4,14]
-PinsOut = [17,22,27,18]
-PinIn = 26
+def Test1():
+    print(GPIO.RPI_INFO)
+    print('mode', GPIO.getmode())
 
-GPIO.setup(PinsOut, GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)
 
-#GPIO.setup(PinIn, GPIO.IN)
-GPIO.setup(PinIn, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
+    #Pins = [2,3,4,14]
+    #PinsOut = [17,22,27,18]
+    PinsOut = [17]
+    PinIn = 26
 
-i = 0
-while True:
-#for i in Pins:
-    i += 1
-    print('loop', i)
+    GPIO.setup(PinsOut, GPIO.OUT)
 
-    GPIO.output(PinsOut, GPIO.HIGH)
-    In = GPIO.input(PinIn)
-    print('PinIn', PinIn, 'In', In)
+    #GPIO.setup(PinIn, GPIO.IN)
+    GPIO.setup(PinIn, GPIO.IN, pull_up_down = GPIO.PUD_DOWN)
 
-    sleep(0.5)
+    i = 0
+    while True:
+        #for i in Pins:
+        i += 1
+        print('loop', i)
 
-    GPIO.output(PinsOut, GPIO.LOW)
+        PinOut(PinsOut, GPIO.HIGH)
+        #GPIO.output(PinsOut, GPIO.HIGH)
+        #In = GPIO.input(PinIn)
+        #print('PinIn', PinIn, 'In', In)
 
-    sleep(0.5)
-    break
+        sleep(3)
 
-GPIO.cleanup()
-print('mode', GPIO.getmode())
+        PinOut(PinsOut, GPIO.LOW)
+        #GPIO.output(PinsOut, GPIO.LOW)
+
+        sleep(3)
+        break
+
+    GPIO.cleanup()
+    print('mode', GPIO.getmode())
+
+
+Test1()

@@ -5,11 +5,17 @@ import time
 #
 #from inc.Common import *
 
+_Required = '_Required'
+
 class TObject():
     def __init__(self, aParent):
         self.Parent     = aParent
         self.ParentRoot = None
         self.Alias      = None
+
+    def _Error(self, aMsg):
+        self.Logger.error(aMsg)
+        raise ValueError(aMsg)
 
 
 class TControl(TObject):
@@ -18,6 +24,9 @@ class TControl(TObject):
         self.Clear()
 
     def _Check(self, aValue):
+        raise NotImplementedError('Method not Implemented')
+
+    def Get(self):
         raise NotImplementedError('Method not Implemented')
 
     def LoadParam(self, aParam):
@@ -37,6 +46,9 @@ class TControl(TObject):
         self.Controls   = {}
         self.Triggers   = {}
 
+    def GetState(self): 
+        return self.State ^ self.Invert
+
     def LoadParamPattern(self, aParam, aPattern):
         self.Clear()
 
@@ -47,13 +59,12 @@ class TControl(TObject):
         for Key in aPattern:
             Default = aPattern.get(Key)
             Param   = aParam.get(Key, Default)
-            if ((Default == None) and (Param == None)):
+            if ( (Default == _Required) and (Param == _Required) ):
                 Msg = "%s->LoadParam. Key %s is required" % (self.__class__.__name__, Key)
                 self.Logger.error(Msg)
                 raise ValueError(Msg)
 
             setattr(self, Key, Param)
-            #print('Key', Key, 'Param', Param, 'Default', Default)
   
     def CheckChild(self):
         for Key in self.Checks:
@@ -63,19 +74,17 @@ class TControl(TObject):
 
     def Check(self):
         if (self.Uptime() % self.Periodic == 0):
-            Value  = self.CheckChild() ^ self.Invert
-            Result = self._Check(Value)
-            if (self.State != Result):
-                self.State = Result
+            StateChild = self.CheckChild()
+            State      = self._Check(StateChild)
+            if (self.State != State):
+                self.State = State
                 self.DoState()
-        else:
-            Result = self.State
 
-        return Result ^ self.Invert
+        return self.GetState()
 
     def DoState(self):
         ClassPath = self.__class__.__name__
-        self.Logger.info('%s->DoState. Alias %s, State %s' % (ClassPath, self.Alias, self.State))
+        self.Logger.info('%s->DoState. Alias %s, State %s' % (ClassPath, self.Alias, self.GetState()))
 
         self.StateTime = int(time.time())
 

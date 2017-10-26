@@ -6,15 +6,39 @@
     },
     "Gpio":{
         "JobStart":[
-            "PiosInit"
         ], 
         "Job":[
-            "I2COut_1"
+            "W1_Sensor_DS"
         ],
         "JobFinish":[
 
         ],
         "Class":[
+            {
+                "Enable":false,
+                "Module":"LibMisc", 
+                "Alias":"ShellDate",
+                "Class":"TShell",
+                "Param":{"Command":"date >> /tmp/TShell2.log"}
+            },
+            {
+                "Enable":true,
+                "Class":"TW1DS",
+                "Alias":"W1_Sensor_DS", 
+                "Param":{"File":"28-0416936117ff/w1_slave", "Min":22},
+                "Triggers":[
+                    {
+                        "Enable":false,
+                        "Ref":"ShellDate"
+                    },
+                    {
+                        "Enable":true,
+                        "Class":"TPioOut",
+                        "Alias":"HitLamp",
+                        "Param":{"Pin":17} 
+                    }
+                ]
+            },
             {
                 "Enable":false,
                 "Module":"LibMisc", 
@@ -29,11 +53,12 @@
                 "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com"}
             },
             {
-                "Enable":true,
+                "Enable":false,
                 "Class":"TTimeRangeDay", 
                 "Param":{"Range":[{ "On":"00:01", "Off": "00:03"}]}
             },
             {
+                "Enable":false,
                 "Class":"TI2COut",
                 "Alias":"I2COut_1",
                 "Param":{"Bus":1, "Address":39, "Pin":16}, 
@@ -46,11 +71,13 @@
                 ]
             },
             {
+                "Enable":true,
                 "Class":"TPiosOut",
                 "Alias":"PiosInit",
                 "Param":{"Pin":[17, 18, 22, 27], "Invert":false} 
             },
             {
+                "Enable":false,
                 "Class":"TPioOut",
                 "Alias":"LedLamp",
                 "Param":{"Pin":18}, 
@@ -62,6 +89,7 @@
                 ]
             },
             {
+                "Enable":true,
                 "Class":"TPioOut", 
                 "Alias":"WaterPump",
                 "Param":{"Pin":17, "Invert":true}, 
@@ -78,9 +106,7 @@
                     },
                     {
                         "Enable":false,
-                        "Module":"LibMisc", 
-                        "Class":"TShell",
-                        "Param":{"Command":"date >> /tmp/TShell.log"}
+                        "Ref":"ShellDate"
                     },
                     {
                         "Enable":false,
@@ -103,7 +129,7 @@
                 ],
                 "Checks":[
                     {
-                        "Enable":true,
+                        "Enable":false,
                         "Class":"TTimeRangeCycle", 
                         "Param":{"Range":[{"On":"3-S", "Off":"1-S"}, {"On":"5-S", "Off":"2-S"}]}
                     },
