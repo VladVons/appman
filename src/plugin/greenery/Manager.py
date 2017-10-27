@@ -7,6 +7,7 @@ import time
 #
 from LibTimer import *
 from LibPio import *
+from LibManager import *
 
 
 class TManager():
@@ -135,11 +136,11 @@ class TManager():
         if (JobStart):
             self._Signal(JobStart)
 
-        Job = aData.get('Job')
-        if (Job):
+        JobLoop = aData.get('JobLoop')
+        if (JobLoop):
             self.InRun = True
             while self.InRun:
-                self._Signal(Job)
+                self._Signal(JobLoop)
                 time.sleep(self.Periodic)
         else:
             self.Logger.warn('%s->Run. `Job` is empty' % (self.__class__.__name__))

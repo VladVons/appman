@@ -12,7 +12,8 @@ cat w1_slave
 Method 2:
 sudo pip3 install w1thermsensor
 
-
-
-
+i2ctest:
 i2cdetect -y 1
+
+python compiler
+pip3 install Nuitka

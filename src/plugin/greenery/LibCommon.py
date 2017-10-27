@@ -39,6 +39,7 @@ class TControl(TObject):
     def Clear(self):
         self.Invert     = False
         self.Periodic   = 1
+        self.CheckAll   = False
         self.Start      = int(time.time())
         self.State      = None
         self.StateTime  = None
@@ -69,10 +70,14 @@ class TControl(TObject):
             setattr(self, Key, Param)
   
     def CheckChild(self):
+        Result = True
+
         for Key in self.Checks:
             if (not self.Checks[Key].Check()):
-                return False
-        return True
+                Result = False
+                if (not self.CheckAll):
+                    break
+        return Result
 
     def Check(self):
         if (self.Uptime() % self.Periodic == 0):

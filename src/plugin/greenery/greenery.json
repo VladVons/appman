@@ -5,26 +5,9 @@
         "HomePage":{"Value":"https://oster.com.ua"}
     },
     "Gpio":{
-        "JobStart":[
-            {
-                "Enable":"true",
-                "Class":"TGroup",
-                "Items":[
-                    {"Enable":"true", "Ref":"PiosOutInit"}
-                ]
-            }
-        }, 
-        "JobLoop":[
-            {
-                "Enable":"true",
-                "Class":"TGroup",
-                "Items":[
-                    {"Enable":"true", "Ref":"HitLamp"}
-                ]
-            }
-        ],
-        "JobFinish":[
-        ],
+        "JobStart":["PiosOutInit"],
+        "JobLoop":["HitLamp"],
+        "JobFinish":[],
         "Class":[
             {
                 "Enable":"true",
@@ -33,11 +16,11 @@
                 "Param":{"Diff":5},
                 "Checks": [
                     {
-                        "Enable":true,
+                        "Enable":false,
                         "Class":"TW1DS",
                         "Alias":"W1_Sensor_DS1", 
                         "Param":{"File":"28-0416936117ff/w1_slave", "Min":26}
-                    }
+                    },
                     {
                         "Enable":true,
                         "Class":"TW1DS",
@@ -98,22 +81,10 @@
                 ]
             },
             {
-                "Enable":false,
-                "Class":"TPioOut",
-                "Alias":"LedLamp",
-                "Param":{"Pin":18}, 
-                "Checks":[
-                    {
-                        "Class":"TTimeRangeDay", 
-                        "Param":{"Range":[{ "On":"07:15", "Off": "10:50"}, { "On":"13:15", "Off": "17:50"}]}
-                    }
-                ]
-            },
-            {
                 "Enable":true,
                 "Class":"TPioOut", 
                 "Alias":"WaterPump",
-                "Param":{"Pin":17, "Invert":true}, 
+                "Param":{"Pin":18, "Invert":true}, 
                 "Triggers":[
                     {
                         "Enable":false,
