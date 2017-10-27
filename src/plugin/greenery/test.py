@@ -74,7 +74,7 @@ def Test2():
 
 def OnSignal(aParent, aObj):
     Alias = aObj.Alias
-    if (Alias == 'W1_Sensor_DS'):
+    if (Alias in ['W1_Sensor_DS1', 'W1_Sensor_DS2']):
         print(aObj.Alias, aObj.Get())
 
 def Test4():

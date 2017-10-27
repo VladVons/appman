@@ -8,7 +8,7 @@ import os
 
 import time
 #
-from LibCommon import TControl, _Required
+from LibCommon import TControl, TThread, _Required
 
 
 __all__ = ['TPioOut', 'TPiosOut', 'TPioIn', 'TI2COut', 'TW1DS']
@@ -90,7 +90,7 @@ class TI2COut(TI2C):
 #--- One wire file
 class TW1File(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Dir':'/sys/bus/w1/devices/', 'File':_Required, 'Min':-99999, 'Max':99999}
+        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Dir':'/sys/bus/w1/devices/', 'File':_Required, 'Min':-99999, 'Max':99999, 'Threaded':True}
         self.LoadParamPattern(aParam, Pattern)
 
         self.File = self.Dir + self.File
@@ -106,12 +106,27 @@ class TW1File(TControl):
     def _Check(self, aValue):
         Value  = self.Get()
         Result = (Value < self.Min) or (Value > self.Max)
+        print(self.Alias, Value, Result)
         return Result
 
 
 class TW1DS(TW1File):
-    def Get(self):
+    def LoadParam(self, aParam):
+        super().LoadParam(aParam)
+
+        if (self.Threaded):
+            self.Thread = TThread(self._Get, 'f')
+            self.Thread.Create()
+
+    def _Get(self):
         Data   = self._ReadFile()
         Str1   = Data.split('\n')[1].split(' ')[9]
         Result = float(Str1[2:]) / 1000
+        return Result
+
+    def Get(self):
+        if (self.Threaded):
+            Result = round(self.Thread.Data.value, 3)
+        else:
+            Result = self._Get()
         return Result

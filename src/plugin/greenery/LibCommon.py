@@ -2,6 +2,7 @@
 # Vladimir Vons, VladVons@gmail.com
 
 import time
+import multiprocessing
 #
 #from inc.Common import *
 
@@ -48,6 +49,7 @@ class TControl(TObject):
 
     def GetState(self): 
         return self.State ^ self.Invert
+
 
     def LoadParamPattern(self, aParam, aPattern):
         self.Clear()
@@ -97,3 +99,22 @@ class TControl(TObject):
         else:
             Result = True
         return Result 
+
+
+class TThread():
+    def __init__(self, aTarget, aType):
+        self.Target   = aTarget
+        self.Data     = multiprocessing.Value(aType, 0)
+        self.Periodic = 10
+
+    def Create(self):
+        process = multiprocessing.Process(target = self._Run, args = [])
+        process.daemon = True
+        process.start()
+        time.sleep(0.1)
+
+    def _Run(self):
+        while True:
+            Value = self.Target()
+            self.Data.value = Value
+            time.sleep(self.Periodic)

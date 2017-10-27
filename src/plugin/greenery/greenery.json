@@ -6,38 +6,65 @@
     },
     "Gpio":{
         "JobStart":[
-        ], 
-        "Job":[
-            "W1_Sensor_DS"
+            {
+                "Enable":"true",
+                "Class":"TGroup",
+                "Items":[
+                    {"Enable":"true", "Ref":"PiosOutInit"}
+                ]
+            }
+        }, 
+        "JobLoop":[
+            {
+                "Enable":"true",
+                "Class":"TGroup",
+                "Items":[
+                    {"Enable":"true", "Ref":"HitLamp"}
+                ]
+            }
         ],
         "JobFinish":[
-
         ],
         "Class":[
+            {
+                "Enable":"true",
+                "Class":"TGroup",
+                "Alias":"GroupTempWater",
+                "Param":{"Diff":5},
+                "Checks": [
+                    {
+                        "Enable":true,
+                        "Class":"TW1DS",
+                        "Alias":"W1_Sensor_DS1", 
+                        "Param":{"File":"28-0416936117ff/w1_slave", "Min":26}
+                    }
+                    {
+                        "Enable":true,
+                        "Class":"TW1DS",
+                        "Alias":"W1_Sensor_DS2", 
+                        "Param":{"File":"28-0416939679ff/w1_slave", "Min":26}
+                    }
+                ]
+            },
             {
                 "Enable":false,
                 "Module":"LibMisc", 
                 "Alias":"ShellDate",
                 "Class":"TShell",
-                "Param":{"Command":"date >> /tmp/TShell2.log"}
+                "Param":{"Command":"date >> ShellDate.log"}
             },
             {
                 "Enable":true,
-                "Class":"TW1DS",
-                "Alias":"W1_Sensor_DS", 
-                "Param":{"File":"28-0416936117ff/w1_slave", "Min":22},
-                "Triggers":[
-                    {
-                        "Enable":false,
-                        "Ref":"ShellDate"
-                    },
-                    {
-                        "Enable":true,
-                        "Class":"TPioOut",
-                        "Alias":"HitLamp",
-                        "Param":{"Pin":17} 
-                    }
-                ]
+                "Class":"TPiosOut",
+                "Alias":"PiosOutInit",
+                "Param":{"Pin":[17, 18, 22, 27], "Invert":false} 
+            },
+            {
+                "Enable":true,
+                "Class":"TPioOut",
+                "Alias":"HitLamp",
+                "Param":{"Pin":17},
+                "Checks":[{"Enable":true, "Ref":"GroupTempWater"}] 
             },
             {
                 "Enable":false,
@@ -69,12 +96,6 @@
                         "Param":{"Range":[{"On":"3-S", "Off":"2-S"}]}
                     }
                 ]
-            },
-            {
-                "Enable":true,
-                "Class":"TPiosOut",
-                "Alias":"PiosInit",
-                "Param":{"Pin":[17, 18, 22, 27], "Invert":false} 
             },
             {
                 "Enable":false,

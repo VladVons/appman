@@ -17,18 +17,21 @@ LED7 = 0x40
 LED8 = 0x80
 LEDF = 0xFF
 
-PATTERN = (LED1, LED2, LED3, LED4,
-           LED5, LED6, LED7, LED8,
-           LED7, LED6, LED5, LED4,
-           LED3, LED2)
+PATTERN = (LED1, LED2, LED3, LED4, LED5, LED6, LED7, 
+            LED8,
+           LED7, LED6, LED5, LED4, LED3, LED2)
+
+PATTERN = (LED1, LED2, LED3, LED4)
+PATTERN = (LED5, LED2, LED7, LED8)
+
 
 addr1 = 0x26
 addr2 = 0x27
 bus = SMBus(1) # Port 1 used on REV2 
 for LED in cycle(PATTERN):
-    print('Addr1', addr1, 'Led', )
-    bus.write_byte(addr1, LEDF)
-    sleep(1)
+    #print('Addr1', addr1, 'Led', )
+    #bus.write_byte(addr1, LEDF)
+    #sleep(1)
 
     print('Addr1', addr1, 'Led', LED)
     bus.write_byte(addr1, LED)
@@ -36,4 +39,4 @@ for LED in cycle(PATTERN):
     print('Addr2', addr2, 'Led', LED)
     bus.write_byte(addr2, LED)
 
-    sleep(1)
+    sleep(2)

@@ -14,7 +14,9 @@ class Gpio(TSectionVarExec):
     def __init__(self, aParent, aName):
         super().__init__(aParent, aName)
         self.Running = False
+
         self.Manager = TManager()
+        Manager.OnSignal = OnSignal
 
     def __RunThread(self, aName):
         GpioSession = TGpioSession(self, aName)
@@ -24,15 +26,17 @@ class Gpio(TSectionVarExec):
         process = multiprocessing.Process(target = aTarget, args = aArgs)
         process.daemon = True
         process.start()
-        time.sleep(0.5)
+        time.sleep(0.1)
 
     def Test(self):
         print('Name', self.Name, 'Startup', self.GetVar('Startup'), 'GetKeys', self.GetKeys(), 'Gpio', self.GetValue('WaterPump'),  self.GetField('WaterPump'))
 
+    def OnSignal(self, aParent, aObj):
+        Alias = aObj.Alias
+        if (Alias == 'W1_Sensor_DS'):
+            print(aObj.Alias, aObj.Get())
+
     def Run(self):
         if (not self.Running):
-            self.Running = True
-            self.Manager.Load(self.GetField('Class'))
-            while True:
-                self.Manager.Signal(['WaterPump'])
-                time.sleep(1)
+            Manager.Run(self.Data)
+            self.Running = false
