@@ -105,7 +105,7 @@ class TTimeRange(TBaseRange):
         self.Range.append(aOn)
         self.Range.append(aOff)
 
-    def _Check(self):
+    def _Check(self, aValue):
         Now = datetime.datetime.now().strftime(self.Format)
 
         for i in range(0, len(self.Range), 2):

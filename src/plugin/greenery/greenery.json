@@ -5,14 +5,17 @@
         "HomePage":{"Value":"https://oster.com.ua"}
     },
     "Gpio":{
-        "JobStart":["PiosOutInit"],
-        "JobLoop":["HitLamp"],
+        "JobStart":[],
+        "JobLoop":[
+            "DayLight",
+            "TemprWater"
+        ],
         "JobFinish":[],
         "Class":[
             {
                 "Enable":"true",
                 "Class":"TGroup",
-                "Alias":"GroupTempWater",
+                "Alias":"GroupTemprWater",
                 "Param":{"Diff":5},
                 "Checks": [
                     {
@@ -30,11 +33,22 @@
                 ]
             },
             {
-                "Enable":false,
-                "Module":"LibMisc", 
-                "Alias":"ShellDate",
-                "Class":"TShell",
-                "Param":{"Command":"date >> ShellDate.log"}
+                "Enable":"true",
+                "Class":"TGroup",
+                "Alias":"GroupDayLight",
+                "Param":{"Diff":5},
+                "Checks": [
+                    {
+                        "Enable":true,
+                        "Class":"TTimeRangeDay", 
+                        "Param":{"Range":[{ "On":"00:01", "Off": "20:00"}]}
+                    },
+                    {
+                        "Enable":true,
+                        "Class":"TTimeRangeCycle", 
+                        "Param":{"Range":[{"On":"4-S", "Off":"2-S"}]}
+                    }
+                ]
             },
             {
                 "Enable":true,
@@ -45,91 +59,16 @@
             {
                 "Enable":true,
                 "Class":"TPioOut",
-                "Alias":"HitLamp",
-                "Param":{"Pin":17},
-                "Checks":[{"Enable":true, "Ref":"GroupTempWater"}] 
-            },
-            {
-                "Enable":false,
-                "Module":"LibMisc", 
-                "Class":"TShell",
-                "Alias":"Shutdown", 
-                "Param":{"Command":"sudo poweroff"}
-            },
-            {
-                "Enable":false,
-                "Module":"LibMisc", 
-                "Class":"TMail",
-                "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com"}
-            },
-            {
-                "Enable":false,
-                "Class":"TTimeRangeDay", 
-                "Param":{"Range":[{ "On":"00:01", "Off": "00:03"}]}
-            },
-            {
-                "Enable":false,
-                "Class":"TI2COut",
-                "Alias":"I2COut_1",
-                "Param":{"Bus":1, "Address":39, "Pin":16}, 
-                "Checks":[
-                    {
-                        "Enable":true,
-                        "Class":"TTimeRangeCycle",
-                        "Param":{"Range":[{"On":"3-S", "Off":"2-S"}]}
-                    }
-                ]
+                "Alias":"DayLight",
+                "Param":{"Pin":27},
+                "Checks":[{"Enable":true, "Ref":"GroupDayLight"}] 
             },
             {
                 "Enable":true,
-                "Class":"TPioOut", 
-                "Alias":"WaterPump",
-                "Param":{"Pin":18, "Invert":true}, 
-                "Triggers":[
-                    {
-                        "Enable":false,
-                        "Class":"TPioOut",
-                        "Param":{"Pin":18, "Invert":true}
-                    },
-                    {
-                        "Enable":false,
-                        "Class":"TPioOut",
-                        "Param":{"Pin":"22", "Invert":true}
-                    },
-                    {
-                        "Enable":false,
-                        "Ref":"ShellDate"
-                    },
-                    {
-                        "Enable":false,
-                        "Module":"LibMisc", 
-                        "Class":"TMail",
-                        "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
-                    },
-                    {
-                        "Enable":false,
-                        "Module":"LibMisc", 
-                        "Class":"TStop"
-                    }
-                ],
-                "Controls":[
-                    {
-                        "Class":"TPioIn",
-                        "Alias":"WaterPumpControl", 
-                        "Param":{"Pin":2, "Delay":3}
-                    }
-                ],
-                "Checks":[
-                    {
-                        "Enable":false,
-                        "Class":"TTimeRangeCycle", 
-                        "Param":{"Range":[{"On":"3-S", "Off":"1-S"}, {"On":"5-S", "Off":"2-S"}]}
-                    },
-                    {
-                        "Enable":false,
-                        "Ref":"TimeRangeDay"
-                    }
-                ]
+                "Class":"TPioOut",
+                "Alias":"TemprWater",
+                "Param":{"Pin":17},
+                "Checks":[{"Enable":true, "Ref":"GroupTemprWater"}] 
             }
         ]
     }

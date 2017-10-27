@@ -17,8 +17,8 @@ def Test1():
     GPIO.setmode(GPIO.BCM)
 
     #Pins = [2,3,4,14]
-    #PinsOut = [17,22,27,18]
-    PinsOut = [17]
+    PinsOut = [17,22,27,18]
+    #PinsOut = [27]
     PinIn = 26
 
     GPIO.setup(PinsOut, GPIO.OUT)
@@ -43,7 +43,7 @@ def Test1():
         #GPIO.output(PinsOut, GPIO.LOW)
 
         sleep(3)
-        break
+        #break
 
     GPIO.cleanup()
     print('mode', GPIO.getmode())
