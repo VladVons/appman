@@ -7,6 +7,19 @@ import smtplib
 from LibCommon import TControl, _Required
 
 
+class TGroup(TControl):
+    def LoadParam(self, aParam):
+        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'CheckAll':True, 'Diff':10}
+        self.LoadParamPattern(aParam, Pattern)
+
+    def _Check(self, aValue):
+        self.Get()
+        return aValue
+
+    def Get(self):
+        pass
+
+
 class TMail(TControl):
     def LoadParam(self, aParam):
         # Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
@@ -58,7 +71,6 @@ class TShell(TControl):
     def _Check(self, aValue):
         self.Set(aValue)
         return True
-
 
 
 class TStop(TControl):

@@ -75,6 +75,7 @@ GitClone()
 GitSyncToServ()
 # sync only changes from disk to server 
 {
+  aComment="$1";
   Log "$0->$FUNCNAME"
 
   git status
@@ -85,7 +86,7 @@ GitSyncToServ()
   #git log
 
   git add -u -v
-  git commit -a -m "just commit"
+  git commit -a -m "$aComment"
   git push -u origin master
 }
 
@@ -100,12 +101,13 @@ GitFromServ()
 GitToServ()
 # sync changes from disk to serv
 {
+  aComment=${1:-"MyCommit"};
   Log "$0->$FUNCNAME"
 
   Clean
   # add all new files
   git add -A -v
-  GitSyncToServ
+  GitSyncToServ "$aComment"
 }
 
 Diff(){

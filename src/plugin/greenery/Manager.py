@@ -7,7 +7,7 @@ import time
 #
 from LibTimer import *
 from LibPio import *
-from LibManager import *
+from LibMisc import *
 
 
 class TManager():

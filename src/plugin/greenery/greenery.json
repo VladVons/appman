@@ -16,7 +16,7 @@
                 "Param":{"Diff":5},
                 "Checks": [
                     {
-                        "Enable":false,
+                        "Enable":true,
                         "Class":"TW1DS",
                         "Alias":"W1_Sensor_DS1", 
                         "Param":{"File":"28-0416936117ff/w1_slave", "Min":26}

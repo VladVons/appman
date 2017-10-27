@@ -16,7 +16,7 @@ __all__ = ['TPioOut', 'TPiosOut', 'TPioIn', 'TI2COut', 'TW1DS']
 
 class TPio(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Pin':_Required}
+        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'CheckAll':False, 'Pin':_Required}
         self.LoadParamPattern(aParam, Pattern)
 
         GPIO.setmode(GPIO.BCM)
