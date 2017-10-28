@@ -37,71 +37,94 @@ class TManager():
             print ('%s->SetLoger Error: %s: %s' % (self.__class__.__name__, E, aFile))
         return Result
 
-    def _CreateClass(self, aData, aParent):
-        ClassName = aData.get('Class')
-        if (not ClassName):
-            self._Error('%s->_CreateClass. Key `Class` is empty' % (self.__class__.__name__))
+    def _FindAlias(self, aAlias):
+        for Item in self.Data:
+            Alias = Item.get('Alias')
+            return Item
+        return None
 
-        Alias = aData.get('Alias')
-        #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
-        if (not Alias):
-            Alias = ClassName + '_' + str(len(self.Obj) + 1)
-        else:
-            if (Alias in self.Obj):
-                self._Error('%s->_CreateClass. Alias already exists %s' % (self.__class__.__name__, Alias))
+    def _AddClass(self, aClass, aAlias):
+        if (not aAlias in self.Obj):
+            #print('--- Add', aAlias, aClass)
+            self.Obj[aAlias] = aClass
+            return True
+        return False
 
-        ModuleName = aData.get('Module')
-        if (ModuleName):
-            Module = __import__(ModuleName)
-            TClass = getattr(Module, ClassName)
+    def _CreateClass(self, aParent, aClassName, aAlias, aModuleName):
+        if (aModuleName):
+            Module = __import__(aModuleName)
+            TClass = getattr(Module, aClassName)
             del Module
         else:
-            TClass = globals()[ClassName]
+            TClass = globals()[aClassName]
 
-        Class = TClass(aParent)
-        Class.Alias      = Alias
-        Class.Logger     = self.Logger
-        Class.ParentRoot = self
-        self.Obj[Alias]  = Class
+        Result = TClass(aParent)
+        Result.Alias      = aAlias
+        Result.Logger     = self.Logger
+        Result.ParentRoot = self
+        self._AddClass(Result, aAlias)
 
-        return Class
+        return Result
 
     def _LoadClass(self, aData, aParent):
+        Result = None
+
         if (aParent):
             ParentInfo = aParent.Alias   
         else:
             ParentInfo = ''   
 
-        Params = ['Enable', 'Module', 'Param', 'Class', 'Alias', 'Checks', 'Triggers', 'Controls', 'Ref']
+        Params = ['Enable', 'Module', 'Param', 'Class', 'Alias', 'Checks', 'Triggers', 'Controls', 'Link']
         Diff   = set(aData.keys()) - set(Params)
         if (Diff):
-            self._Error('%s->_CreateClass. Unknown key %s' % (self.__class__.__name__, str(Diff)))
+            self._Error('%s->_LoadClass. Unknown key %s' % (self.__class__.__name__, str(Diff)))
 
         Enable = aData.get('Enable', True)
         if (not Enable):
-            return None
+            return None 
   
-        Ref = aData.get('Ref')
-        if (Ref):
-            Class = self.Obj.get(Ref)
-            if (not Class):
-                self._Error('%s->_LoadClass. Ref `%s` not found or it placed below %s' % (self.__class__.__name__, Ref, ParentInfo))
+        Link = aData.get('Link')
+        if (Link):
+            Alias  = None
+            Result = self.Obj.get(Link)
+            if (not Result):
+                Data = self._FindAlias(Link)
+                if (Data):
+                    Result = self._LoadClass(Data, aParent)
+                else:
+                    self._Error('%s->_LoadClass. Link `%s` not found %s' % (self.__class__.__name__, Link, ParentInfo))
         else:
-            Class = self._CreateClass(aData, aParent)
+            ClassName = aData.get('Class')
+            if (not ClassName):
+                self._Error('%s->_LoadClass. Key `Class` is empty' % (self.__class__.__name__))
 
-            Param = aData.get('Param')
-            if (Param):
-                Class.LoadParam(Param)
+            Alias = aData.get('Alias')
+            #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
+            if (not Alias):
+                Alias = ClassName + '_' + str(len(self.Obj) + 1)
 
-            for Section in ['Checks', 'Controls', 'Triggers']:
-                Items = aData.get(Section)
-                if (Items):
-                    for Item in Items:
-                        ClassSection = self._LoadClass(Item, Class)
-                        if (ClassSection):
-                            getattr(Class, Section)[ClassSection.Alias] = ClassSection
 
-        return Class
+            if (Alias in self.Obj):
+                Result = self.Obj.get(Alias)
+            else:
+                ModuleName = aData.get('Module')
+
+                Result = self._CreateClass(aParent, ClassName, Alias, ModuleName)
+
+                Param = aData.get('Param')
+                if (Param):
+                    Result.LoadParam(Param)
+
+                for Section in ['Checks', 'Controls', 'Triggers']:
+                    Items = aData.get(Section)
+                    if (Items):
+                        for Item in Items:
+                            ClassSection = self._LoadClass(Item, Result)
+                            if (ClassSection):
+                                getattr(Result, Section)[ClassSection.Alias] = ClassSection
+
+        print('--- Alias', Alias, 'Link', Link, 'Result', Result)
+        return Result
 
     def Load(self, aData):
         if (not self._SetLoger('/var/log/greenery.log')):
@@ -114,10 +137,11 @@ class TManager():
 
         self.Logger.info('TManager->Load')
 
-        for Item in aData['Class']:
+        self.Data = aData['Class']
+        for Item in self.Data:
             Class = self._LoadClass(Item, None)
             if (Class):
-                self.Obj[Class.Alias] = Class
+                self._AddClass(Class.Alias, Class)
 
     def _Signal(self, aKeys):
         for Key in aKeys:
@@ -131,6 +155,7 @@ class TManager():
 
     def Run(self, aData):
         self.Load(aData)
+        #return
 
         JobStart = aData.get('JobStart')
         if (JobStart):

@@ -7,11 +7,20 @@
     "Gpio":{
         "JobStart":[],
         "JobLoop":[
-            "DayLight",
             "TemprWater"
         ],
         "JobFinish":[],
         "Class":[
+            {
+                "Enable":"false",
+                "Class":"TGroup",
+                "Alias":"GroupLoop",
+                "Checks":[
+                    {"Enable":true, "Link":"DayLight"},
+                    {"Enable":true, "Link":"TemprWater"},
+                    {"Enable":true, "Link":"I2COut_1"}
+                ] 
+            },
             {
                 "Enable":"true",
                 "Class":"TGroup",
@@ -61,14 +70,21 @@
                 "Class":"TPioOut",
                 "Alias":"DayLight",
                 "Param":{"Pin":27},
-                "Checks":[{"Enable":true, "Ref":"GroupDayLight"}] 
+                "Checks":[{"Enable":true, "Link":"GroupDayLight"}]
             },
             {
                 "Enable":true,
                 "Class":"TPioOut",
                 "Alias":"TemprWater",
                 "Param":{"Pin":17},
-                "Checks":[{"Enable":true, "Ref":"GroupTemprWater"}] 
+                "Checks":[{"Enable":true, "Link":"GroupTemprWater"}] 
+            },
+            {
+                "Enable":true,
+                "Class":"TI2COut",
+                "Alias":"I2COut_1",
+                "Param":{"Bus":1, "Address":39, "Pin":1},
+                "Checks":[{"Enable":true, "Link":"GroupDayLight"}] 
             }
         ]
     }

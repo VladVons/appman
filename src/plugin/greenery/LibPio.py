@@ -25,7 +25,6 @@ class TPio(TControl):
 class TPioOut(TPio):
     def LoadParam(self, aParam):
         super().LoadParam(aParam)
-        GPIO.setup(self.Pin, GPIO.OUT)
 
     def Set(self, aValue):
         #print('Alias', self.Alias, 'Pin', self.Pin, 'State', self.State, 'aValue', aValue, 'High', GPIO.HIGH)
@@ -39,6 +38,7 @@ class TPioOut(TPio):
 
 
         #if (self.State != aValue):
+        GPIO.setup(self.Pin, GPIO.OUT)
         GPIO.output(self.Pin, int(not aValue))
         #time.sleep(1)
         #GPIO.output(self.Pin, int(not aValue))
