@@ -10,6 +10,27 @@ from LibPio import *
 from LibMisc import *
 
 
+class TAliaser():
+    def __init__(self, aData):
+        self.Data = aData
+        self.ClassCnt = {}
+
+    def Find(self, aAlias):
+        for Item in self.Data:
+            Alias = Item.get('Alias')
+            return Item
+        return None
+
+    def Get(self, aClassName):
+        return aClassName + '__' + str(self.ClassCnt[aClassName])
+
+    def Add(self, aClassName):
+        if (aClassName in self.ClassCnt):
+            self.ClassCnt[aClassName] += 1
+        else:
+            self.ClassCnt[aClassName]  = 0
+
+
 class TManager():
     def __init__(self):
         self.Obj      = {}
@@ -37,15 +58,8 @@ class TManager():
             print ('%s->SetLoger Error: %s: %s' % (self.__class__.__name__, E, aFile))
         return Result
 
-    def _FindAlias(self, aAlias):
-        for Item in self.Data:
-            Alias = Item.get('Alias')
-            return Item
-        return None
-
     def _AddClass(self, aClass, aAlias):
         if (not aAlias in self.Obj):
-            #print('--- Add', aAlias, aClass)
             self.Obj[aAlias] = aClass
             return True
         return False
@@ -85,10 +99,10 @@ class TManager():
   
         Link = aData.get('Link')
         if (Link):
-            Alias  = None
+            #Alias  = None
             Result = self.Obj.get(Link)
             if (not Result):
-                Data = self._FindAlias(Link)
+                Data = self.TmpAliaser.Find(Link)
                 if (Data):
                     Result = self._LoadClass(Data, aParent)
                 else:
@@ -98,11 +112,11 @@ class TManager():
             if (not ClassName):
                 self._Error('%s->_LoadClass. Key `Class` is empty' % (self.__class__.__name__))
 
+            self.TmpAliaser.Add(ClassName)
             Alias = aData.get('Alias')
             #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
             if (not Alias):
-                Alias = ClassName + '_' + str(len(self.Obj) + 1)
-
+                Alias = self.TmpAliaser.Get(ClassName)
 
             if (Alias in self.Obj):
                 Result = self.Obj.get(Alias)
@@ -123,7 +137,7 @@ class TManager():
                             if (ClassSection):
                                 getattr(Result, Section)[ClassSection.Alias] = ClassSection
 
-        print('--- Alias', Alias, 'Link', Link, 'Result', Result)
+        #print('--- Alias', Alias, 'Link', Link, 'Result', Result)
         return Result
 
     def Load(self, aData):
@@ -137,11 +151,12 @@ class TManager():
 
         self.Logger.info('TManager->Load')
 
-        self.Data = aData['Class']
-        for Item in self.Data:
+        self.TmpAliaser = TAliaser(aData['Class'])
+        for Item in aData['Class']:
             Class = self._LoadClass(Item, None)
             if (Class):
-                self._AddClass(Class.Alias, Class)
+                self._AddClass(Class, Class.Alias)
+        del self.TmpAliaser
 
     def _Signal(self, aKeys):
         for Key in aKeys:
@@ -155,7 +170,6 @@ class TManager():
 
     def Run(self, aData):
         self.Load(aData)
-        #return
 
         JobStart = aData.get('JobStart')
         if (JobStart):

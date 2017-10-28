@@ -80,7 +80,7 @@ class TControl(TObject):
         return Result
 
     def Check(self):
-        print('TObject->Check', 'Alias', self.Alias, self.Checks)
+        #print('TObject->Check', 'Alias', self.Alias, self.Checks)
         if (self.Uptime() % self.Periodic == 0):
             StateChild = self.CheckChild()
             State      = self._Check(StateChild)
