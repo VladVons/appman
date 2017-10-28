@@ -16,4 +16,5 @@ i2ctest:
 i2cdetect -y 1
 
 python compiler
-pip3 install Nuitka
+pip3 install nuitka
+nuitka --module some_module.py

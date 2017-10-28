@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import json
 import time
 import sys
@@ -7,6 +8,7 @@ import logging
 from LibTimer import *
 from LibCommon import *
 from Manager import *
+
 
 
 class TA():

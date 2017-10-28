@@ -48,7 +48,7 @@
                 "Param":{"Diff":5},
                 "Checks": [
                     {
-                        "Enable":true,
+                        "Enable":false,
                         "Class":"TTimeRangeDay", 
                         "Alias":"TimeRaneDay_1",
                         "Param":{"Range":[{ "On":"00:01", "Off": "23:50"}]}
