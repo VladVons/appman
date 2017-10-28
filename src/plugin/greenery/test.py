@@ -83,8 +83,8 @@ def Test4():
         Data = json.load(FileData)
 
     Manager = TManager()
-    Manager.OnSignal = OnSignal
-    Manager.Run(Data['Gpio'])
+    Manager.Load(Data['Gpio'])
+    Manager.Run()
 
 Test4()
 #Test2()

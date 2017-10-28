@@ -10,33 +10,16 @@ from LibPio import *
 from LibMisc import *
 
 
-class TAliaser():
-    def __init__(self, aData):
-        self.Data = aData
-        self.ClassCnt = {}
-
-    def Find(self, aAlias):
-        for Item in self.Data:
-            Alias = Item.get('Alias')
-            return Item
-        return None
-
-    def Get(self, aClassName):
-        return aClassName + '__' + str(self.ClassCnt[aClassName])
-
-    def Add(self, aClassName):
-        if (aClassName in self.ClassCnt):
-            self.ClassCnt[aClassName] += 1
-        else:
-            self.ClassCnt[aClassName]  = 0
-
-
 class TManager():
     def __init__(self):
-        self.Obj      = {}
+        self.OnSignal = None
         self.InRun    = False 
         self.Periodic = 1 
-        self.OnSignal = None
+        self.Clear()
+
+    def Clear(self):
+        self.Obj    = {}
+        self.Runs   = {}
 
     def _Error(self, aMsg):
         self.Logger.error(aMsg)
@@ -58,7 +41,15 @@ class TManager():
             print ('%s->SetLoger Error: %s: %s' % (self.__class__.__name__, E, aFile))
         return Result
 
+    def Find(self, aAlias):
+        for Item in self.Data:
+            Alias = Item.get('Alias')
+            if (aAlias == Alias):
+                return Item
+        return None
+
     def _AddClass(self, aClass, aAlias):
+        #print("aAlias", aAlias, "aClass", aClass)
         if (not aAlias in self.Obj):
             self.Obj[aAlias] = aClass
             return True
@@ -102,7 +93,8 @@ class TManager():
             #Alias  = None
             Result = self.Obj.get(Link)
             if (not Result):
-                Data = self.TmpAliaser.Find(Link)
+                #Data = self.TmpAliaser.Find(Link)
+                Data = self.Find(Link)
                 if (Data):
                     Result = self._LoadClass(Data, aParent)
                 else:
@@ -112,11 +104,13 @@ class TManager():
             if (not ClassName):
                 self._Error('%s->_LoadClass. Key `Class` is empty' % (self.__class__.__name__))
 
-            self.TmpAliaser.Add(ClassName)
+            #self.TmpAliaser.Add(ClassName)
             Alias = aData.get('Alias')
             #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
             if (not Alias):
-                Alias = self.TmpAliaser.Get(ClassName)
+                #Alias = ClassName + '__' + str(len(self.Obj) + 1)
+                #Alias = self.TmpAliaser.Get(ClassName)
+                self._Error('%s->_LoadClass. Alias is empty in Class' % (self.__class__.__name__, ClassName))
 
             if (Alias in self.Obj):
                 Result = self.Obj.get(Alias)
@@ -149,44 +143,45 @@ class TManager():
         if (OptEchoConsole):
             self.Logger.addHandler(logging.StreamHandler())
 
-        self.Logger.info('TManager->Load')
+        #self.Logger.info('TManager->Load')
 
-        self.TmpAliaser = TAliaser(aData['Class'])
-        for Item in aData['Class']:
-            Class = self._LoadClass(Item, None)
-            if (Class):
-                self._AddClass(Class, Class.Alias)
-        del self.TmpAliaser
+        self.Data = aData.get("Classes")
+        if (not self.Data):
+            self._Error('%s->_Load. Section `Classes` not found' % (self.__class__.__name__))
 
-    def _Signal(self, aKeys):
-        for Key in aKeys:
-            Obj = self.Obj.get(Key)
-            if (Obj):
-                Obj.Check()
-                if (self.OnSignal):
-                     self.OnSignal(self, Obj)
-            else:
-                self._Error('%s->Signal. Key `%s` not found' % (self.__class__.__name__, Key))
+        Runs = aData.get("Run")
+        if (not Runs):
+            self._Error('%s->_Load. Section `Run` not found' % (self.__class__.__name__))
 
-    def Run(self, aData):
-        self.Load(aData)
+        self.Clear()
+        for Key in ["Start", "Loop", "Finish"]:
+            Alias = Runs.get(Key)
+            if (Alias):
+                Data = self.Find(Alias)
+                if (Data):
+                    Class = self._LoadClass(Data, None)
+                    if (Class):
+                        self.Runs[Key] = Class
+                else:
+                    self._Error('%s->_Load. Alias `%s` not found' % (self.__class__.__name__, Alias))
 
-        JobStart = aData.get('JobStart')
-        if (JobStart):
-            self._Signal(JobStart)
+    def Run(self):
+        Class = self.Runs.get('Start')
+        if (Class):
+            Class.Check()
 
-        JobLoop = aData.get('JobLoop')
-        if (JobLoop):
+        Class = self.Runs.get('Loop')
+        if (Class):
             self.InRun = True
             while self.InRun:
-                self._Signal(JobLoop)
+                Class.Check()
                 time.sleep(self.Periodic)
         else:
-            self.Logger.warn('%s->Run. `Job` is empty' % (self.__class__.__name__))
+            self.Logger.warn('%s->Run. `Loop` is empty' % (self.__class__.__name__))
 
-        JobFinish = aData.get('JobFinish')
-        if (JobFinish):
-            self._Signal(JobFinish)
+        Class = self.Runs.get('Finish')
+        if (Class):
+            Class.Check()
 
     def Stop(self):
         self.InRun = False
