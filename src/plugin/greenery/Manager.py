@@ -12,7 +12,7 @@ from LibMisc import *
 
 class TManager():
     def __init__(self):
-        self.OnSignal = None
+        self.OnState  = None
         self.InRun    = False 
         self.Periodic = 1 
         self.Clear()
@@ -50,10 +50,10 @@ class TManager():
 
     def _AddClass(self, aClass, aAlias):
         #print("aAlias", aAlias, "aClass", aClass)
-        if (not aAlias in self.Obj):
-            self.Obj[aAlias] = aClass
-            return True
-        return False
+        if (aAlias in self.Obj):
+            self._Error('%s->_AddClass. Alias exists %s' % (self.__class__.__name__, aAlias))
+    
+        self.Obj[aAlias] = aClass
 
     def _CreateClass(self, aParent, aClassName, aAlias, aModuleName):
         if (aModuleName):
@@ -67,7 +67,9 @@ class TManager():
         Result.Alias      = aAlias
         Result.Logger     = self.Logger
         Result.ParentRoot = self
+        Result.OnState    = self.OnState
         self._AddClass(Result, aAlias)
+        #print('->_CreateClass', 'Alias', Result.Alias, 'Class', aClassName, 'OnState', Result.OnState)
 
         return Result
 
@@ -90,46 +92,37 @@ class TManager():
   
         Link = aData.get('Link')
         if (Link):
-            #Alias  = None
             Result = self.Obj.get(Link)
             if (not Result):
-                #Data = self.TmpAliaser.Find(Link)
                 Data = self.Find(Link)
                 if (Data):
                     Result = self._LoadClass(Data, aParent)
                 else:
                     self._Error('%s->_LoadClass. Link `%s` not found %s' % (self.__class__.__name__, Link, ParentInfo))
         else:
+            ModuleName = aData.get('Module')
+
             ClassName = aData.get('Class')
             if (not ClassName):
                 self._Error('%s->_LoadClass. Key `Class` is empty' % (self.__class__.__name__))
 
-            #self.TmpAliaser.Add(ClassName)
             Alias = aData.get('Alias')
-            #assert(Alias), 'TManager->_CreateClass. Key `Alias` is empty'
             if (not Alias):
-                #Alias = ClassName + '__' + str(len(self.Obj) + 1)
-                #Alias = self.TmpAliaser.Get(ClassName)
                 self._Error('%s->_LoadClass. Alias is empty in Class' % (self.__class__.__name__, ClassName))
 
-            if (Alias in self.Obj):
-                Result = self.Obj.get(Alias)
-            else:
-                ModuleName = aData.get('Module')
+            Result = self._CreateClass(aParent, ClassName, Alias, ModuleName)
 
-                Result = self._CreateClass(aParent, ClassName, Alias, ModuleName)
+            Param = aData.get('Param')
+            if (Param):
+                Result.LoadParam(Param)
 
-                Param = aData.get('Param')
-                if (Param):
-                    Result.LoadParam(Param)
-
-                for Section in ['Checks', 'Controls', 'Triggers']:
-                    Items = aData.get(Section)
-                    if (Items):
-                        for Item in Items:
-                            ClassSection = self._LoadClass(Item, Result)
-                            if (ClassSection):
-                                getattr(Result, Section)[ClassSection.Alias] = ClassSection
+            for Section in ['Checks', 'Controls', 'Triggers']:
+                Items = aData.get(Section)
+                if (Items):
+                    for Item in Items:
+                        ClassSection = self._LoadClass(Item, Result)
+                        if (ClassSection):
+                            getattr(Result, Section)[ClassSection.Alias] = ClassSection
 
         #print('--- Alias', Alias, 'Link', Link, 'Result', Result)
         return Result

@@ -106,7 +106,7 @@ class TW1File(TControl):
     def _Check(self, aValue):
         Value  = self.Get()
         Result = (Value < self.Min) or (Value > self.Max)
-        print(self.Alias, Value, Result)
+        #print(self.Alias, Value, Result)
         return Result
 
 

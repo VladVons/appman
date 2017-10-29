@@ -17,4 +17,4 @@ i2cdetect -y 1
 
 python compiler
 pip3 install nuitka
-nuitka --module some_module.py
+nuitka --module --python-version='3.5' some_module.py

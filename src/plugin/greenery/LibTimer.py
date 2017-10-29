@@ -4,10 +4,31 @@
 
 import datetime
 #
-from LibCommon import TControl
+from LibCommon import TControl, _Required
 
 
-__all__ = ['TTimeRangeCycle', 'TTimeRangeDay', 'TTimeRangeWeek', 'TTimeRangeMonth', 'TTimeRangeYear']
+__all__ = ['TTimeRangeCycle', 'TTimeRangeDay', 'TTimeRangeWeek', 'TTimeRangeMonth', 'TTimeRangeYear', "TTimeCount"]
+
+
+class TTimeUtil():
+    @staticmethod
+    def CharToSec(aChar, aValue):
+        if (aChar == 'S'):
+            Ratio = 1
+        elif (aChar == 'M'):
+            Ratio = 60
+        elif (aChar == 'H'):
+            Ratio = 60 * 60
+        elif (aChar == 'D'):
+            Ratio = 60 * 60 * 24
+        elif (aChar == 'W'):
+            Ratio = 60 * 60 * 24 * 7
+        elif (aChar == 'm'):
+            Ratio = 60 * 60 * 24 * 30
+        else:
+            raise ValueError('Unknown char ' + aChar)
+        return aValue * Ratio
+
 
 class TBaseRange(TControl):
     def __init__(self, aParent):
@@ -16,16 +37,14 @@ class TBaseRange(TControl):
         self.Delim   = ''
         self.PadLen  = 2
 
-    def Clear(self):
-        super().Clear()
-        self.Range = []
-
     def LoadParam(self, aParam):
-        #print('TBaseRange->LoadParam', 'Alias', self.Alias, aParam)
-        self.Invert = aParam.get('Invert', False)
-
+        self.Range = []
         self.Clear()
-        for Range in aParam.get('Range'):
+
+        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Ranges':[]}
+        self.LoadParamPattern(aParam, Pattern)
+
+        for Range in self.Ranges:
             On  = self._Adjust(Range.get('On'))
             Off = self._Adjust(Range.get('Off'))
 
@@ -44,19 +63,7 @@ class TTimeRangeCycle(TBaseRange):
 
     def _Adjust(self, aValue):
         Items = aValue.split(self.Delim)
-        if (Items[1] == 'S'):
-            Result = int(Items[0])
-        elif (Items[1] == 'M'):
-            Result = int(Items[0]) * (60)
-        elif (Items[1] == 'H'):
-            Result = int(Items[0]) * (60 * 60)
-        elif (Items[1] == 'D'):
-            Result = int(Items[0]) * (60 * 60 * 24)
-        elif (Items[1] == 'W'):
-            Result = int(Items[0]) * (60 * 60 * 24 * 7)
-        else:
-            raise ValueError('Unknown value ' + Items[1])
-        return Result
+        return TTimeUtil.CharToSec(Items[1], int(Items[0]))
 
     def _Load(self, aOn, aOff):
         self.Range.append(aOn)
@@ -146,3 +153,16 @@ class TTimeRangeYear(TTimeRange):
         self.Delim  = '.'
         self.Mask   = '00.01'
         self.Format = '%m.%d'
+
+
+class TTimeCount(TControl):
+    def LoadParam(self, aParam):
+        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Count':_Required}
+        self.LoadParamPattern(aParam, Pattern)
+
+    def Get(self):
+        return self.Uptime() - self.Count
+
+    def _Check(self, aValue):
+        return self.Get() > 0
+

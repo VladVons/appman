@@ -22,6 +22,9 @@ class TObject():
 class TControl(TObject):
     def __init__(self, aParent):
         super().__init__(aParent)
+        self.OnState    = None
+        self.Periodic   = 1
+
         self.Clear()
 
     def _Check(self, aValue):
@@ -38,19 +41,16 @@ class TControl(TObject):
 
     def Clear(self):
         self.Invert     = False
-        self.Periodic   = 1
         self.CheckAll   = False
         self.Start      = int(time.time())
         self.State      = None
         self.StateTime  = None
-        self.OnState    = None
         self.Checks     = {}
         self.Controls   = {}
         self.Triggers   = {}
 
     def GetState(self): 
         return self.State ^ self.Invert
-
 
     def LoadParamPattern(self, aParam, aPattern):
         self.Clear()
@@ -63,9 +63,7 @@ class TControl(TObject):
             Default = aPattern.get(Key)
             Param   = aParam.get(Key, Default)
             if ( (Default == _Required) and (Param == _Required) ):
-                Msg = "%s->LoadParam. Key %s is required" % (self.__class__.__name__, Key)
-                self.Logger.error(Msg)
-                raise ValueError(Msg)
+                self._Error('%s->LoadParam. Key %s is required' % (self.__class__.__name__, Key))
 
             setattr(self, Key, Param)
   
@@ -86,25 +84,21 @@ class TControl(TObject):
             State      = self._Check(StateChild)
             if (self.State != State):
                 self.State = State
+                self.StateTime = int(time.time())
                 self.DoState()
 
         return self.GetState()
 
     def DoState(self):
         ClassPath = self.__class__.__name__
-        self.Logger.info('%s->DoState. Alias %s, State %s' % (ClassPath, self.Alias, self.GetState()))
-
-        self.StateTime = int(time.time())
+        #self.Logger.info('%s->DoState. Alias %s, State %s, OnState %s' % (ClassPath, self.Alias, self.GetState(), self.OnState))
 
         for Key in self.Triggers:
             self.Logger.info('%s->DoState. Trigger %s' % (ClassPath, Key))
             self.Triggers[Key].Check()
 
         if (self.OnState):
-            Result = self.OnState(self)
-        else:
-            Result = True
-        return Result 
+            self.OnState(self)
 
 
 class TThread():

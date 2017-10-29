@@ -74,8 +74,10 @@ def Test2():
         Value = W1DS.Get()
         print('Value', Value)
 
-def OnSignal(aParent, aObj):
+def OnState(aObj):
     Alias = aObj.Alias
+    print('OnState', 'Alias', aObj.Alias)
+
     if (Alias in ['W1_Sensor_DS1', 'W1_Sensor_DS2']):
         print(aObj.Alias, aObj.Get())
 
@@ -85,25 +87,13 @@ def Test4():
         Data = json.load(FileData)
 
     Manager = TManager()
+    Manager.OnState = OnState
     Manager.Load(Data['Gpio'])
     Manager.Run()
 
 Test4()
-#Test2()
-#print(ClassPath(TC, ''))
-
-#C = TC()
-#C.GetPath()
-#print(TC.__bases__[0])
 
 
-#Dic1 = {'a1':1, 'a2':2}
-#Dic2 = {'b1':1, 'b2':2, list(Dic1)}
-
-#print(Dic2.update(Dic1))
-#dest = dict(list(Dic1.items()) + list(Dic2.items()))
-#dest = dict(Dic1.items() + Dic2.items())
-#print(dest)
-
-
-
+#Var1 = []
+#Var2 = '123'
+#print(Var1 == Var2)

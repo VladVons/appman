@@ -6,7 +6,7 @@
     },
     "Gpio":{
         "Run":{
-            "Start":"", 
+            "Start":"PiosOutInit", 
             "Loop":"GroupLoop", 
             "Finish":""
         },
@@ -50,14 +50,20 @@
                     {
                         "Enable":false,
                         "Class":"TTimeRangeDay", 
-                        "Alias":"TimeRaneDay_1",
-                        "Param":{"Range":[{ "On":"00:01", "Off": "23:50"}]}
+                        "Alias":"DayLight_TimeRangeDay",
+                        "Param":{"Ranges":[{ "On":"00:01", "Off": "23:50"}]}
                     },
                     {
                         "Enable":true,
                         "Class":"TTimeRangeCycle", 
-                        "Alias":"TimeRangeCycle_1",
-                        "Param":{"Range":[{"On":"4-S", "Off":"2-S"}]}
+                        "Alias":"DayLight_TimeRangeCycle",
+                        "Param":{"Ranges":[{"On":"4-S", "Off":"2-S"}]}
+                    },
+                    {
+                        "Enable":true,
+                        "Class":"TTimeCount", 
+                        "Alias":"DayLight_TTimeCount",
+                        "Param":{"Count":10}
                     }
                 ]
             },
