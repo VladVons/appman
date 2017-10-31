@@ -33,7 +33,6 @@ class TTimeUtil():
 class TBaseRange(TControl):
     def __init__(self, aParent):
         super().__init__(aParent)
-        self.Invert  = False
         self.Delim   = ''
         self.PadLen  = 2
 
@@ -42,9 +41,9 @@ class TBaseRange(TControl):
         self.Clear()
 
         Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Ranges':[]}
-        self.LoadParamPattern(aParam, Pattern)
+        self.Param.Load(aParam, Pattern)
 
-        for Range in self.Ranges:
+        for Range in self.Param.Ranges:
             On  = self._Adjust(Range.get('On'))
             Off = self._Adjust(Range.get('Off'))
 
@@ -55,6 +54,10 @@ class TBaseRange(TControl):
                 raise ValueError('Off is empty')
 
             self._Load(On, Off)
+
+    def _Get(self):
+        return self.Param.State
+
 
 class TTimeRangeCycle(TBaseRange):
     def __init__(self, aParent):
@@ -79,6 +82,7 @@ class TTimeRangeCycle(TBaseRange):
             Idx += self.Range[i] + self.Range[i + 1]
 
         return False
+
 
     def GetDuration(self):
         Result = 0
@@ -157,12 +161,11 @@ class TTimeRangeYear(TTimeRange):
 
 class TTimeCount(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Count':_Required}
-        self.LoadParamPattern(aParam, Pattern)
+        Pattern = {'Count':_Required}
+        self.Param.Load(aParam, Pattern)
 
     def Get(self):
         return self.Uptime() - self.Count
 
     def _Check(self, aValue):
         return self.Get() > 0
-

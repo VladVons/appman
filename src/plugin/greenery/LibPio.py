@@ -5,19 +5,17 @@
 import RPi.GPIO as GPIO
 import smbus
 import os
-
-import time
+import Adafruit_DHT as dht
 #
-from LibCommon import TControl, TThread, _Required
+from LibCommon import TControl, TControlThredRead, _Required
 
 
-__all__ = ['TPioOut', 'TPiosOut', 'TPioIn', 'TI2COut', 'TW1DS']
-
+__all__ = ['TPioOut', 'TPiosOut', 'TPioIn', 'TI2COut', 'TW1DS', 'TDHT22']
 
 class TPio(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'CheckAll':False, 'Pin':_Required}
-        self.LoadParamPattern(aParam, Pattern)
+        Pattern = {'Pin':_Required}
+        self.Param.Load(aParam, Pattern)
 
         GPIO.setmode(GPIO.BCM)
 
@@ -27,27 +25,16 @@ class TPioOut(TPio):
         super().LoadParam(aParam)
 
     def Set(self, aValue):
-        #print('Alias', self.Alias, 'Pin', self.Pin, 'State', self.State, 'aValue', aValue, 'High', GPIO.HIGH)
-
-        #print(0)
-        #GPIO.output(self.Pin, 0)
-        #time.sleep(5)
-        #print(1)
-        #GPIO.output(self.Pin, 1)
-        #time.sleep(5)
-
-
         #if (self.State != aValue):
-        GPIO.setup(self.Pin, GPIO.OUT)
-        GPIO.output(self.Pin, int(not aValue))
-        #time.sleep(1)
-        #GPIO.output(self.Pin, int(not aValue))
-        #GPIO.output(self.Pin, GPIO.HIGH)
-        #assert (False)
+        GPIO.setup(self.Param.Pin, GPIO.OUT)
+        GPIO.output(self.Param.Pin, int(not aValue))
 
     def _Check(self, aValue):
         self.Set(aValue)
         return aValue
+
+    def _Get(self):
+        return self.GetState()
 
 
 class TPioIn(TPio):
@@ -55,11 +42,11 @@ class TPioIn(TPio):
         super().LoadParam(aParam)
         GPIO.setup(self.Pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
-    def Get(self):
+    def _Get(self):
         return GPIO.input(self.Pin)
 
     def _Check(self, aValue):
-        return self.Get()
+        return self._Get()
 
 
 class TPiosOut(TPioOut):
@@ -71,62 +58,76 @@ class TPiosOut(TPioOut):
 #--- I2C
 class TI2C(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Bus':1, 'Address':_Required, 'Pin':_Required}
-        self.LoadParamPattern(aParam, Pattern)
+        Pattern = {'Bus':1, 'Address':_Required, 'Pin':_Required}
+        self.Param.Load(aParam, Pattern)
 
 
 class TI2COut(TI2C):
     def Set(self, aValue):
-        if (self.State != aValue):
+        if (self.Param.State != aValue):
             #print(self.Alias, self.Bus, self.Address, int(aValue))
-            Bus = smbus.SMBus(self.Bus)
-            Bus.write_byte(self.Address, self.Pin)
+            Bus = smbus.SMBus(self.Param.Bus)
+            Bus.write_byte(self.Param.Address, self.Param.Pin)
+
+    def _Check(self, aValue):
+        self.Set(aValue)
+        return True
+
+class TI2CIn(TI2C):
+    def Set(self, aValue):
+        if (self.Param.State != aValue):
+            #print(self.Alias, self.Bus, self.Address, int(aValue))
+            Bus = smbus.SMBus(self.Param.Bus)
+            Bus.write_byte(self.Param.Address, self.Param.Pin)
 
     def _Check(self, aValue):
         self.Set(aValue)
         return True
 
 
-#--- One wire file
-class TW1File(TControl):
+#--- Read slow devices 
+class TFileData(TControlThredRead):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Dir':'/sys/bus/w1/devices/', 'File':_Required, 'Min':-99999, 'Max':99999, 'Threaded':True}
+        Pattern = {'File':_Required, 'Min':-99999, 'Max':99999}
         self.LoadParamPattern(aParam, Pattern)
 
-        self.File = self.Dir + self.File
-        if (not os.path.exists(self.File)):
-            self._Error('File not found %s' % self.File)
+        if (not os.path.exists(self.Param.File)):
+            self._Error('File not found %s' % self.Param.File)
 
-    def _ReadFile(self):
-        HFile  = open(self.File)
-        Result = HFile.read()
-        HFile.close()
-        return Result
-
-    def _Check(self, aValue):
-        Value  = self.Get()
-        Result = (Value < self.Min) or (Value > self.Max)
-        #print(self.Alias, Value, Result)
+    def _ReadCallBack(self):
+        hFile  = open(self.Param.File)
+        Result = hFile.read()
+        hFile.close()
         return Result
 
 
-class TW1DS(TW1File):
+class TW1DS(TFileData):
+    def _Get(self):
+        # get previous value
+        Result = self.Value
+
+        Data = self.Thread.GetData()
+        if (Data):
+            Str1   = Data.split('\n')[1].split(' ')[9]
+            Result = float(Str1[2:]) / 1000
+        return round(Result, 2)
+
+
+class TDHT22(TControlThredRead):
     def LoadParam(self, aParam):
-        super().LoadParam(aParam)
+        Pattern = {'Address':_Required, 'Min':-99999, 'Max':99999}
+        self.LoadParamPattern(aParam, Pattern)
 
-        if (self.Threaded):
-            self.Thread = TThread(self._Get, 'f')
-            self.Thread.Create()
+    def _ReadCallBack(self):
+        return dht.read(dht.DHT22, self.Param.Address)
 
     def _Get(self):
-        Data   = self._ReadFile()
-        Str1   = Data.split('\n')[1].split(' ')[9]
-        Result = float(Str1[2:]) / 1000
-        return Result
+        # get previous value
+        Result = self.Value
 
-    def Get(self):
-        if (self.Threaded):
-            Result = round(self.Thread.Data.value, 3)
-        else:
-            Result = self._Get()
-        return Result
+        Data = self.Thread.GetData()
+        if (Data):
+            Humidity, Themper = Data
+            if (Humidity):
+                Result = Humidity
+        return round(Result, 2)

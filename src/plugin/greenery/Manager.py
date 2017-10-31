@@ -13,6 +13,7 @@ from LibMisc import *
 class TManager():
     def __init__(self):
         self.OnState  = None
+        self.OnValue  = None
         self.InRun    = False 
         self.Periodic = 1 
         self.Clear()
@@ -68,6 +69,7 @@ class TManager():
         Result.Logger     = self.Logger
         Result.ParentRoot = self
         Result.OnState    = self.OnState
+        Result.OnValue    = self.OnValue
         self._AddClass(Result, aAlias)
         #print('->_CreateClass', 'Alias', Result.Alias, 'Class', aClassName, 'OnState', Result.OnState)
 
@@ -98,7 +100,7 @@ class TManager():
                 if (Data):
                     Result = self._LoadClass(Data, aParent)
                 else:
-                    self._Error('%s->_LoadClass. Link `%s` not found %s' % (self.__class__.__name__, Link, ParentInfo))
+                    self._Error('%s->_LoadClass. Link `%s` not found in %s' % (self.__class__.__name__, Link, ParentInfo))
         else:
             ModuleName = aData.get('Module')
 
@@ -147,34 +149,39 @@ class TManager():
             self._Error('%s->_Load. Section `Run` not found' % (self.__class__.__name__))
 
         self.Clear()
-        for Key in ["Start", "Loop", "Finish"]:
-            Alias = Runs.get(Key)
-            if (Alias):
-                Data = self.Find(Alias)
-                if (Data):
-                    Class = self._LoadClass(Data, None)
+        for Key in ['Start', 'Loop', 'Finish']:
+            KeyData = Runs.get(Key)
+            if (KeyData):
+                for Item in Runs.get(Key):
+                    Class = self._LoadClass(Item, None)
                     if (Class):
-                        self.Runs[Key] = Class
-                else:
-                    self._Error('%s->_Load. Alias `%s` not found' % (self.__class__.__name__, Alias))
+                        if (not Key in self.Runs):
+                            self.Runs[Key] = []
+                        self.Runs[Key].append(Class)
+                    else:
+                        self.Logger.warn('%s->Load. Class not loaded in `%s`' % (self.__class__.__name__, Key))
+
+    def _Check(self, aClass):
+        if (aClass):
+            for Class in aClass:
+                #print('Check', 'Class', Class)
+                Class.Check()
 
     def Run(self):
-        Class = self.Runs.get('Start')
-        if (Class):
-            Class.Check()
+        Items = self.Runs.get('Start')
+        self._Check(Items)
 
-        Class = self.Runs.get('Loop')
-        if (Class):
+        Items = self.Runs.get('Loop')
+        if (Items):
             self.InRun = True
             while self.InRun:
-                Class.Check()
+                self._Check(Items)
                 time.sleep(self.Periodic)
         else:
             self.Logger.warn('%s->Run. `Loop` is empty' % (self.__class__.__name__))
 
-        Class = self.Runs.get('Finish')
-        if (Class):
-            Class.Check()
+        Items = self.Runs.get('Finish')
+        self._Check(Items)
 
     def Stop(self):
         self.InRun = False

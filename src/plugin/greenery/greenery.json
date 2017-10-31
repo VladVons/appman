@@ -6,93 +6,120 @@
     },
     "Gpio":{
         "Run":{
-            "Start":"PiosOutInit", 
-            "Loop":"GroupLoop", 
-            "Finish":""
+            "Start":[
+                {"Enable":false, "Link":"PiosOut_Init"}
+            ],
+            "Loop":[
+                {"Enable":true, "Link":"Group_Loop"}
+            ],
+            "Finish":[
+            ]
         },
         "Classes":[
             {
-                "Enable":"true",
                 "Class":"TGroup",
-                "Alias":"GroupLoop",
+                "Alias":"Group_Loop",
                 "Checks":[
-                    {"Enable":true, "Link":"DayLight"},
-                    {"Enable":true, "Link":"TemprWater"},
-                    {"Enable":true, "Link":"I2COut_1"}
+                    {"Enable":false, "Link":"Group_DayLight"},
+                    {"Enable":true,  "Link":"PioOut_DayLight"},
+                    {"Enable":true,  "Link":"PioOut_ThermWater"},
+                    {"Enable":true,  "Link":"PioOut_Humidity"}
                 ] 
             },
             {
-                "Enable":"true",
                 "Class":"TGroup",
-                "Alias":"GroupTemprWater",
+                "Alias":"Group_ThermWater",
                 "Param":{"Diff":5},
                 "Checks": [
                     {
                         "Enable":true,
                         "Class":"TW1DS",
-                        "Alias":"W1_Sensor_DS1", 
-                        "Param":{"File":"28-0416936117ff/w1_slave", "Min":25}
+                        "Alias":"W1DS_Therm1", 
+                        "Param":{"File":"/sys/bus/w1/devices/28-0416936117ff/w1_slave", "Min":24}
                     },
                     {
                         "Enable":true,
                         "Class":"TW1DS",
-                        "Alias":"W1_Sensor_DS2", 
-                        "Param":{"File":"28-0416939679ff/w1_slave", "Min":25}
+                        "Alias":"W1DS_Therm2", 
+                        "Param":{"File":"/sys/bus/w1/devices/28-0416939679ff/w1_slave", "Min":24}
                     }
                 ]
             },
             {
-                "Enable":"true",
                 "Class":"TGroup",
-                "Alias":"GroupDayLight",
+                "Alias":"Group_DayLight",
                 "Param":{"Diff":5},
                 "Checks": [
                     {
                         "Enable":false,
                         "Class":"TTimeRangeDay", 
-                        "Alias":"DayLight_TimeRangeDay",
-                        "Param":{"Ranges":[{ "On":"00:01", "Off": "23:50"}]}
+                        "Alias":"TimeRangeDay_DayLight",
+                        "Param":{"Ranges":[{"On":"00:01", "Off": "23:50"}]}
                     },
                     {
                         "Enable":true,
                         "Class":"TTimeRangeCycle", 
-                        "Alias":"DayLight_TimeRangeCycle",
-                        "Param":{"Ranges":[{"On":"4-S", "Off":"2-S"}]}
+                        "Alias":"TimeRangeCycle_DayLight",
+                        "Param":{"Ranges":[{"On":"5-S", "Off":"2-S"}]}
                     },
                     {
-                        "Enable":true,
+                        "Enable":false,
                         "Class":"TTimeCount", 
-                        "Alias":"DayLight_TTimeCount",
+                        "Alias":"TimeCount_TTimeCount",
                         "Param":{"Count":10}
                     }
                 ]
             },
             {
-                "Enable":true,
+                "Class":"TShell",
+                "Alias":"Shell_Date",
+                "Param":{"Command":"date >> ShellDate.log"}
+            },
+            {
+                "Class":"TMail",
+                "Alias":"Mail_VladVons",
+                "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com"}
+            },
+            {
                 "Class":"TPiosOut",
-                "Alias":"PiosOutInit",
-                "Param":{"Pin":[17, 18, 22, 27], "Invert":false} 
+                "Alias":"PiosOut_Init",
+                "Param":{"Pin":[17, 18, 22, 27], "Invert":true}
             },
             {
-                "Enable":true,
                 "Class":"TPioOut",
-                "Alias":"DayLight",
+                "Alias":"PioOut_Humidity",
+                "Param":{"Pin":18},
+                "Checks":[
+                    {
+                        "Enable":true,
+                        "Class":"TDHT22",
+                        "Alias":"DHT22_Humidity", 
+                        "Param":{"Address":23, "Max":60}
+                    }
+                ]
+            },
+            {
+                "Class":"TPioOut",
+                "Alias":"PioOut_DayLight",
                 "Param":{"Pin":27},
-                "Checks":[{"Enable":true, "Link":"GroupDayLight"}]
+                "Checks":[{"Enable":true, "Link":"Group_DayLight"}]
             },
             {
-                "Enable":true,
                 "Class":"TPioOut",
-                "Alias":"TemprWater",
+                "Alias":"PioOut_ThermWater",
                 "Param":{"Pin":17},
-                "Checks":[{"Enable":true, "Link":"GroupTemprWater"}] 
+                "Checks":[
+                    {"Enable":true, "Link":"Group_ThermWater"}
+                ],
+                "Triggers":[
+                    {"Enable":true, "Link":"Shell_Date"}
+                ]
             },
             {
-                "Enable":true,
                 "Class":"TI2COut",
                 "Alias":"I2COut_1",
                 "Param":{"Bus":1, "Address":39, "Pin":1},
-                "Checks":[{"Enable":true, "Link":"GroupDayLight"}] 
+                "Checks":[{"Enable":true, "Link":"Group_DayLight"}] 
             }
         ]
     }

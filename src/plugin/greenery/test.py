@@ -4,6 +4,8 @@ import json
 import time
 import sys
 import logging
+import ast
+
 #
 from LibTimer import *
 from LibCommon import *
@@ -74,12 +76,17 @@ def Test2():
         Value = W1DS.Get()
         print('Value', Value)
 
+
+def OnValue(aObj):
+    Alias = aObj.Alias
+    print('OnValue', 'Alias', aObj.Alias, 'Value', aObj.Value)
+
 def OnState(aObj):
     Alias = aObj.Alias
-    print('OnState', 'Alias', aObj.Alias)
+    print('OnState', 'Alias', aObj.Alias, 'State', aObj.Param.State)
 
-    if (Alias in ['W1_Sensor_DS1', 'W1_Sensor_DS2']):
-        print(aObj.Alias, aObj.Get())
+    #if (Alias in ['W1_Sensor_DS1', 'W1_Sensor_DS2']):
+    #    print(aObj.Alias, aObj.Get())
 
 def Test4():
     File = 'greenery.json'
@@ -87,13 +94,22 @@ def Test4():
         Data = json.load(FileData)
 
     Manager = TManager()
-    Manager.OnState = OnState
+    #Manager.OnState = OnState
+    Manager.OnValue  = OnValue
     Manager.Load(Data['Gpio'])
     Manager.Run()
 
+
+def Test5():
+    import smbus
+    ONE_TIME_HIGH_RES_MODE_1 = 0x20
+    ADDR = 35
+    bus = smbus.SMBus(1)
+    while True: 
+        data = bus.read_i2c_block_data(ADDR, ONE_TIME_HIGH_RES_MODE_1)
+        Var = round(((data[1] + (256 * data[0])) / 1.2))
+        print('Lx', Var)
+        time.sleep(1)
+
 Test4()
 
-
-#Var1 = []
-#Var2 = '123'
-#print(Var1 == Var2)

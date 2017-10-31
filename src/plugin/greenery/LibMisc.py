@@ -9,22 +9,21 @@ from LibCommon import TControl, _Required
 
 class TGroup(TControl):
     def LoadParam(self, aParam):
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'CheckAll':True, 'Diff':10}
-        self.LoadParamPattern(aParam, Pattern)
+        Pattern = {'Diff':10}
+        self.Param.Load(aParam, Pattern)
 
     def _Check(self, aValue):
-        self.Get()
-        return aValue
+        return True
 
-    def Get(self):
-        pass
+    def _Get(self):
+        return 0
 
 
 class TMail(TControl):
     def LoadParam(self, aParam):
         # Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com", "Password":"19710819"}
         Pattern = {'MailTo':_Required, 'Subject':'TGMail', 'User':'', 'Password':'', 'Port':0, 'Relay':'localhost', 'SSL':True}
-        self.LoadParamPattern(aParam, Pattern)
+        self.Param.Load(aParam, Pattern)
 
     def Set(self, aValue):
         self.Send('Caller Alias: ' + self.Parent.Alias)
@@ -62,15 +61,18 @@ class TMail(TControl):
 class TShell(TControl):
     def LoadParam(self, aParam):
         Pattern = {'Command':_Required}
-        self.LoadParamPattern(aParam, Pattern)
+        self.Param.Load(aParam, Pattern)
 
     def Set(self, aValue):
-        Pipe = subprocess.Popen(self.Command, shell = True, stdout = subprocess.PIPE)
+        Pipe = subprocess.Popen(self.Param.Command, shell = True, stdout = subprocess.PIPE)
         return Pipe.communicate()[0]
 
     def _Check(self, aValue):
         self.Set(aValue)
         return True
+
+    def _Get(self):
+        return None
 
 
 class TStop(TControl):
