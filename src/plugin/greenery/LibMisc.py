@@ -72,7 +72,7 @@ class TShell(TControl):
         return True
 
     def _Get(self):
-        return None
+        return 0
 
 
 class TStop(TControl):

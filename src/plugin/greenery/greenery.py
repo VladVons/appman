@@ -18,7 +18,6 @@ class Gpio(TSectionVarExec):
         print('Name', self.Name, 'Startup', self.GetVar('Startup'), 'GetKeys', self.GetKeys(), 'Gpio', self.GetValue('WaterPump'),  self.GetField('WaterPump'))
 
     def OnState(self, aObj):
-        Alias = aObj.Alias
         print('OnState', aObj.Alias)
 
     def Run(self):

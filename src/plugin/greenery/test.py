@@ -76,17 +76,11 @@ def Test2():
         Value = W1DS.Get()
         print('Value', Value)
 
-
 def OnValue(aObj):
-    Alias = aObj.Alias
-    print('OnValue', 'Alias', aObj.Alias, 'Value', aObj.Value)
+    #print('OnValue. Alias', aObj.Alias, 'Value', aObj.Value)
+    Info = 'Alias {:25}, Value {:6}, State {:1}'.format(aObj.Alias, aObj.Value, aObj.Param.State)
+    print('OnValue', Info)
 
-def OnState(aObj):
-    Alias = aObj.Alias
-    print('OnState', 'Alias', aObj.Alias, 'State', aObj.Param.State)
-
-    #if (Alias in ['W1_Sensor_DS1', 'W1_Sensor_DS2']):
-    #    print(aObj.Alias, aObj.Get())
 
 def Test4():
     File = 'greenery.json'

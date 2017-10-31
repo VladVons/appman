@@ -40,7 +40,7 @@ class TBaseRange(TControl):
         self.Range = []
         self.Clear()
 
-        Pattern = {'Invert':False, 'Periodic':1, 'State':None, 'Ranges':[]}
+        Pattern = {'Ranges':[]}
         self.Param.Load(aParam, Pattern)
 
         for Range in self.Param.Ranges:

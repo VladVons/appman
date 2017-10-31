@@ -9,7 +9,7 @@ import multiprocessing
 __all__ = ['TObject', 'TControl', 'TControlThredRead', '_Required']
 
 _Required = '_Required'
-DefPattern  = {'Invert':False, 'Periodic':1, 'State':False, 'CheckAll':False}
+DefPattern  = {'Invert':False, 'Periodic':1, 'State':False, 'CheckAll':True}
 
 
 # for reading slow devices
@@ -77,7 +77,7 @@ class TObject():
         self.ParentRoot = None
         self.Alias      = None
         self.Param      = TParam(self, DefPattern)
-        self.Value      = None
+        self.Value      = 0
 
     def _Error(self, aMsg):
         self.Logger.error(aMsg)

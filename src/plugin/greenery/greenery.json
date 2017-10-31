@@ -7,7 +7,12 @@
     "Gpio":{
         "Run":{
             "Start":[
-                {"Enable":false, "Link":"PiosOut_Init"}
+                {
+                    "Enable":true,
+                    "Class":"TPiosOut",
+                    "Alias":"PiosOut_Init",
+                    "Param":{"Pin":[17, 18, 22, 27], "Invert":true}
+                }
             ],
             "Loop":[
                 {"Enable":true, "Link":"Group_Loop"}
@@ -79,11 +84,6 @@
                 "Class":"TMail",
                 "Alias":"Mail_VladVons",
                 "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com"}
-            },
-            {
-                "Class":"TPiosOut",
-                "Alias":"PiosOut_Init",
-                "Param":{"Pin":[17, 18, 22, 27], "Invert":true}
             },
             {
                 "Class":"TPioOut",

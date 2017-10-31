@@ -50,10 +50,7 @@ class TPioIn(TPio):
 
 
 class TPiosOut(TPioOut):
-    def LoadParam(self, aParam):
-        super().LoadParam(aParam)
-
-
+    pass
 
 #--- I2C
 class TI2C(TControl):
@@ -125,6 +122,7 @@ class TDHT22(TControlThredRead):
         # get previous value
         Result = self.Value
 
+        #print('TDHT22',  Result)
         Data = self.Thread.GetData()
         if (Data):
             Humidity, Themper = Data
