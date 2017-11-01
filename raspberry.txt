@@ -27,3 +27,9 @@ apt-get install pigpio python3-pigpio
 
 BH1750FVI I2C Digital Light Intensity Sensor
 https://www.raspberrypi-spy.co.uk/2015/03/bh1750fvi-i2c-digital-light-intensity-sensor/
+
+--- collectd ---
+https://blog.dbrgn.ch/2017/3/10/write-a-collectd-python-plugin/
+https://collectd.org/documentation/manpages/collectd-python.5.shtml#examples
+sudo apt-get install collectd rrdtool apache2 php libapache2-mod-php --no-install-recommends
+collectd -f

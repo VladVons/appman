@@ -4,7 +4,7 @@
 import subprocess
 import smtplib
 #
-from LibCommon import TControl, _Required
+from LibCommon import *
 
 
 class TGroup(TControl):
@@ -64,6 +64,7 @@ class TShell(TControl):
         self.Param.Load(aParam, Pattern)
 
     def Set(self, aValue):
+        #print('TShell->Set', 'aValue', aValue)
         Pipe = subprocess.Popen(self.Param.Command, shell = True, stdout = subprocess.PIPE)
         return Pipe.communicate()[0]
 
@@ -82,3 +83,19 @@ class TStop(TControl):
     def _Check(self, aValue):
         self.Set(aValue)
         return True
+
+
+class TCPUTemp(TFileData):
+    #def LoadParam(self, aParam):
+    #    Pattern = {'File':'/sys/class/thermal/thermal_zone0/temp'}
+    #    self.Param.Load(aParam, Pattern)
+
+    def _Get(self):
+        # get previous value
+        Result = self.Value
+
+        Data = self.Thread.GetData()
+        if (Data):
+            Result = int(Data) / 1000
+        return round(Result, 2)
+

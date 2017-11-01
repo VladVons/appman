@@ -53,19 +53,24 @@ class TManager():
         #print("aAlias", aAlias, "aClass", aClass)
         if (aAlias in self.Obj):
             self._Error('%s->_AddClass. Alias exists %s' % (self.__class__.__name__, aAlias))
-    
+
         self.Obj[aAlias] = aClass
 
-    def _CreateClass(self, aParent, aClassName, aAlias, aModuleName):
+    def _CreateClass(self, **aParam):
+        aModuleName = aParam.get('ModuleName')
+        aClassName  = aParam.get('ClassName')
+        aAlias      = aParam.get('Alias')
+ 
         if (aModuleName):
-            Module = __import__(aModuleName)
+            Module = __import__(aModuleName )
             TClass = getattr(Module, aClassName)
             del Module
         else:
             TClass = globals()[aClassName]
 
-        Result = TClass(aParent)
+        Result = TClass(aParam.get('aParent'))
         Result.Alias      = aAlias
+        Result.Tag        = aParam.get('Tag')
         Result.Logger     = self.Logger
         Result.ParentRoot = self
         Result.OnState    = self.OnState
@@ -83,7 +88,7 @@ class TManager():
         else:
             ParentInfo = ''   
 
-        Params = ['Enable', 'Module', 'Param', 'Class', 'Alias', 'Checks', 'Triggers', 'Controls', 'Link']
+        Params = ['Enable', 'Module', 'Param', 'Class', 'Alias', 'Checks', 'Link', 'Tag', 'Triggers', 'Controls']
         Diff   = set(aData.keys()) - set(Params)
         if (Diff):
             self._Error('%s->_LoadClass. Unknown key %s' % (self.__class__.__name__, str(Diff)))
@@ -102,8 +107,6 @@ class TManager():
                 else:
                     self._Error('%s->_LoadClass. Link `%s` not found in %s' % (self.__class__.__name__, Link, ParentInfo))
         else:
-            ModuleName = aData.get('Module')
-
             ClassName = aData.get('Class')
             if (not ClassName):
                 self._Error('%s->_LoadClass. Key `Class` is empty' % (self.__class__.__name__))
@@ -112,7 +115,7 @@ class TManager():
             if (not Alias):
                 self._Error('%s->_LoadClass. Alias is empty in Class' % (self.__class__.__name__, ClassName))
 
-            Result = self._CreateClass(aParent, ClassName, Alias, ModuleName)
+            Result = self._CreateClass(Parent=aParent, ClassName=ClassName, Alias=Alias, ModuleName=aData.get('Module'), Tag=aData.get('Tag'))
 
             Param = aData.get('Param')
             if (Param):
@@ -165,7 +168,7 @@ class TManager():
         if (aClass):
             for Class in aClass:
                 #print('Check', 'Class', Class)
-                Class.Check()
+                Class.Check(True)
 
     def Run(self):
         Items = self.Runs.get('Start')

@@ -28,7 +28,9 @@
                     {"Enable":false, "Link":"Group_DayLight"},
                     {"Enable":true,  "Link":"PioOut_DayLight"},
                     {"Enable":true,  "Link":"PioOut_ThermWater"},
-                    {"Enable":true,  "Link":"PioOut_Humidity"}
+                    {"Enable":true,  "Link":"PioOut_Humidity"},
+                    {"Enable":true,  "Link":"CPUTemp_Pi"},
+                    {"Enable":true,  "Link":"BH1750_lux"}
                 ] 
             },
             {
@@ -40,12 +42,14 @@
                         "Enable":true,
                         "Class":"TW1DS",
                         "Alias":"W1DS_Therm1", 
+                        "Tag":"Temperature", 
                         "Param":{"File":"/sys/bus/w1/devices/28-0416936117ff/w1_slave", "Min":24}
                     },
                     {
                         "Enable":true,
                         "Class":"TW1DS",
                         "Alias":"W1DS_Therm2", 
+                        "Tag":"Temperature", 
                         "Param":{"File":"/sys/bus/w1/devices/28-0416939679ff/w1_slave", "Min":24}
                     }
                 ]
@@ -94,6 +98,7 @@
                         "Enable":true,
                         "Class":"TDHT22",
                         "Alias":"DHT22_Humidity", 
+                        "Tag":"Humidity", 
                         "Param":{"Address":23, "Max":60}
                     }
                 ]
@@ -112,7 +117,7 @@
                     {"Enable":true, "Link":"Group_ThermWater"}
                 ],
                 "Triggers":[
-                    {"Enable":true, "Link":"Shell_Date"}
+                    {"Enable":false, "Link":"Shell_Date"}
                 ]
             },
             {
@@ -120,6 +125,18 @@
                 "Alias":"I2COut_1",
                 "Param":{"Bus":1, "Address":39, "Pin":1},
                 "Checks":[{"Enable":true, "Link":"Group_DayLight"}] 
+            },
+            {
+                "Class":"TCPUTemp",
+                "Alias":"CPUTemp_Pi", 
+                "Tag":"Temperature", 
+                "Param":{"File":"/sys/class/thermal/thermal_zone0/temp", "Max":50}
+            },
+            {
+                "Class":"TBH1750",
+                "Alias":"BH1750_lux", 
+                "Tag":"Brightness", 
+                "Param":{"Address":35}
             }
         ]
     }
