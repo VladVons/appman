@@ -8,87 +8,19 @@
         "Run":{
             "Start":[
                 {
-                    "Enable":true,
+                    "Enable":false,
                     "Class":"TPiosOut",
                     "Alias":"PiosOut_Init",
                     "Param":{"Pin":[17, 18, 22, 27], "Invert":true}
                 }
             ],
             "Loop":[
-                {"Enable":true, "Link":"Group_Loop"}
+                {"Enable":true, "Link":"PioOut_Humidity"}
             ],
             "Finish":[
             ]
         },
         "Classes":[
-            {
-                "Class":"TGroup",
-                "Alias":"Group_Loop",
-                "Checks":[
-                    {"Enable":false, "Link":"Group_DayLight"},
-                    {"Enable":true,  "Link":"PioOut_DayLight"},
-                    {"Enable":true,  "Link":"PioOut_ThermWater"},
-                    {"Enable":true,  "Link":"PioOut_Humidity"},
-                    {"Enable":true,  "Link":"CPUTemp_Pi"},
-                    {"Enable":true,  "Link":"BH1750_lux"}
-                ] 
-            },
-            {
-                "Class":"TGroup",
-                "Alias":"Group_ThermWater",
-                "Param":{"Diff":5},
-                "Checks": [
-                    {
-                        "Enable":true,
-                        "Class":"TW1DS",
-                        "Alias":"W1DS_Therm1", 
-                        "Tag":"Temperature", 
-                        "Param":{"File":"/sys/bus/w1/devices/28-0416936117ff/w1_slave", "Min":24}
-                    },
-                    {
-                        "Enable":true,
-                        "Class":"TW1DS",
-                        "Alias":"W1DS_Therm2", 
-                        "Tag":"Temperature", 
-                        "Param":{"File":"/sys/bus/w1/devices/28-0416939679ff/w1_slave", "Min":24}
-                    }
-                ]
-            },
-            {
-                "Class":"TGroup",
-                "Alias":"Group_DayLight",
-                "Param":{"Diff":5},
-                "Checks": [
-                    {
-                        "Enable":false,
-                        "Class":"TTimeRangeDay", 
-                        "Alias":"TimeRangeDay_DayLight",
-                        "Param":{"Ranges":[{"On":"00:01", "Off": "23:50"}]}
-                    },
-                    {
-                        "Enable":true,
-                        "Class":"TTimeRangeCycle", 
-                        "Alias":"TimeRangeCycle_DayLight",
-                        "Param":{"Ranges":[{"On":"5-S", "Off":"2-S"}]}
-                    },
-                    {
-                        "Enable":false,
-                        "Class":"TTimeCount", 
-                        "Alias":"TimeCount_TTimeCount",
-                        "Param":{"Count":10}
-                    }
-                ]
-            },
-            {
-                "Class":"TShell",
-                "Alias":"Shell_Date",
-                "Param":{"Command":"date >> ShellDate.log"}
-            },
-            {
-                "Class":"TMail",
-                "Alias":"Mail_VladVons",
-                "Param":{"MailTo":"VladVons@gmail.com", "Relay":"smtp.gmail.com", "Port":"465", "User":"ua0976646510@gmail.com"}
-            },
             {
                 "Class":"TPioOut",
                 "Alias":"PioOut_Humidity",
@@ -102,41 +34,6 @@
                         "Param":{"Address":23, "Max":60}
                     }
                 ]
-            },
-            {
-                "Class":"TPioOut",
-                "Alias":"PioOut_DayLight",
-                "Param":{"Pin":27},
-                "Checks":[{"Enable":true, "Link":"Group_DayLight"}]
-            },
-            {
-                "Class":"TPioOut",
-                "Alias":"PioOut_ThermWater",
-                "Param":{"Pin":17},
-                "Checks":[
-                    {"Enable":true, "Link":"Group_ThermWater"}
-                ],
-                "Triggers":[
-                    {"Enable":false, "Link":"Shell_Date"}
-                ]
-            },
-            {
-                "Class":"TI2COut",
-                "Alias":"I2COut_1",
-                "Param":{"Bus":1, "Address":39, "Pin":1},
-                "Checks":[{"Enable":true, "Link":"Group_DayLight"}] 
-            },
-            {
-                "Class":"TCPUTemp",
-                "Alias":"CPUTemp_Pi", 
-                "Tag":"Temperature", 
-                "Param":{"File":"/sys/class/thermal/thermal_zone0/temp", "Max":50}
-            },
-            {
-                "Class":"TBH1750",
-                "Alias":"BH1750_lux", 
-                "Tag":"Brightness", 
-                "Param":{"Address":35}
             }
         ]
     }
