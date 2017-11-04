@@ -249,6 +249,17 @@ class TObject():
             aPath = TObject.GetClassPath(Class[0], aPath, aDepth - 1)
         return aPath + '/' + aClass.__name__
 
+    @staticmethod
+    def Dump(aValue, aPref = ''):
+        if (isinstance(aValue, dict)):
+            for Key in aValue:
+                TObject.Dump(aValue[Key], aPref + '/' + Key)
+        elif (isinstance(aValue, list)):
+            for Value in aValue:
+                TObject.Dump(Value, aPref)
+        else:
+            print(aPref, '=', aValue)
+
 
 #---
 class TDebug():
