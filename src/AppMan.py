@@ -1,4 +1,3 @@
-# Created: 17.08.2016
 # Vladimir Vons, VladVons@gmail.com
 #
 # Application manager

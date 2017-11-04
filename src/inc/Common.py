@@ -259,3 +259,46 @@ class TDebug():
         filename      = sys._getframe(1).f_code.co_filename
         #class_name    = sys._getframe(1).__class__
         return filename + '->' + function_name
+
+
+class TNetUtil():
+    from uuid import getnode as get_mac
+ 
+    @staticmethod
+    def CharToSec(aChar, aValue):
+        Mac = hex(get_mac())[2:]
+        Result = ':'.join(Mac[i : i+2] for i in range(0, 12, 2))
+        return Result
+
+
+class TTimeUtil():
+    @staticmethod
+    def CharToSec(aChar, aValue):
+        Ratios = {'S':1, 'M':60, 'H':3600, 'd':86400, 'w':86400 * 7, 'm':86400 * 30, 'y':86400 * 365}
+        Ratio  = Ratios.get(aChar)
+        #print('--- CharToSec', 'Char', aChar, 'Value', aValue, 'Ratio', Ratio)
+        if (not Ratio):
+            raise ValueError('Unknown char %s' % aChar)
+        return Ratio * aValue
+        
+    @staticmethod
+    def StrToSec(aValue):
+        Result = 0
+    
+        Items = re.split('([\D])', aValue)
+        Items.append('')
+        for i in range(0, len(Items) - 1, 2):
+            Digit  = Items[i+0].strip()
+            Letter = Items[i+1].strip()
+            if (Digit and Letter == ''):
+                Letter = 'S'
+
+            if (Digit and Letter):
+                if ( (not Letter in 'SMHdwmy') or (not Digit.isdigit()) ):
+                    raise ValueError('Value error %s%s' % (Digit, Letter))
+    
+                #print('---2', 'D', Digit, 'L', Letter)
+                Result += TTimeUtil.CharToSec(Letter, int(Digit))
+        return Result
+
+
